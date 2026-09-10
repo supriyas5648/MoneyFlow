@@ -9,7 +9,7 @@ public static class DatabaseInitializer
         "Host=localhost;Port=5432;Username=postgres;Password=033911;Database=postgres";
 
     private const string AppConnectionString =
-        "Host=localhost;Port=5432;Username=postgres;Password=033911;Database=DB_MoneyFlow";
+        "Host=localhost;Port=5432;Username=postgres;Password=033911;Database=MoneyFlow";
 
     public static void Initialize()
     {
@@ -26,7 +26,7 @@ public static class DatabaseInitializer
         checkCommand.CommandText = """
             SELECT EXISTS (
                 SELECT FROM pg_database
-                WHERE datname = 'DB_MoneyFlow'
+                WHERE datname = 'MoneyFlow'
             );
             """;
 
@@ -35,7 +35,7 @@ public static class DatabaseInitializer
         if (!databaseExists)
         {
             using var createCommand = connection.CreateCommand();
-            createCommand.CommandText = "CREATE DATABASE \"DB_MoneyFlow\";";
+            createCommand.CommandText = "CREATE DATABASE \"MoneyFlow\";";
             createCommand.ExecuteNonQuery();
         }
     }

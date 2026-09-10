@@ -1,13 +1,64 @@
 {
   "version": 2,
-  "dgSpecHash": "cZb7rF40Fh8=",
+  "dgSpecHash": "u8paVD/LaWA=",
   "success": true,
   "projectFilePath": "D:\\CasePoint Intership\\Group C\\MoneyFlow\\MoneyFlow.csproj",
   "expectedPackageFiles": [
+    "C:\\Users\\ayush\\.nuget\\packages\\harfbuzzsharp\\8.3.1.1\\harfbuzzsharp.8.3.1.1.nupkg.sha512",
+    "C:\\Users\\ayush\\.nuget\\packages\\harfbuzzsharp.nativeassets.macos\\8.3.1.1\\harfbuzzsharp.nativeassets.macos.8.3.1.1.nupkg.sha512",
+    "C:\\Users\\ayush\\.nuget\\packages\\harfbuzzsharp.nativeassets.win32\\8.3.1.1\\harfbuzzsharp.nativeassets.win32.8.3.1.1.nupkg.sha512",
+    "C:\\Users\\ayush\\.nuget\\packages\\livechartscore\\2.0.5\\livechartscore.2.0.5.nupkg.sha512",
+    "C:\\Users\\ayush\\.nuget\\packages\\livechartscore.skiasharpview\\2.0.5\\livechartscore.skiasharpview.2.0.5.nupkg.sha512",
+    "C:\\Users\\ayush\\.nuget\\packages\\livechartscore.skiasharpview.winforms\\2.0.5\\livechartscore.skiasharpview.winforms.2.0.5.nupkg.sha512",
     "C:\\Users\\ayush\\.nuget\\packages\\microsoft.extensions.dependencyinjection.abstractions\\8.0.0\\microsoft.extensions.dependencyinjection.abstractions.8.0.0.nupkg.sha512",
     "C:\\Users\\ayush\\.nuget\\packages\\microsoft.extensions.logging.abstractions\\8.0.0\\microsoft.extensions.logging.abstractions.8.0.0.nupkg.sha512",
     "C:\\Users\\ayush\\.nuget\\packages\\npgsql\\10.0.3\\npgsql.10.0.3.nupkg.sha512",
+    "C:\\Users\\ayush\\.nuget\\packages\\opentk\\3.1.0\\opentk.3.1.0.nupkg.sha512",
+    "C:\\Users\\ayush\\.nuget\\packages\\opentk.glcontrol\\3.1.0\\opentk.glcontrol.3.1.0.nupkg.sha512",
+    "C:\\Users\\ayush\\.nuget\\packages\\skiasharp\\3.119.0\\skiasharp.3.119.0.nupkg.sha512",
+    "C:\\Users\\ayush\\.nuget\\packages\\skiasharp.harfbuzz\\3.119.0\\skiasharp.harfbuzz.3.119.0.nupkg.sha512",
+    "C:\\Users\\ayush\\.nuget\\packages\\skiasharp.nativeassets.macos\\3.119.0\\skiasharp.nativeassets.macos.3.119.0.nupkg.sha512",
+    "C:\\Users\\ayush\\.nuget\\packages\\skiasharp.nativeassets.win32\\3.119.0\\skiasharp.nativeassets.win32.3.119.0.nupkg.sha512",
+    "C:\\Users\\ayush\\.nuget\\packages\\skiasharp.views.desktop.common\\3.119.0\\skiasharp.views.desktop.common.3.119.0.nupkg.sha512",
+    "C:\\Users\\ayush\\.nuget\\packages\\skiasharp.views.windowsforms\\3.119.0\\skiasharp.views.windowsforms.3.119.0.nupkg.sha512",
     "C:\\Users\\ayush\\.nuget\\packages\\system.diagnostics.diagnosticsource\\9.0.11\\system.diagnostics.diagnosticsource.9.0.11.nupkg.sha512"
   ],
-  "logs": []
+  "logs": [
+    {
+      "code": "NU1701",
+      "level": "Warning",
+      "message": "Package 'OpenTK 3.1.0' was restored using '.NETFramework,Version=v4.6.1, .NETFramework,Version=v4.6.2, .NETFramework,Version=v4.7, .NETFramework,Version=v4.7.1, .NETFramework,Version=v4.7.2, .NETFramework,Version=v4.8, .NETFramework,Version=v4.8.1' instead of the project target framework 'net8.0-windows7.0'. This package may not be fully compatible with your project.",
+      "projectPath": "D:\\CasePoint Intership\\Group C\\MoneyFlow\\MoneyFlow.csproj",
+      "warningLevel": 1,
+      "filePath": "D:\\CasePoint Intership\\Group C\\MoneyFlow\\MoneyFlow.csproj",
+      "libraryId": "OpenTK",
+      "targetGraphs": [
+        "net8.0-windows"
+      ]
+    },
+    {
+      "code": "NU1701",
+      "level": "Warning",
+      "message": "Package 'OpenTK.GLControl 3.1.0' was restored using '.NETFramework,Version=v4.6.1, .NETFramework,Version=v4.6.2, .NETFramework,Version=v4.7, .NETFramework,Version=v4.7.1, .NETFramework,Version=v4.7.2, .NETFramework,Version=v4.8, .NETFramework,Version=v4.8.1' instead of the project target framework 'net8.0-windows7.0'. This package may not be fully compatible with your project.",
+      "projectPath": "D:\\CasePoint Intership\\Group C\\MoneyFlow\\MoneyFlow.csproj",
+      "warningLevel": 1,
+      "filePath": "D:\\CasePoint Intership\\Group C\\MoneyFlow\\MoneyFlow.csproj",
+      "libraryId": "OpenTK.GLControl",
+      "targetGraphs": [
+        "net8.0-windows"
+      ]
+    },
+    {
+      "code": "NU1701",
+      "level": "Warning",
+      "message": "Package 'SkiaSharp.Views.WindowsForms 3.119.0' was restored using '.NETFramework,Version=v4.6.1, .NETFramework,Version=v4.6.2, .NETFramework,Version=v4.7, .NETFramework,Version=v4.7.1, .NETFramework,Version=v4.7.2, .NETFramework,Version=v4.8, .NETFramework,Version=v4.8.1' instead of the project target framework 'net8.0-windows7.0'. This package may not be fully compatible with your project.",
+      "projectPath": "D:\\CasePoint Intership\\Group C\\MoneyFlow\\MoneyFlow.csproj",
+      "warningLevel": 1,
+      "filePath": "D:\\CasePoint Intership\\Group C\\MoneyFlow\\MoneyFlow.csproj",
+      "libraryId": "SkiaSharp.Views.WindowsForms",
+      "targetGraphs": [
+        "net8.0-windows"
+      ]
+    }
+  ]
 }
