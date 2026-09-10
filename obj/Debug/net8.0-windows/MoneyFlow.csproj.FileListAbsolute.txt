@@ -28,3 +28,8 @@ D:\casepoint\MoneyFlow\obj\Debug\net8.0-windows\refint\MoneyFlow.dll
 D:\casepoint\MoneyFlow\obj\Debug\net8.0-windows\MoneyFlow.pdb
 D:\casepoint\MoneyFlow\obj\Debug\net8.0-windows\MoneyFlow.genruntimeconfig.cache
 D:\casepoint\MoneyFlow\obj\Debug\net8.0-windows\ref\MoneyFlow.dll
+D:\MoneyFlow\bin\Debug\net8.0-windows\Microsoft.Extensions.DependencyInjection.Abstractions.dll
+D:\MoneyFlow\bin\Debug\net8.0-windows\Microsoft.Extensions.Logging.Abstractions.dll
+D:\MoneyFlow\bin\Debug\net8.0-windows\Npgsql.dll
+D:\MoneyFlow\obj\Debug\net8.0-windows\MoneyFlow.csproj.AssemblyReference.cache
+D:\MoneyFlow\obj\Debug\net8.0-windows\MoneyFlow.csproj.Up2Date
