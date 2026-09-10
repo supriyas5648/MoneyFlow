@@ -1,0 +1,11 @@
+.env
+
+# Visual Studio and .NET build output
+.vs/
+bin/
+obj/
+*.user
+*.suo
+
+# IDE and local tooling files
+.idea/
