@@ -1,0 +1,15 @@
+D:\MoneyFlow\bin\Debug\net8.0-windows\MoneyFlow.exe
+D:\MoneyFlow\bin\Debug\net8.0-windows\MoneyFlow.deps.json
+D:\MoneyFlow\bin\Debug\net8.0-windows\MoneyFlow.runtimeconfig.json
+D:\MoneyFlow\bin\Debug\net8.0-windows\MoneyFlow.dll
+D:\MoneyFlow\bin\Debug\net8.0-windows\MoneyFlow.pdb
+D:\MoneyFlow\obj\Debug\net8.0-windows\MoneyFlow.GeneratedMSBuildEditorConfig.editorconfig
+D:\MoneyFlow\obj\Debug\net8.0-windows\MoneyFlow.AssemblyInfoInputs.cache
+D:\MoneyFlow\obj\Debug\net8.0-windows\MoneyFlow.AssemblyInfo.cs
+D:\MoneyFlow\obj\Debug\net8.0-windows\MoneyFlow.csproj.CoreCompileInputs.cache
+D:\MoneyFlow\obj\Debug\net8.0-windows\MoneyFlow.sourcelink.json
+D:\MoneyFlow\obj\Debug\net8.0-windows\MoneyFlow.dll
+D:\MoneyFlow\obj\Debug\net8.0-windows\refint\MoneyFlow.dll
+D:\MoneyFlow\obj\Debug\net8.0-windows\MoneyFlow.pdb
+D:\MoneyFlow\obj\Debug\net8.0-windows\MoneyFlow.genruntimeconfig.cache
+D:\MoneyFlow\obj\Debug\net8.0-windows\ref\MoneyFlow.dll
