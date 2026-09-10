@@ -1,9 +1,14 @@
 .env
+.env.*
+!.env.example
+
+# Local database credentials
+Service/Env.cs
 
 # Visual Studio and .NET build output
 .vs/
-bin/
-obj/
+[Bb]in/
+[Oo]bj/
 *.user
 *.suo
 
