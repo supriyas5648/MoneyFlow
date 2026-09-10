@@ -323,6 +323,7 @@ namespace MoneyFlow
             // lblTransactionCategoryError
             // 
             this.lblTransactionCategoryError.AutoSize = true;
+            this.lblTransactionCategoryError.ForeColor = System.Drawing.Color.Red;
             this.lblTransactionCategoryError.Location = new System.Drawing.Point(32, 510);
             this.lblTransactionCategoryError.Name = "lblTransactionCategoryError";
             this.lblTransactionCategoryError.Size = new System.Drawing.Size(0, 16);
@@ -332,6 +333,7 @@ namespace MoneyFlow
             // lblTransactionAmountError
             // 
             this.lblTransactionAmountError.AutoSize = true;
+            this.lblTransactionAmountError.ForeColor = System.Drawing.Color.Red;
             this.lblTransactionAmountError.Location = new System.Drawing.Point(177, 299);
             this.lblTransactionAmountError.Name = "lblTransactionAmountError";
             this.lblTransactionAmountError.Size = new System.Drawing.Size(0, 16);
@@ -341,6 +343,7 @@ namespace MoneyFlow
             // lblTransactionTypeError
             // 
             this.lblTransactionTypeError.AutoSize = true;
+            this.lblTransactionTypeError.ForeColor = System.Drawing.Color.Red;
             this.lblTransactionTypeError.Location = new System.Drawing.Point(32, 253);
             this.lblTransactionTypeError.Name = "lblTransactionTypeError";
             this.lblTransactionTypeError.Size = new System.Drawing.Size(0, 16);
@@ -350,6 +353,7 @@ namespace MoneyFlow
             // lblTransactionDescError
             // 
             this.lblTransactionDescError.AutoSize = true;
+            this.lblTransactionDescError.ForeColor = System.Drawing.Color.Red;
             this.lblTransactionDescError.Location = new System.Drawing.Point(177, 148);
             this.lblTransactionDescError.Name = "lblTransactionDescError";
             this.lblTransactionDescError.Size = new System.Drawing.Size(0, 16);
@@ -359,6 +363,7 @@ namespace MoneyFlow
             // lblTransactionDateError
             // 
             this.lblTransactionDateError.AutoSize = true;
+            this.lblTransactionDateError.ForeColor = System.Drawing.Color.Red;
             this.lblTransactionDateError.Location = new System.Drawing.Point(385, 69);
             this.lblTransactionDateError.Name = "lblTransactionDateError";
             this.lblTransactionDateError.Size = new System.Drawing.Size(0, 16);
