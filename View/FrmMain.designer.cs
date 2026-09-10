@@ -176,6 +176,7 @@ namespace MoneyFlow
             };
             this.menuItemMainSettingsChangeFont.Click += new System.EventHandler(this.menuItemMainSettingsChangeFont_Click);
             this.menuItemMainSettingsChangeColor.Click += new System.EventHandler(this.menuItemMainSettingsChangeColor_Click);
+            this.menuItemMainSettingsChangePassword.Click += new System.EventHandler(this.menuItemMainSettingsChangePassword_Click);
             this.menuItemMainSettings.DropDownItems.AddRange(new ToolStripItem[]
             {
                 this.menuItemMainSettingsChangeFont,

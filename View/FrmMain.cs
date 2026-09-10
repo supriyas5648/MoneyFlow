@@ -1,13 +1,18 @@
 using System;
 using System.Drawing;
 using System.Windows.Forms;
+using MoneyFlow.Model;
+using MoneyFlow.View;
 
 namespace MoneyFlow
 {
     public partial class FrmMain : Form
     {
-        public FrmMain()
+        private readonly User? _currentUser;
+
+        public FrmMain(User? currentUser = null)
         {
+            _currentUser = currentUser;
             InitializeComponent();
             LoadMainWorkspacePage();
         }
@@ -41,6 +46,22 @@ namespace MoneyFlow
             {
                 bottomListView.ForeColor = colorDialogMain.Color;
             }
+        }
+
+        private void menuItemMainSettingsChangePassword_Click(object sender, EventArgs e)
+        {
+            if (_currentUser == null)
+            {
+                MessageBox.Show(
+                    "Change Password is available after a user has logged in.",
+                    "Change Password",
+                    MessageBoxButtons.OK,
+                    MessageBoxIcon.Information);
+                return;
+            }
+
+            using FrmChangePassword frmChangePassword = new FrmChangePassword(_currentUser.UserId);
+            frmChangePassword.ShowDialog(this);
         }
 
         private void LoadMainWorkspacePage()

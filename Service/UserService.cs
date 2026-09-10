@@ -81,5 +81,31 @@ namespace MoneyFlow.Service
                 }
             }
         }
+
+        public bool ChangePassword(int userId, string currentPassword, string newPassword)
+        {
+            using (NpgsqlConnection connection =
+                   new NpgsqlConnection(Env.ConnectionString))
+            {
+                connection.Open();
+
+                string query = @"
+                    UPDATE t_user
+                    SET c_user_password = @newPassword
+                    WHERE c_user_id = @userId
+                      AND c_user_password = @currentPassword;
+                ";
+
+                using (NpgsqlCommand command =
+                       new NpgsqlCommand(query, connection))
+                {
+                    command.Parameters.AddWithValue("@newPassword", newPassword);
+                    command.Parameters.AddWithValue("@userId", userId);
+                    command.Parameters.AddWithValue("@currentPassword", currentPassword);
+
+                    return command.ExecuteNonQuery() > 0;
+                }
+            }
+        }
     }
 }
