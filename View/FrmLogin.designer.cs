@@ -78,6 +78,7 @@ namespace MoneyFlow
             this.txtUserName.Name = "txtUserName";
             this.txtUserName.Size = new System.Drawing.Size(218, 22);
             this.txtUserName.TabIndex = 3;
+            this.txtUserName.TextChanged += new System.EventHandler(this.txtUserName_TextChanged);
             // 
             // txtPassword
             // 
@@ -85,6 +86,7 @@ namespace MoneyFlow
             this.txtPassword.Name = "txtPassword";
             this.txtPassword.Size = new System.Drawing.Size(218, 22);
             this.txtPassword.TabIndex = 4;
+            this.txtPassword.TextChanged += new System.EventHandler(this.txtPassword_TextChanged);
             // 
             // btnLogin
             // 
@@ -95,6 +97,7 @@ namespace MoneyFlow
             this.btnLogin.TabIndex = 5;
             this.btnLogin.Text = "LOGIN";
             this.btnLogin.UseVisualStyleBackColor = false;
+            this.btnLogin.Click += new System.EventHandler(this.LoginClick);
             // 
             // lblUserNameError
             // 

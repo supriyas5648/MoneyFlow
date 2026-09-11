@@ -1,6 +1,6 @@
 using System;
-using Npgsql;
 using System.Windows.Forms;
+using MoneyFlow.Model;
 using MoneyFlow.Service;
 using MoneyFlow.View;
 
@@ -8,70 +8,97 @@ namespace MoneyFlow
 {
     public partial class FrmLogin : Form
     {
+        private readonly UserService _userService;
+
         public FrmLogin()
         {
             InitializeComponent();
+            _userService = new UserService();
         }
 
-        public void LoginClick(object sender, EventArgs e)
+        private void LoginClick(object sender, EventArgs e)
         {
-           if(string.IsNullOrEmpty(this.txtUserName.Text) || string.IsNullOrEmpty(this.txtPassword.Text)) 
-           {
-                if (string.IsNullOrEmpty(this.txtUserName.Text))
-                {
-                    this.lblUserNameError.Visible = true;
-                }
+            string username = txtUserName.Text.Trim();
+            string password = txtPassword.Text;
 
-                if (string.IsNullOrEmpty(this.txtPassword.Text))
-                {
-                    this.lblPasswordError.Visible = true;
-                }
-           }else
-           {
+            lblUserNameError.Visible = string.IsNullOrWhiteSpace(username);
+            lblPasswordError.Visible = string.IsNullOrWhiteSpace(password);
 
-            //else check values
-            //accessed con string
-            string ConnectionString = Env.ConnectionString;
-            
-             //connection 
-             NpgsqlConnection cn = new NpgsqlConnection(ConnectionString);
+            if (lblUserNameError.Visible || lblPasswordError.Visible)
+            {
+                return;
+            }
+
             try
             {
-                string query = @"SELECT COUNT(*) FROM t_user WHERE c_user_username = @username AND c_user_password = @password";
+                User? authenticatedUser = _userService.AuthenticateUser(username, password);
 
-                NpgsqlCommand cmd = new NpgsqlCommand(query,cn);
-
-                cmd.Parameters.AddWithValue("username", txtUserName.Text);
-                cmd.Parameters.AddWithValue("password", txtPassword.Text);
-
-                cn.Open();
-                int count = Convert.ToInt32(cmd.ExecuteScalar());
-
-                if (count > 0)
+                if (authenticatedUser != null)
                 {
-                    MessageBox.Show("Login Successful");
+                    Hide();
+
+                    using (FrmMain mainForm = new FrmMain(authenticatedUser))
+                    {
+                        mainForm.ShowDialog(this);
+
+                        if (mainForm.LogoutRequested)
+                        {
+                            ResetForNextUser();
+                            Show();
+                            return;
+                        }
+                    }
+
+                    Close();
                 }
                 else
                 {
-                    MessageBox.Show("Invalid username or password");
+                    MessageBox.Show(
+                        "Invalid username or password.",
+                        "Login",
+                        MessageBoxButtons.OK,
+                        MessageBoxIcon.Warning);
                 }
-
-            }catch(Exception ex)
+            }
+            catch (Exception)
             {
-                MessageBox.Show("Error : " + ex.Message);
-            }finally
-            {
-                cn.Close();
+                MessageBox.Show(
+                    "Unable to connect to the database.",
+                    "Database Error",
+                    MessageBoxButtons.OK,
+                    MessageBoxIcon.Error);
             }
         }
-        }
 
-
-    public void RegisterClick(object sender, EventArgs e)
+        private void RegisterClick(object sender, EventArgs e)
         {
-            FrmRegistration registerForm = new FrmRegistration();
-            registerForm.Show(); 
-            //  this.Hide();
+            Hide();
+
+            using (FrmRegistration registrationForm = new FrmRegistration())
+            {
+                registrationForm.ShowDialog(this);
+            }
+
+            Show();
         }
-}
+
+        private void txtUserName_TextChanged(object sender, EventArgs e)
+        {
+            lblUserNameError.Visible = string.IsNullOrWhiteSpace(txtUserName.Text);
+        }
+
+        private void txtPassword_TextChanged(object sender, EventArgs e)
+        {
+            lblPasswordError.Visible = string.IsNullOrWhiteSpace(txtPassword.Text);
+        }
+
+        private void ResetForNextUser()
+        {
+            txtUserName.Clear();
+            txtPassword.Clear();
+            lblUserNameError.Visible = false;
+            lblPasswordError.Visible = false;
+            txtUserName.Focus();
+        }
+    }
 }

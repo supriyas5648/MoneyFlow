@@ -25,6 +25,7 @@ namespace MoneyFlow
         private ToolStripMenuItem menuItemMainSettingsChangeFont;
         private ToolStripMenuItem menuItemMainSettingsChangeColor;
         private ToolStripMenuItem menuItemMainSettingsChangePassword;
+        private ToolStripMenuItem menuItemMainSettingsLogout;
 
         // Master Grid & Containers
         private Panel workspaceContainerPanel;
@@ -174,14 +175,20 @@ namespace MoneyFlow
             {
                 Name = "menuItemMainSettingsChangePassword"
             };
+            this.menuItemMainSettingsLogout = new ToolStripMenuItem("Logout")
+            {
+                Name = "menuItemMainSettingsLogout"
+            };
             this.menuItemMainSettingsChangeFont.Click += new System.EventHandler(this.menuItemMainSettingsChangeFont_Click);
             this.menuItemMainSettingsChangeColor.Click += new System.EventHandler(this.menuItemMainSettingsChangeColor_Click);
             this.menuItemMainSettingsChangePassword.Click += new System.EventHandler(this.menuItemMainSettingsChangePassword_Click);
+            this.menuItemMainSettingsLogout.Click += new System.EventHandler(this.menuItemMainSettingsLogout_Click);
             this.menuItemMainSettings.DropDownItems.AddRange(new ToolStripItem[]
             {
                 this.menuItemMainSettingsChangeFont,
                 this.menuItemMainSettingsChangeColor,
-                this.menuItemMainSettingsChangePassword
+                this.menuItemMainSettingsChangePassword,
+                this.menuItemMainSettingsLogout
             });
 
             this.menuStripMain.Items.AddRange(new ToolStripItem[]

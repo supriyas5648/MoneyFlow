@@ -212,7 +212,8 @@ namespace MoneyFlow.View
 
         private void btnRegistrationLogin_Click(object sender, EventArgs e)
         {
-            // TODO: Implement login functionality.
+            DialogResult = DialogResult.Cancel;
+            Close();
         }
     }
 }
