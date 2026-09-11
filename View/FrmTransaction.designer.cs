@@ -290,6 +290,7 @@ namespace MoneyFlow
             // numupdTransactionAmount
             // 
             this.numupdTransactionAmount.DecimalPlaces = 2;
+            this.numupdTransactionAmount.Maximum = decimal.MaxValue;
             this.numupdTransactionAmount.Location = new System.Drawing.Point(177, 350);
             this.numupdTransactionAmount.Name = "numupdTransactionAmount";
             this.numupdTransactionAmount.Size = new System.Drawing.Size(150, 22);

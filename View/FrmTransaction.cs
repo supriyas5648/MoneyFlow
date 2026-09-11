@@ -6,21 +6,17 @@ using MoneyFlow.Service;
 
 namespace MoneyFlow
 {
-    public static class UserSession
-    {
-        public static int UserId = 1;
-        public static string Username = "admin";
-    }
-
     public partial class FrmTransaction : Form
     {
+        private readonly User _currentUser;
         private readonly TransactionService _transactionService =
             new TransactionService();
         private readonly TransactionCategoryService _transactionCategoryService =
             new TransactionCategoryService();
 
-        public FrmTransaction()
+        public FrmTransaction(User currentUser)
         {
+            _currentUser = currentUser ?? throw new ArgumentNullException(nameof(currentUser));
             InitializeComponent();
 
             // Default = Income
@@ -54,7 +50,7 @@ namespace MoneyFlow
             {
                 DataTable dt =
                     _transactionCategoryService.GetCategories(
-                        UserSession.UserId,
+                        _currentUser.UserId,
                         "Income");
 
                 AddOtherOption(dt, "Income");
@@ -90,7 +86,7 @@ namespace MoneyFlow
             {
                 DataTable dt =
                     _transactionCategoryService.GetCategories(
-                        UserSession.UserId,
+                        _currentUser.UserId,
                         "Expense");
 
                 AddOtherOption(dt, "Expense");
@@ -129,7 +125,7 @@ namespace MoneyFlow
             otherRow["c_category_id"] = 0;
             otherRow["c_category_name"] = "Other";
             otherRow["c_category_type"] = categoryType;
-            otherRow["c_user_id"] = UserSession.UserId;
+            otherRow["c_user_id"] = _currentUser.UserId;
 
             dt.Rows.Add(otherRow);
         }
@@ -432,7 +428,7 @@ namespace MoneyFlow
             {
                 bool exists =
                     _transactionCategoryService.CategoryExists(
-                        UserSession.UserId,
+                        _currentUser.UserId,
                         categoryName,
                         categoryType);
 
@@ -456,7 +452,7 @@ namespace MoneyFlow
                     _transactionCategoryService.AddCategory(
                         categoryName,
                         categoryType,
-                        UserSession.UserId);
+                        _currentUser.UserId);
 
 
                 MessageBox.Show(
@@ -588,7 +584,7 @@ namespace MoneyFlow
                 Transaction? transaction =
                     _transactionService.GetTransactionById(
                         transactionId,
-                        UserSession.UserId);
+                        _currentUser.UserId);
 
                 if (transaction == null)
                 {
@@ -671,7 +667,7 @@ namespace MoneyFlow
 
             if (!_transactionService.TransactionBelongsToUser(
                     transactionId,
-                    UserSession.UserId))
+                    _currentUser.UserId))
             {
                 MessageBox.Show(
                     "Transaction not found for this user!!",
@@ -703,7 +699,7 @@ namespace MoneyFlow
                     categoryId,
                     numupdTransactionAmount.Value,
                     dtpTransactionDate.Value.Date,
-                    UserSession.UserId,
+                    _currentUser.UserId,
                     txtTransactionDescription.Text.Trim());
 
                 MessageBox.Show(
@@ -747,7 +743,7 @@ namespace MoneyFlow
             {
                 _transactionService.DeleteTransaction(
                     transactionId,
-                    UserSession.UserId);
+                    _currentUser.UserId);
 
                 MessageBox.Show(
                     "Transaction deleted successfully.",
@@ -854,7 +850,7 @@ namespace MoneyFlow
                     categoryId,
                     numupdTransactionAmount.Value,
                     dtpTransactionDate.Value.Date,
-                    UserSession.UserId,
+                    _currentUser.UserId,
                     txtTransactionDescription.Text.Trim());
 
                 MessageBox.Show(
