@@ -85,6 +85,7 @@ namespace MoneyFlow
             this.Text = "MoneyFlow Desktop";
             this.Size = new Size(960, 640);
             this.MinimumSize = new Size(820, 540);
+            this.MaximizeBox = false;
             this.StartPosition = FormStartPosition.CenterScreen;
 
             // Main MenuStrip
@@ -123,6 +124,7 @@ namespace MoneyFlow
             {
                 Name = "menuItemMainTransaction"
             };
+            this.menuItemMainTransaction.Click += new System.EventHandler(this.menuItemMainTransaction_Click);
 
             // View Menu
             this.menuItemMainView = new ToolStripMenuItem("View")

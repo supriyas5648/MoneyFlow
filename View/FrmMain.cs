@@ -227,6 +227,22 @@ namespace MoneyFlow
             frmChangePassword.ShowDialog(this);
         }
 
+        private void menuItemMainTransaction_Click(object sender, EventArgs e)
+        {
+            if (_currentUser == null)
+            {
+                MessageBox.Show(
+                    "Transaction management is available after a user has logged in.",
+                    "Transaction",
+                    MessageBoxButtons.OK,
+                    MessageBoxIcon.Information);
+                return;
+            }
+
+            using FrmTransaction frmTransaction = new FrmTransaction(_currentUser);
+            frmTransaction.ShowDialog(this);
+        }
+
         private void menuItemMainSettingsLogout_Click(object sender, EventArgs e)
         {
             LogoutRequested = true;
