@@ -1,139 +1,7 @@
-// using System;
-// using System.Data;
-// using System.Windows.Forms;
-// using MoneyFlow.Service;
-
-// namespace MoneyFlow
-// {
-//     public static class UserSession
-//         {
-//             public static int UserId = 1;
-//             public static string Username = "admin";
-//         }
-//     public partial class FrmTransaction : Form
-//     {
-//         private readonly TransactionService _transactionService = new TransactionService();
-//         public FrmTransaction()
-//         {
-//             InitializeComponent();
-//             LoadIncomeCategories();
-//             LoadExpenseCategories();
-//         }
-
-// private void LoadExpenseCategories()
-// {
-//     try
-//     {
-//         DataTable dt = _transactionService.GetCategories(
-//             UserSession.UserId,
-//             "Expense");
-
-//         DataRow otherRow = dt.NewRow();
-
-//         otherRow["c_category_id"] = 0;
-//         otherRow["c_category_name"] = "Other";
-//         otherRow["c_category_type"] = "Expense";
-//         otherRow["c_user_id"] = UserSession.UserId;
-
-//         dt.Rows.Add(otherRow);
-
-//         lstboxTransactionExpenseCategory.DataSource = dt;
-//         lstboxTransactionExpenseCategory.DisplayMember =
-//             "c_category_name";
-//         lstboxTransactionExpenseCategory.ValueMember =
-//             "c_category_id";
-
-//         lstboxTransactionExpenseCategory.SelectedIndex = -1;
-//     }
-//     catch (Exception ex)
-//     {
-//         MessageBox.Show(
-//             ex.Message,
-//             "Error",
-//             MessageBoxButtons.OK,
-//             MessageBoxIcon.Error);
-//     }
-// }
-//         private void LoadIncomeCategories()
-// {
-//     try
-//     {
-//         DataTable dt = _transactionService.GetCategories(
-//             UserSession.UserId,
-//             "Income");
-
-//         DataRow otherRow = dt.NewRow();
-
-//         otherRow["c_category_id"] = 0;
-//         otherRow["c_category_name"] = "Other";
-//         otherRow["c_category_type"] = "Income";
-//         otherRow["c_user_id"] = UserSession.UserId;
-
-//         dt.Rows.Add(otherRow);
-
-//         cmbIncomeCategory.DataSource = dt;
-//         cmbIncomeCategory.DisplayMember = "c_category_name";
-//         cmbIncomeCategory.ValueMember = "c_category_id";
-
-//         cmbIncomeCategory.SelectedIndex = -1;
-//     }
-//     catch (Exception ex)
-//     {
-//         MessageBox.Show(
-//             ex.Message,
-//             "Error",
-//             MessageBoxButtons.OK,
-//             MessageBoxIcon.Error);
-//     }
-// }
-//         private void ClearValidationMessages()
-//         {
-//             lblTransactionDateError.Text = "";
-//             lblTransactionDescError.Text = "";
-//             lblTransactionTypeError.Text = "";
-//             lblTransactionAmountError.Text = "";
-//             lblTransactionCategoryError.Text = "";
-
-//             lblTransactionDateError.Visible = false;
-//             lblTransactionDescError.Visible = false;
-//             lblTransactionTypeError.Visible = false;
-//             lblTransactionAmountError.Visible = false;
-//             lblTransactionCategoryError.Visible = false;
-//         }
-
-//         private void RbTransactionIncome_CheckedChanged(object sender, System.EventArgs e)
-//         {
-//                  if (rbTransactionIncome.Checked)
-//                     {
-//                         LoadIncomeCategories();
-
-//                         cmbIncomeCategory.Visible = true;
-//                         lblTransactionIncomeCategory.Visible = true;
-
-//                         lstboxTransactionExpenseCategory.Visible = false;
-//                         lblTransactionExpenseCategory.Visible = false;
-//                     }
-//         }
-
-//         private void RbTransactionExpense_CheckedChanged(object sender, System.EventArgs e)
-//         {
-//             if (rbTransactionExpense.Checked)
-//             {
-//                 LoadExpenseCategories();
-
-//                 cmbIncomeCategory.Visible = false;
-//                 lblTransactionIncomeCategory.Visible = false;
-
-//                 lstboxTransactionExpenseCategory.Visible = true;
-//                 lblTransactionExpenseCategory.Visible = true;
-//             }
-//         }
-//     }
-// }
-
 using System;
 using System.Data;
 using System.Windows.Forms;
+using MoneyFlow.Model;
 using MoneyFlow.Service;
 
 namespace MoneyFlow
@@ -170,6 +38,8 @@ namespace MoneyFlow
             HideNewCategoryControls();
 
             ClearValidationMessages();
+
+            SetInsertMode();
 
             // Load income categories
             LoadIncomeCategories();
@@ -506,22 +376,21 @@ namespace MoneyFlow
                 return;
             }
 
-            // Optional: prevent only spaces/special characters
-            bool hasLetterOrDigit = false;
+            bool containsOnlyLettersAndSpaces = true;
 
             foreach (char c in categoryName)
             {
-                if (char.IsLetterOrDigit(c))
+                if (!char.IsLetter(c) && c != ' ')
                 {
-                    hasLetterOrDigit = true;
+                    containsOnlyLettersAndSpaces = false;
                     break;
                 }
             }
 
-            if (!hasLetterOrDigit)
+            if (!containsOnlyLettersAndSpaces)
             {
                 MessageBox.Show(
-                    "Please enter a valid category name.",
+                    "Category name can contain only alphabets and spaces.",
                     "Validation",
                     MessageBoxButtons.OK,
                     MessageBoxIcon.Warning);
@@ -687,6 +556,215 @@ namespace MoneyFlow
             lblTransactionTypeError.Visible = false;
             lblTransactionAmountError.Visible = false;
             lblTransactionCategoryError.Visible = false;
+        }
+
+        private void SetInsertMode()
+        {
+            btnTransactionAdd.Enabled = true;
+            btnTransactionEdit.Enabled = false;
+            btnTransactionDelete.Enabled = false;
+            txtTransactionLookup.ReadOnly = false;
+            txtTransactionId.Clear();
+            txtTransactionId.Visible = false;
+            lblTransactionId.Visible = false;
+        }
+
+        private void BtnTransactionBind_Click(object sender, EventArgs e)
+        {
+            if (!int.TryParse(txtTransactionLookup.Text.Trim(), out int transactionId))
+            {
+                MessageBox.Show(
+                    "Enter a valid transaction ID.",
+                    "Validation",
+                    MessageBoxButtons.OK,
+                    MessageBoxIcon.Warning);
+                txtTransactionLookup.Clear();
+                txtTransactionLookup.Focus();
+                return;
+            }
+
+            try
+            {
+                Transaction? transaction =
+                    _transactionService.GetTransactionById(
+                        transactionId,
+                        UserSession.UserId);
+
+                if (transaction == null)
+                {
+                    MessageBox.Show(
+                        "Transaction not found for this user!!",
+                        "Search",
+                        MessageBoxButtons.OK,
+                        MessageBoxIcon.Information);
+                    txtTransactionLookup.Clear();
+                    txtTransactionLookup.Focus();
+                    return;
+                }
+
+                txtTransactionId.Text = transaction.TransactionId.ToString();
+                txtTransactionId.Visible = true;
+                lblTransactionId.Visible = true;
+                txtTransactionId.ReadOnly = true;
+
+                if (transaction.TransactionType == "Income")
+                {
+                    rbTransactionIncome.Checked = true;
+                    SelectIncomeCategory(transaction.TransactionCategoryId);
+                }
+                else
+                {
+                    rbTransactionExpense.Checked = true;
+                    SelectExpenseCategory(transaction.TransactionCategoryId);
+                }
+
+                dtpTransactionDate.Value = transaction.TransactionDate;
+                txtTransactionDescription.Text =
+                    transaction.TransactionDescription ?? string.Empty;
+                numupdTransactionAmount.Value = transaction.TransactionAmount;
+
+                btnTransactionAdd.Enabled = false;
+                btnTransactionEdit.Enabled = true;
+                btnTransactionDelete.Enabled = true;
+                txtTransactionLookup.ReadOnly = true;
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(
+                    ex.Message,
+                    "Error",
+                    MessageBoxButtons.OK,
+                    MessageBoxIcon.Error);
+            }
+        }
+
+        private void BtnTransactionClear_Click(object sender, EventArgs e)
+        {
+            txtTransactionLookup.Clear();
+            txtTransactionDescription.Clear();
+            txtTransactionNewCat.Clear();
+            numupdTransactionAmount.Value = 0;
+            dtpTransactionDate.Value = DateTime.Today;
+            cmbIncomeCategory.SelectedIndex = -1;
+            lstboxTransactionExpenseCategory.SelectedIndex = -1;
+            rbTransactionIncome.Checked = true;
+            HideNewCategoryControls();
+            ClearValidationMessages();
+            SetInsertMode();
+        }
+
+        private bool ValidateTransactionId(out int transactionId)
+        {
+            transactionId = 0;
+
+            if (!int.TryParse(txtTransactionLookup.Text.Trim(), out transactionId) ||
+                transactionId <= 0)
+            {
+                MessageBox.Show(
+                    "Please enter a valid transaction ID.",
+                    "Transaction ID validation",
+                    MessageBoxButtons.OK,
+                    MessageBoxIcon.Warning);
+                txtTransactionLookup.Clear();
+                return false;
+            }
+
+            if (!_transactionService.TransactionBelongsToUser(
+                    transactionId,
+                    UserSession.UserId))
+            {
+                MessageBox.Show(
+                    "Transaction not found for this user!!",
+                    "Transaction ID validation",
+                    MessageBoxButtons.OK,
+                    MessageBoxIcon.Warning);
+                txtTransactionLookup.Clear();
+                return false;
+            }
+
+            return true;
+        }
+
+        private void BtnTransactionEdit_Click(object sender, EventArgs e)
+        {
+            if (!ValidateTransactionId(out int transactionId) ||
+                !ValidateTransaction(
+                    out string transactionType,
+                    out int categoryId))
+            {
+                return;
+            }
+
+            try
+            {
+                _transactionService.UpdateTransaction(
+                    transactionId,
+                    transactionType,
+                    categoryId,
+                    numupdTransactionAmount.Value,
+                    dtpTransactionDate.Value.Date,
+                    UserSession.UserId,
+                    txtTransactionDescription.Text.Trim());
+
+                MessageBox.Show(
+                    "Transaction updated successfully.",
+                    "Success",
+                    MessageBoxButtons.OK,
+                    MessageBoxIcon.Information);
+
+                BtnTransactionClear_Click(sender, e);
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(
+                    ex.Message,
+                    "Error",
+                    MessageBoxButtons.OK,
+                    MessageBoxIcon.Error);
+            }
+        }
+
+        private void BtnTransactionDelete_Click(object sender, EventArgs e)
+        {
+            if (!ValidateTransactionId(out int transactionId))
+            {
+                return;
+            }
+
+            DialogResult confirmation = MessageBox.Show(
+                "Are you sure you want to permanently delete this transaction?",
+                "Confirm permanent deletion",
+                MessageBoxButtons.YesNo,
+                MessageBoxIcon.Warning,
+                MessageBoxDefaultButton.Button2);
+
+            if (confirmation != DialogResult.Yes)
+            {
+                return;
+            }
+
+            try
+            {
+                _transactionService.DeleteTransaction(
+                    transactionId,
+                    UserSession.UserId);
+
+                MessageBox.Show(
+                    "Transaction deleted successfully.",
+                    "Success",
+                    MessageBoxButtons.OK,
+                    MessageBoxIcon.Information);
+
+                BtnTransactionClear_Click(sender, e);
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(
+                    ex.Message,
+                    "Error",
+                    MessageBoxButtons.OK,
+                    MessageBoxIcon.Error);
+            }
         }
 
         private bool ValidateTransaction(

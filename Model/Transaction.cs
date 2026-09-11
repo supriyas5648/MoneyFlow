@@ -1,3 +1,5 @@
+using System;
+
 namespace MoneyFlow.Model
 {
     public class Transaction
