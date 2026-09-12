@@ -199,6 +199,8 @@ namespace MoneyFlow
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(9F, 20F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
+            this.BackColor = System.Drawing.Color.FromArgb(238, 246, 247);
+            this.ForeColor = System.Drawing.Color.FromArgb(27, 49, 58);
             this.ClientSize = new System.Drawing.Size(800, 500);
             this.Controls.Add(this.btnRegistrationLogin);
             this.Controls.Add(this.btnRegistrationClear);
