@@ -43,11 +43,8 @@ public partial class FrmMain2
     private CheckBox chkFilterDescription;
 
     private GroupBox grpCategory;
-    private CheckBox chkSalary;
-    private CheckBox chkGroceries;
-    private CheckBox chkUtilities;
-    private CheckBox chkRent;
-    private CheckBox chkEntertainment;
+    private ComboBox cmbCategoryType;
+    private FlowLayoutPanel categoryFlow;
 
     private GroupBox grpDescription;
     private Label lblDescription;
@@ -269,7 +266,7 @@ public partial class FrmMain2
         this.grpFilter = new GroupBox
         {
             Name = "grpFilter",
-            Text = "  User Filter Criteria Summary  ",
+            Text = " Filter Criteria  ",
             Dock = DockStyle.Fill,
             Padding = new Padding(18, 28, 18, 18),
             BackColor = Color.White,
@@ -357,7 +354,7 @@ public partial class FrmMain2
             Font = new Font("Segoe UI", 10F, FontStyle.Bold)
         };
 
-        FlowLayoutPanel categoryFlow = new FlowLayoutPanel
+        this.categoryFlow = new FlowLayoutPanel
         {
             Dock = DockStyle.Fill,
             FlowDirection = FlowDirection.TopDown,
@@ -367,26 +364,20 @@ public partial class FrmMain2
             BackColor = Color.FromArgb(248, 250, 252)
         };
 
-        this.chkSalary = CreateCategoryCheckBox("Salary");
-        this.chkGroceries = CreateCategoryCheckBox("Groceries");
-        this.chkUtilities = CreateCategoryCheckBox("Utilities");
-        this.chkRent = CreateCategoryCheckBox("Rent");
-        this.chkEntertainment = CreateCategoryCheckBox("Entertainment");
-
-        this.categoryCheckBoxesList.Clear();
-        this.categoryCheckBoxesList.Add(this.chkSalary);
-        this.categoryCheckBoxesList.Add(this.chkGroceries);
-        this.categoryCheckBoxesList.Add(this.chkUtilities);
-        this.categoryCheckBoxesList.Add(this.chkRent);
-        this.categoryCheckBoxesList.Add(this.chkEntertainment);
-
-        foreach (CheckBox checkBox in this.categoryCheckBoxesList)
+        this.cmbCategoryType = new ComboBox
         {
-            checkBox.CheckedChanged += new EventHandler(this.DynamicFilter_Changed);
-            categoryFlow.Controls.Add(checkBox);
-        }
+            Name = "cmbCategoryType",
+            Dock = DockStyle.Top,
+            DropDownStyle = ComboBoxStyle.DropDownList,
+            Height = 30,
+            Margin = new Padding(5, 0, 5, 8)
+        };
+        this.cmbCategoryType.Items.AddRange(new object[] { "Income", "Expense" });
+        this.cmbCategoryType.SelectedIndex = 0;
+        this.cmbCategoryType.SelectedIndexChanged += new EventHandler(this.CategoryType_SelectedIndexChanged);
 
-        this.grpCategory.Controls.Add(categoryFlow);
+        this.grpCategory.Controls.Add(this.categoryFlow);
+        this.grpCategory.Controls.Add(this.cmbCategoryType);
 
         // Description group
         this.grpDescription = new GroupBox

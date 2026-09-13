@@ -377,6 +377,7 @@ namespace MoneyFlow
             _currentUser = currentUser;
             _settingService = new SettingService();
             InitializeComponent();
+            LoadCategoryFilter();
             LoadDataInListView();
         }
 
@@ -744,6 +745,7 @@ namespace MoneyFlow
             // form.
             // --------------------------------------------------------
 
+            LoadCategoryFilter();
             LoadDataInListView();
         }
 
@@ -888,6 +890,60 @@ namespace MoneyFlow
         private void DynamicFilter_Changed(object sender, EventArgs e)
         {
             ApplyFilters();
+        }
+
+        private void CategoryType_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            LoadCategoryFilter();
+        }
+
+        private void LoadCategoryFilter()
+        {
+            if (_currentUser == null || categoryFlow == null || cmbCategoryType == null)
+            {
+                return;
+            }
+
+            string categoryType = cmbCategoryType.SelectedItem?.ToString() ?? "Income";
+            categoryFlow.SuspendLayout();
+            categoryFlow.Controls.Clear();
+            categoryCheckBoxesList.Clear();
+
+            try
+            {
+                using NpgsqlConnection connection = new NpgsqlConnection(env.ConnectionString);
+                using NpgsqlCommand command = new NpgsqlCommand(@"
+                    SELECT c_category_name
+                    FROM t_category
+                    WHERE c_created_by_user_id = @UserId
+                      AND c_category_type = @CategoryType
+                    ORDER BY c_category_name;", connection);
+                command.Parameters.AddWithValue("@UserId", _currentUser.UserId);
+                command.Parameters.AddWithValue("@CategoryType", categoryType);
+
+                connection.Open();
+                using NpgsqlDataReader reader = command.ExecuteReader();
+                while (reader.Read())
+                {
+                    CheckBox checkBox = CreateCategoryCheckBox(reader.GetString(0));
+                    checkBox.CheckedChanged += DynamicFilter_Changed;
+                    categoryCheckBoxesList.Add(checkBox);
+                    categoryFlow.Controls.Add(checkBox);
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(
+                    "Error loading categories: " + ex.Message,
+                    "Category Filter",
+                    MessageBoxButtons.OK,
+                    MessageBoxIcon.Error);
+            }
+            finally
+            {
+                categoryFlow.ResumeLayout();
+                ApplyFilters();
+            }
         }
 
         // ============================================================
