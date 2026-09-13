@@ -498,7 +498,7 @@ namespace MoneyFlow
                  i < cmbIncomeCategory.Items.Count;
                  i++)
             {
-                DataRowView row =
+                DataRowView? row =
                     cmbIncomeCategory.Items[i] as DataRowView;
 
                 if (row != null &&
@@ -521,7 +521,7 @@ namespace MoneyFlow
                  i < lstboxTransactionExpenseCategory.Items.Count;
                  i++)
             {
-                DataRowView row =
+                DataRowView? row =
                     lstboxTransactionExpenseCategory.Items[i]
                     as DataRowView;
 

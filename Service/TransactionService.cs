@@ -229,5 +229,56 @@ namespace MoneyFlow.Service
                     ex);
             }
         }
+
+        public List<TransactionModel> GetAllTransactions(int userId)
+        {
+            var list = new List<TransactionModel>();
+            try
+            {
+                using (NpgsqlConnection con = new NpgsqlConnection(_con))
+                using (NpgsqlCommand cmd = new NpgsqlCommand(@"
+                    SELECT
+                        t.c_transaction_id,
+                        t.c_transaction_date,
+                        COALESCE(c.c_category_name, 'General') AS c_category_name,
+                        t.c_transaction_description,
+                        t.c_transaction_amount,
+                        t.c_transaction_type,
+                        t.c_transaction_category_id,
+                        t.c_user_id
+                    FROM t_transaction t
+                    LEFT JOIN t_category c ON t.c_transaction_category_id = c.c_category_id
+                    WHERE t.c_user_id = @UserId
+                    ORDER BY t.c_transaction_date DESC, t.c_transaction_id DESC;", con))
+                {
+                    cmd.Parameters.AddWithValue("@UserId", userId);
+                    con.Open();
+
+                    using (NpgsqlDataReader reader = cmd.ExecuteReader())
+                    {
+                        while (reader.Read())
+                        {
+                            list.Add(new TransactionModel
+                            {
+                                TransactionId = reader.GetInt32(0),
+                                TransactionDate = reader.GetDateTime(1),
+                                CategoryName = reader.GetString(2),
+                                TransactionDescription = reader.IsDBNull(3) ? null : reader.GetString(3),
+                                TransactionAmount = reader.GetDecimal(4),
+                                TransactionType = reader.GetString(5),
+                                TransactionCategoryId = reader.GetInt32(6),
+                                UserId = reader.GetInt32(7)
+                            });
+                        }
+                    }
+                }
+
+                return list;
+            }
+            catch (Exception ex)
+            {
+                throw new Exception("Error while fetching transactions: " + ex.Message, ex);
+            }
+        }
     }
 }

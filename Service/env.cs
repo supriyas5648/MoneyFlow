@@ -6,7 +6,7 @@ namespace MoneyFlow.Service
             "Server=localhost;" +
             "Port=5432;" +
             "Database=MoneyFlow;" +
-            "User Id=postgres;" +
-            "Password=Meet@4751;";
+            "Username=postgres;" +
+            "Password=root;";
     }
 }

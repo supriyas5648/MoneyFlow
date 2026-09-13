@@ -6,7 +6,7 @@ namespace MoneyFlow.Model
     {
         public int TransactionId { get; set; }
 
-        public string TransactionType { get; set; }
+        public string TransactionType { get; set; } = string.Empty;
 
         public int TransactionCategoryId { get; set; }
 

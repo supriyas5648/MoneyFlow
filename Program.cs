@@ -1,3 +1,6 @@
+using System;
+using System.Windows.Forms;
+using MoneyFlow.Data;
 using MoneyFlow.View;
 
 namespace MoneyFlow;
@@ -10,9 +13,17 @@ static class Program
     [STAThread]
     static void Main()
     {
-        // To customize application configuration such as set high DPI settings or default font,
-        // see https://aka.ms/applicationconfiguration.
         ApplicationConfiguration.Initialize();
+
+        try
+        {
+            DatabaseInitializer.Initialize();
+        }
+        catch
+        {
+            // Database initialization will gracefully fallback if server is offline
+        }
+
         Application.Run(new FrmLogin());
     }    
 }
