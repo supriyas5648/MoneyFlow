@@ -9,6 +9,7 @@ namespace MoneyFlow
     public partial class FrmRegistration : Form
     {
         private readonly UserService _userService;
+        private const string FullNamePattern = @"^[A-Za-z]{2,}(?:\s+[A-Za-z]+)*$";
         private const string UsernamePattern = @"^(?=.*[0-9])[A-Z][A-Za-z0-9]{0,49}$";
         private const string PasswordPattern = @"^(?=[A-Z])(?=.*\d)(?=.*[^A-Za-z0-9\s])[^\s]{8,}$";
 
@@ -25,27 +26,30 @@ namespace MoneyFlow
             string password = txtRegistrationPassword.Text;
             string confirmPassword = txtRegistrationConfirmPassword.Text;
 
-            if (!ValidateFullName(true))
-            {
-                txtRegistrationFullName.Focus();
-                return;
-            }
+            bool isFullNameValid = ValidateFullName(true);
+            bool isUsernameValid = ValidateUsername(true);
+            bool isPasswordValid = ValidatePassword(true);
+            bool isConfirmPasswordValid = ValidateConfirmPassword(true);
 
-            if (!ValidateUsername(true))
+            if (!isFullNameValid || !isUsernameValid || !isPasswordValid || !isConfirmPasswordValid)
             {
-                txtRegistrationUsername.Focus();
-                return;
-            }
+                if (!isFullNameValid)
+                {
+                    txtRegistrationFullName.Focus();
+                }
+                else if (!isUsernameValid)
+                {
+                    txtRegistrationUsername.Focus();
+                }
+                else if (!isPasswordValid)
+                {
+                    txtRegistrationPassword.Focus();
+                }
+                else
+                {
+                    txtRegistrationConfirmPassword.Focus();
+                }
 
-            if (!ValidatePassword(true))
-            {
-                txtRegistrationPassword.Focus();
-                return;
-            }
-
-            if (!ValidateConfirmPassword(true))
-            {
-                txtRegistrationConfirmPassword.Focus();
                 return;
             }
 
@@ -83,18 +87,25 @@ namespace MoneyFlow
             catch (Exception)
             {
                 MessageBox.Show(
-                    "Registration could not be completed because the database is unavailable.","Database Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    "Registration could not be completed because the database is unavailable.", "Database Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
 
         private bool ValidateFullName(bool showRequiredError = false)
         {
             string fullName = txtRegistrationFullName.Text.Trim();
+
             if (string.IsNullOrWhiteSpace(fullName))
             {
                 lblRegistrationFullNameError.Text = showRequiredError ? "Full name is required." : string.Empty;
 
                 return !showRequiredError;
+            }
+
+            if (!Regex.IsMatch(fullName, FullNamePattern, RegexOptions.CultureInvariant))
+            {
+                lblRegistrationFullNameError.Text = "Full name must contain only letters and spaces, and be at least 2 characters long.";
+                return false;
             }
 
             if (fullName.Length > 100)
@@ -111,6 +122,7 @@ namespace MoneyFlow
         private bool ValidateUsername(bool showRequiredError = false)
         {
             string username = txtRegistrationUsername.Text.Trim();
+
             if (string.IsNullOrWhiteSpace(username))
             {
                 lblRegistrationUsernameError.Text = showRequiredError ? "Username is required." : string.Empty;
@@ -132,9 +144,10 @@ namespace MoneyFlow
         private bool ValidatePassword(bool showRequiredError = false)
         {
             string password = txtRegistrationPassword.Text;
+
             if (string.IsNullOrWhiteSpace(password))
             {
-                lblRegistrationPasswordError.Text = showRequiredError? "Password is required." : string.Empty;
+                lblRegistrationPasswordError.Text = showRequiredError ? "Password is required." : string.Empty;
                 return !showRequiredError;
             }
 

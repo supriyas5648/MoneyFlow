@@ -365,6 +365,7 @@ namespace MoneyFlow
         private UserSettings? _currentUserSettings;
         private DataTable? _transactionsTable;
         private readonly FileService _fileService = new FileService();
+        private string _transactionTypeFilter = "All";
         public bool LogoutRequested { get; private set; }
 
 
@@ -892,6 +893,24 @@ namespace MoneyFlow
             ApplyFilters();
         }
 
+        private void ShowAllTransactions_Click(object sender, EventArgs e)
+        {
+            _transactionTypeFilter = "All";
+            ApplyFilters();
+        }
+
+        private void ShowIncomeTransactions_Click(object sender, EventArgs e)
+        {
+            _transactionTypeFilter = "Income";
+            ApplyFilters();
+        }
+
+        private void ShowExpenseTransactions_Click(object sender, EventArgs e)
+        {
+            _transactionTypeFilter = "Expense";
+            ApplyFilters();
+        }
+
         private void CategoryType_SelectedIndexChanged(object sender, EventArgs e)
         {
             LoadCategoryFilter();
@@ -969,6 +988,12 @@ namespace MoneyFlow
             // --------------------------------------------------------
 
             List<string> filters = new List<string>();
+
+            if (_transactionTypeFilter != "All")
+            {
+                filters.Add(
+                    $"[Type] = '{_transactionTypeFilter.Replace("'", "''")}'");
+            }
 
 
             // ========================================================
@@ -1152,16 +1177,18 @@ namespace MoneyFlow
                     return;
                 }
 
+                int updatedCount;
                 int savedCount = _fileService.SaveToDatabase(
                     records,
-                    _currentUser.UserId);
+                    _currentUser.UserId,
+                    out updatedCount);
 
                 LoadDataInListView();
 
                 MessageBox.Show(
-                    savedCount == 0
-                        ? "The CSV contained no new records."
-                        : $"Imported {savedCount} new record(s) successfully.",
+                    savedCount == 0 && updatedCount == 0
+                        ? "The CSV contained no new or updated records."
+                        : $"Imported {savedCount} new record(s) and updated {updatedCount} record(s) successfully.",
                     "Import Records",
                     MessageBoxButtons.OK,
                     MessageBoxIcon.Information);
@@ -1230,7 +1257,12 @@ namespace MoneyFlow
 
         private void menuItemMainFileExit_Click(object sender,EventArgs e)
         {
-           FrmLogin frmLogin = new FrmLogin();
+           this.Close();
+        }
+
+        private void menuItemMainFileExit_Click()
+        {
+            FrmLogin frmLogin = new FrmLogin();
            frmLogin.Show();
            this.Close();
         }

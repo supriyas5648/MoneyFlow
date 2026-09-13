@@ -91,6 +91,8 @@ public partial class FrmMain2
             Padding = new Padding(10, 5, 10, 5),
             Font = new Font("Segoe UI", 10F, FontStyle.Regular)
         };
+        this.menuStripMain.Renderer = new ToolStripProfessionalRenderer(
+            new MoneyFlowMenuColorTable());
 
         this.menuItemMainFile = new ToolStripMenuItem("File");
         this.menuItemMainFileImportRecords = new ToolStripMenuItem("Import Records");
@@ -116,6 +118,9 @@ public partial class FrmMain2
         this.menuItemMainViewShowAll = new ToolStripMenuItem("Show All");
         this.menuItemMainViewShowIncome = new ToolStripMenuItem("Show Income");
         this.menuItemMainViewShowExpense = new ToolStripMenuItem("Show Expense");
+        this.menuItemMainViewShowAll.Click += new EventHandler(this.ShowAllTransactions_Click);
+        this.menuItemMainViewShowIncome.Click += new EventHandler(this.ShowIncomeTransactions_Click);
+        this.menuItemMainViewShowExpense.Click += new EventHandler(this.ShowExpenseTransactions_Click);
         this.menuItemMainViewSummary = new ToolStripMenuItem("Summary");
         this.menuItemMainViewGraph = new ToolStripMenuItem("Graph");
         this.menuItemMainViewGraph.Click += new EventHandler(this.Graph_Click);
@@ -527,4 +532,14 @@ public partial class FrmMain2
             Padding = new Padding(3)
         };
     }
+}
+
+internal sealed class MoneyFlowMenuColorTable : ProfessionalColorTable
+{
+    public override Color MenuItemSelected => Color.FromArgb(51, 65, 85);
+    public override Color MenuItemSelectedGradientBegin => Color.FromArgb(51, 65, 85);
+    public override Color MenuItemSelectedGradientEnd => Color.FromArgb(71, 85, 105);
+    public override Color MenuItemPressedGradientBegin => Color.FromArgb(15, 23, 42);
+    public override Color MenuItemPressedGradientEnd => Color.FromArgb(30, 41, 59);
+    public override Color MenuItemBorder => Color.FromArgb(100, 116, 139);
 }

@@ -1,4 +1,5 @@
 using System;
+using System.Text.RegularExpressions;
 using System.Windows.Forms;
 using MoneyFlow.Service;
 
@@ -8,6 +9,8 @@ namespace MoneyFlow
     {
         private readonly int _userId;
         private readonly UserService _userService;
+        
+        private const string PasswordPattern =@"^(?=.*\d)(?=.*[^A-Za-z0-9\s])[^\s]{8,}$";
 
         public FrmChangePassword(int userId)
         {
@@ -22,37 +25,27 @@ namespace MoneyFlow
             string newPassword = txtChangePasswordNewPassword.Text;
             string confirmPassword = txtChangePasswordConfirmPassword.Text;
 
-            if (string.IsNullOrWhiteSpace(currentPassword))
+            if (!ValidateCurrentPassword(true))
             {
-                MessageBox.Show("Current password is required.", "Change Password", MessageBoxButtons.OK, MessageBoxIcon.Warning);
                 txtChangePasswordCurrentPassword.Focus();
                 return;
             }
 
-            if (string.IsNullOrWhiteSpace(newPassword))
+            if (!ValidateNewPassword(true))
             {
-                MessageBox.Show("New password is required.", "Change Password", MessageBoxButtons.OK, MessageBoxIcon.Warning);
                 txtChangePasswordNewPassword.Focus();
                 return;
             }
 
-            if (string.IsNullOrWhiteSpace(confirmPassword))
+            if (!ValidateConfirmPassword(true))
             {
-                MessageBox.Show("Please confirm the new password.", "Change Password", MessageBoxButtons.OK, MessageBoxIcon.Warning);
-                txtChangePasswordConfirmPassword.Focus();
-                return;
-            }
-
-            if (newPassword != confirmPassword)
-            {
-                MessageBox.Show("New passwords do not match.", "Change Password", MessageBoxButtons.OK, MessageBoxIcon.Warning);
                 txtChangePasswordConfirmPassword.Focus();
                 return;
             }
 
             if (newPassword == currentPassword)
             {
-                MessageBox.Show("The new password must be different from the current password.", "Change Password", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                lblChangePasswordNewPasswordError.Text = "The new password must be different from the current password.";
                 txtChangePasswordNewPassword.Focus();
                 return;
             }
@@ -67,6 +60,7 @@ namespace MoneyFlow
                 }
 
                 MessageBox.Show("Password changed successfully.", "Change Password", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                ClearChangePasswordFields();
                 DialogResult = DialogResult.OK;
                 Close();
             }
@@ -80,10 +74,93 @@ namespace MoneyFlow
             }
         }
 
+        private bool ValidateCurrentPassword(bool showRequiredError = false)
+        {
+            if (string.IsNullOrWhiteSpace(txtChangePasswordCurrentPassword.Text))
+            {
+                lblChangePasswordCurrentPasswordError.Text = showRequiredError ? "Current password is required." : string.Empty;
+                return !showRequiredError;
+            }
+
+            lblChangePasswordCurrentPasswordError.Text = string.Empty;
+            return true;
+        }
+
+        private bool ValidateNewPassword(bool showRequiredError = false)
+        {
+            string newPassword = txtChangePasswordNewPassword.Text;
+            if (string.IsNullOrWhiteSpace(newPassword))
+            {
+                lblChangePasswordNewPasswordError.Text = showRequiredError ? "New password is required." : string.Empty;
+                return !showRequiredError;
+            }
+
+            if (!Regex.IsMatch(newPassword, PasswordPattern, RegexOptions.CultureInvariant))
+            {
+                lblChangePasswordNewPasswordError.Text =
+                    "Password must start with an letter,\n be at least 8 characters,\n contain a number and special character,\n and contain no spaces.";
+                return false;
+            }
+
+            lblChangePasswordNewPasswordError.Text = string.Empty;
+            return true;
+        }
+
+        private bool ValidateConfirmPassword(bool showRequiredError = false)
+        {
+            string confirmPassword = txtChangePasswordConfirmPassword.Text;
+            if (string.IsNullOrWhiteSpace(confirmPassword))
+            {
+                lblChangePasswordConfirmPasswordError.Text = showRequiredError ? "Please confirm the new password." : string.Empty;
+                return !showRequiredError;
+            }
+
+            if (txtChangePasswordNewPassword.Text != confirmPassword)
+            {
+                lblChangePasswordConfirmPasswordError.Text = "New passwords do not match.";
+                return false;
+            }
+
+            lblChangePasswordConfirmPasswordError.Text = string.Empty;
+            return true;
+        }
+
+        private void ClearChangePasswordFields()
+        {
+            txtChangePasswordCurrentPassword.Clear();
+            txtChangePasswordNewPassword.Clear();
+            txtChangePasswordConfirmPassword.Clear();
+            lblChangePasswordCurrentPasswordError.Text = string.Empty;
+            lblChangePasswordNewPasswordError.Text = string.Empty;
+            lblChangePasswordConfirmPasswordError.Text = string.Empty;
+            txtChangePasswordCurrentPassword.Focus();
+        }
+
+        private void txtChangePasswordCurrentPassword_TextChanged(object sender, EventArgs e)
+        {
+            ValidateCurrentPassword();
+        }
+
+        private void txtChangePasswordNewPassword_TextChanged(object sender, EventArgs e)
+        {
+            ValidateNewPassword();
+            ValidateConfirmPassword();
+        }
+
+        private void txtChangePasswordConfirmPassword_TextChanged(object sender, EventArgs e)
+        {
+            ValidateConfirmPassword();
+        }
+
         private void btnChangePasswordCancel_Click(object sender, EventArgs e)
         {
             DialogResult = DialogResult.Cancel;
             Close();
+        }
+
+        private void FrmChangePassword_Load(object sender, System.EventArgs e)
+        {
+
         }
     }
 }

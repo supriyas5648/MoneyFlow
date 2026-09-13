@@ -12,6 +12,18 @@ namespace MoneyFlow
         public FrmLogin()
         {
             InitializeComponent();
+            txtUserName.TextChanged += txtUserName_TextChanged;
+            txtPassword.TextChanged += txtPassword_TextChanged;
+        }
+
+        private void txtUserName_TextChanged(object? sender, EventArgs e)
+        {
+            lblUserNameError.Visible = string.IsNullOrWhiteSpace(txtUserName.Text);
+        }
+
+        private void txtPassword_TextChanged(object? sender, EventArgs e)
+        {
+            lblPasswordError.Visible = string.IsNullOrWhiteSpace(txtPassword.Text);
         }
 
         public void btnLogin_Click(object sender, EventArgs e)

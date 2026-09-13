@@ -85,6 +85,7 @@ namespace MoneyFlow.Service
         public List<string> ValidateRecords(DataTable records, int loggedInUserId)
         {
             List<string> errors = new List<string>();
+            HashSet<int> transactionIdsInFile = new HashSet<int>();
 
             using NpgsqlConnection connection = new NpgsqlConnection(_connectionString);
             connection.Open();
@@ -98,6 +99,7 @@ namespace MoneyFlow.Service
                 string dateText = row["Date"].ToString()?.Trim() ?? string.Empty;
                 string description = row["Description"].ToString()?? string.Empty;
                 string transactionIdText = row["Transaction ID"].ToString()?.Trim() ?? string.Empty;
+                string userIdText = row["User ID"].ToString()?.Trim() ?? string.Empty;
 
                 if (!string.Equals(transactionType, "Income", StringComparison.OrdinalIgnoreCase) &&
                     !string.Equals(transactionType, "Expense", StringComparison.OrdinalIgnoreCase))
@@ -124,15 +126,20 @@ namespace MoneyFlow.Service
                     errors.Add($"Line {rowNumber}: Date is invalid.");
                 }
 
-                // if (!int.TryParse(userIdText, out int fileUserId) || fileUserId != loggedInUserId)
-                // {
-                //     errors.Add($"Line {rowNumber}: User ID must match the logged-in user.");
-                // }
+                if (!int.TryParse(userIdText, out int fileUserId) || fileUserId != loggedInUserId)
+                {
+                    errors.Add($"Line {rowNumber}: User ID must match the logged-in user.");
+                }
 
                 if (!string.IsNullOrWhiteSpace(transactionIdText) &&
                     (!int.TryParse(transactionIdText, out int transactionId) || transactionId <= 0))
                 {
                     errors.Add($"Line {rowNumber}: Transaction ID is invalid.");
+                }
+                else if (int.TryParse(transactionIdText, out int duplicateCheckId) &&
+                         !transactionIdsInFile.Add(duplicateCheckId))
+                {
+                    errors.Add($"Line {rowNumber}: Transaction ID appears more than once in the CSV.");
                 }
 
                 if (!string.IsNullOrWhiteSpace(categoryName) &&
@@ -173,9 +180,10 @@ namespace MoneyFlow.Service
             return errors;
         }
 
-        public int SaveToDatabase(DataTable records, int loggedInUserId)
+        public int SaveToDatabase(DataTable records, int loggedInUserId, out int updatedCount)
         {
             int savedCount = 0;
+            updatedCount = 0;
 
             using NpgsqlConnection connection = new NpgsqlConnection(_connectionString);
             connection.Open();
@@ -200,9 +208,6 @@ namespace MoneyFlow.Service
                     categoryCommand.Parameters.AddWithValue("@UserId", loggedInUserId);
 
                     object? categoryId = categoryCommand.ExecuteScalar();
-                    bool categoryAlreadyExists =
-                        categoryId != null && categoryId != DBNull.Value;
-
                     if (categoryId == null || categoryId == DBNull.Value)
                     {
                         using NpgsqlCommand addCategoryCommand = new NpgsqlCommand(@"
@@ -232,19 +237,50 @@ namespace MoneyFlow.Service
                         categoryId = addCategoryCommand.ExecuteScalar();
                     }
 
-                    if (categoryAlreadyExists &&
-                        int.TryParse(transactionIdText, out int transactionId))
+                    if (int.TryParse(transactionIdText, out int transactionId))
                     {
-                        using NpgsqlCommand existsCommand = new NpgsqlCommand(@"
+                        using NpgsqlCommand existingCommand = new NpgsqlCommand(@"
                             SELECT COUNT(*)
                             FROM t_transaction
                             WHERE c_transaction_id = @TransactionId
                               AND c_user_id = @UserId;", connection, transaction);
-                        existsCommand.Parameters.AddWithValue("@TransactionId", transactionId);
-                        existsCommand.Parameters.AddWithValue("@UserId", loggedInUserId);
+                        existingCommand.Parameters.AddWithValue("@TransactionId", transactionId);
+                        existingCommand.Parameters.AddWithValue("@UserId", loggedInUserId);
 
-                        if (Convert.ToInt32(existsCommand.ExecuteScalar()) > 0)
+                        if (Convert.ToInt32(existingCommand.ExecuteScalar()) > 0)
                         {
+                            using NpgsqlCommand updateCommand = new NpgsqlCommand(@"
+                                UPDATE t_transaction
+                                SET c_transaction_type = @TransactionType,
+                                    c_transaction_category_id = @CategoryId,
+                                    c_transaction_amount = @Amount,
+                                    c_transaction_date = @TransactionDate,
+                                    c_transaction_description = @Description,
+                                    c_transaction_updated_at = CURRENT_TIMESTAMP
+                                WHERE c_transaction_id = @TransactionId
+                                  AND c_user_id = @UserId
+                                  AND (
+                                      c_transaction_type IS DISTINCT FROM @TransactionType
+                                      OR c_transaction_category_id IS DISTINCT FROM @CategoryId
+                                      OR c_transaction_amount IS DISTINCT FROM @Amount
+                                      OR c_transaction_date IS DISTINCT FROM @TransactionDate
+                                      OR c_transaction_description IS DISTINCT FROM @Description
+                                  );", connection, transaction);
+                            updateCommand.Parameters.AddWithValue("@TransactionId", transactionId);
+                            updateCommand.Parameters.AddWithValue("@TransactionType", transactionType);
+                            updateCommand.Parameters.AddWithValue("@CategoryId", Convert.ToInt32(categoryId));
+                            updateCommand.Parameters.AddWithValue("@Amount", decimal.Parse(row["Amount"].ToString()!, CultureInfo.InvariantCulture));
+                            updateCommand.Parameters.AddWithValue("@TransactionDate", DateTime.Parse(row["Date"].ToString()!, CultureInfo.InvariantCulture));
+                            updateCommand.Parameters.AddWithValue("@UserId", loggedInUserId);
+                            updateCommand.Parameters.AddWithValue("@Description", string.IsNullOrWhiteSpace(row["Description"].ToString())
+                                ? DBNull.Value
+                                : row["Description"].ToString()!.Trim());
+
+                            if (updateCommand.ExecuteNonQuery() > 0)
+                            {
+                                updatedCount++;
+                            }
+
                             continue;
                         }
                     }
