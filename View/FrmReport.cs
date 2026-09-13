@@ -96,9 +96,9 @@ namespace MoneyFlow
             _balance = _income - _expense;
             decimal maximum = Math.Max(Math.Max(_income, _expense), Math.Abs(_balance));
 
-            _incomeLabel.Text = $"Total Income\n{_income:N2}";
-            _expenseLabel.Text = $"Total Expense\n{_expense:N2}";
-            _balanceLabel.Text = $"Balance\n{_balance:N2}";
+            _incomeLabel.Text = $"Total Income\n₹{_income:N2}";
+            _expenseLabel.Text = $"Total Expense\n₹{_expense:N2}";
+            _balanceLabel.Text = $"Balance\n₹{_balance:N2}";
             _incomeProgressBar.Value = GetProgressValue(_income, maximum);
             _expenseProgressBar.Value = GetProgressValue(_expense, maximum);
             _balanceProgressBar.Value = GetProgressValue(Math.Abs(_balance), maximum);
@@ -116,7 +116,7 @@ namespace MoneyFlow
             {
                 _reportListView.Items.Add(new ListViewItem(new[]
                 {
-                    transaction.TransactionId.ToString(),
+                    transaction.DisplayId.ToString(),
                     transaction.TransactionDate.ToString("yyyy-MM-dd"),
                     transaction.CategoryName,
                     transaction.TransactionDescription ?? string.Empty,
@@ -152,7 +152,7 @@ namespace MoneyFlow
             int height = maximum <= 0 ? 0 : (int)Math.Round(value / maximum * chartHeight);
             graphics.FillRectangle(brush, x, baseline - height, width, height);
             graphics.DrawString(label, labelFont, textBrush, x, baseline + 8);
-            graphics.DrawString(value.ToString("N2"), labelFont, textBrush, x, Math.Max(65, baseline - height - 18));
+            graphics.DrawString($"₹{value:N2}", labelFont, textBrush, x, Math.Max(65, baseline - height - 18));
         }
     }
 }

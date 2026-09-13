@@ -23,5 +23,7 @@ namespace MoneyFlow.Model
         public DateTime TransactionUpdatedAt { get; set; }
 
         public string? TransactionDescription { get; set; }
+        public int UserTransactionNo { get; set; }
+        public int DisplayId => UserTransactionNo > 0 ? UserTransactionNo : TransactionId;
     }
 }

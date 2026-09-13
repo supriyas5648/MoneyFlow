@@ -300,7 +300,7 @@ namespace MoneyFlow
                 new ColumnHeader { Text = "Category", Width = 120 },
                 new ColumnHeader { Text = "Description", Width = 220 },
                 new ColumnHeader { Text = "Type", Width = 85 },
-                new ColumnHeader { Text = "Amount ($)", Width = 105 }
+                new ColumnHeader { Text = "Amount (₹)", Width = 105 }
             });
             this._reportListView.Dock = DockStyle.Fill;
             this._reportListView.FullRowSelect = true;

@@ -27,6 +27,17 @@ namespace MoneyFlow.Service
                 using (NpgsqlConnection con =
                     new NpgsqlConnection(_con))
                 {
+                    con.Open();
+
+                    using (NpgsqlCommand sumCmd = new NpgsqlCommand(@"
+                        INSERT INTO t_summary (c_user_id, c_total_income, c_total_expense)
+                        VALUES (@UserId, 0, 0)
+                        ON CONFLICT (c_user_id) DO NOTHING;", con))
+                    {
+                        sumCmd.Parameters.AddWithValue("@UserId", userId);
+                        sumCmd.ExecuteNonQuery();
+                    }
+
                     string query = @"
                         INSERT INTO t_transaction
                         (
@@ -35,7 +46,9 @@ namespace MoneyFlow.Service
                             c_transaction_amount,
                             c_transaction_date,
                             c_user_id,
-                            c_transaction_description
+                            c_summary_id,
+                            c_transaction_description,
+                            c_user_transaction_no
                         )
                         VALUES
                         (
@@ -44,7 +57,9 @@ namespace MoneyFlow.Service
                             @Amount,
                             @TransactionDate,
                             @UserId,
-                            @Description
+                            (SELECT c_summary_id FROM t_summary WHERE c_user_id = @UserId LIMIT 1),
+                            @Description,
+                            (SELECT COALESCE(MAX(c_user_transaction_no), 0) + 1 FROM t_transaction WHERE c_user_id = @UserId)
                         );
                     ";
 
@@ -64,8 +79,25 @@ namespace MoneyFlow.Service
                         cmd.Parameters.AddWithValue(
                             "@Description", (object?)description ?? DBNull.Value);
 
-                        con.Open();
                         cmd.ExecuteNonQuery();
+                    }
+
+                    using (NpgsqlCommand updSummaryCmd = new NpgsqlCommand(@"
+                        UPDATE t_summary s
+                        SET c_total_income = COALESCE((
+                                SELECT SUM(t.c_transaction_amount)
+                                FROM t_transaction t
+                                WHERE t.c_user_id = @UserId AND t.c_transaction_type = 'Income'
+                            ), 0),
+                            c_total_expense = COALESCE((
+                                SELECT SUM(t.c_transaction_amount)
+                                FROM t_transaction t
+                                WHERE t.c_user_id = @UserId AND t.c_transaction_type = 'Expense'
+                            ), 0)
+                        WHERE s.c_user_id = @UserId;", con))
+                    {
+                        updSummaryCmd.Parameters.AddWithValue("@UserId", userId);
+                        updSummaryCmd.ExecuteNonQuery();
                     }
                 }
             }
@@ -89,10 +121,13 @@ namespace MoneyFlow.Service
                         c_transaction_category_id,
                         c_transaction_amount,
                         c_transaction_date,
-                        c_transaction_description
+                        c_transaction_description,
+                        COALESCE(c_user_transaction_no, c_transaction_id) AS c_user_transaction_no
                     FROM t_transaction
-                    WHERE c_transaction_id = @TransactionId
-                      AND c_user_id = @UserId;", con))
+                    WHERE (c_user_transaction_no = @TransactionId OR c_transaction_id = @TransactionId)
+                      AND c_user_id = @UserId
+                    ORDER BY (CASE WHEN c_user_transaction_no = @TransactionId THEN 0 ELSE 1 END)
+                    LIMIT 1;", con))
                 {
                     cmd.Parameters.AddWithValue("@TransactionId", transactionId);
                     cmd.Parameters.AddWithValue("@UserId", userId);
@@ -114,7 +149,8 @@ namespace MoneyFlow.Service
                             TransactionDate = reader.GetDateTime(4),
                             TransactionDescription = reader.IsDBNull(5)
                                 ? null
-                                : reader.GetString(5)
+                                : reader.GetString(5),
+                            UserTransactionNo = reader.IsDBNull(6) ? reader.GetInt32(0) : reader.GetInt32(6)
                         };
                     }
                 }
@@ -191,6 +227,24 @@ namespace MoneyFlow.Service
                         throw new InvalidOperationException(
                             "The transaction does not belong to the current user.");
                     }
+
+                    using (NpgsqlCommand updSummaryCmd = new NpgsqlCommand(@"
+                        UPDATE t_summary s
+                        SET c_total_income = COALESCE((
+                                SELECT SUM(t.c_transaction_amount)
+                                FROM t_transaction t
+                                WHERE t.c_user_id = @UserId AND t.c_transaction_type = 'Income'
+                            ), 0),
+                            c_total_expense = COALESCE((
+                                SELECT SUM(t.c_transaction_amount)
+                                FROM t_transaction t
+                                WHERE t.c_user_id = @UserId AND t.c_transaction_type = 'Expense'
+                            ), 0)
+                        WHERE s.c_user_id = @UserId;", con))
+                    {
+                        updSummaryCmd.Parameters.AddWithValue("@UserId", userId);
+                        updSummaryCmd.ExecuteNonQuery();
+                    }
                 }
             }
             catch (Exception ex)
@@ -220,6 +274,24 @@ namespace MoneyFlow.Service
                         throw new InvalidOperationException(
                             "The transaction does not belong to the current user.");
                     }
+
+                    using (NpgsqlCommand updSummaryCmd = new NpgsqlCommand(@"
+                        UPDATE t_summary s
+                        SET c_total_income = COALESCE((
+                                SELECT SUM(t.c_transaction_amount)
+                                FROM t_transaction t
+                                WHERE t.c_user_id = @UserId AND t.c_transaction_type = 'Income'
+                            ), 0),
+                            c_total_expense = COALESCE((
+                                SELECT SUM(t.c_transaction_amount)
+                                FROM t_transaction t
+                                WHERE t.c_user_id = @UserId AND t.c_transaction_type = 'Expense'
+                            ), 0)
+                        WHERE s.c_user_id = @UserId;", con))
+                    {
+                        updSummaryCmd.Parameters.AddWithValue("@UserId", userId);
+                        updSummaryCmd.ExecuteNonQuery();
+                    }
                 }
             }
             catch (Exception ex)
@@ -245,7 +317,8 @@ namespace MoneyFlow.Service
                         t.c_transaction_amount,
                         t.c_transaction_type,
                         t.c_transaction_category_id,
-                        t.c_user_id
+                        t.c_user_id,
+                        COALESCE(t.c_user_transaction_no, t.c_transaction_id) AS c_user_transaction_no
                     FROM t_transaction t
                     LEFT JOIN t_category c ON t.c_transaction_category_id = c.c_category_id
                     WHERE t.c_user_id = @UserId
@@ -267,7 +340,8 @@ namespace MoneyFlow.Service
                                 TransactionAmount = reader.GetDecimal(4),
                                 TransactionType = reader.GetString(5),
                                 TransactionCategoryId = reader.GetInt32(6),
-                                UserId = reader.GetInt32(7)
+                                UserId = reader.GetInt32(7),
+                                UserTransactionNo = reader.IsDBNull(8) ? reader.GetInt32(0) : reader.GetInt32(8)
                             });
                         }
                     }

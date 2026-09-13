@@ -14,7 +14,7 @@ namespace MoneyFlow
         private readonly TransactionCategoryService _transactionCategoryService =
             new TransactionCategoryService();
 
-        public FrmTransaction(User currentUser)
+        public FrmTransaction(User currentUser, int? initialTransactionId = null)
         {
             _currentUser = currentUser ?? throw new ArgumentNullException(nameof(currentUser));
             InitializeComponent();
@@ -39,6 +39,12 @@ namespace MoneyFlow
 
             // Load income categories
             LoadIncomeCategories();
+
+            if (initialTransactionId.HasValue && initialTransactionId.Value > 0)
+            {
+                txtTransactionLookup.Text = initialTransactionId.Value.ToString();
+                BtnTransactionBind_Click(this, EventArgs.Empty);
+            }
         }
 
         // =========================================================
@@ -598,7 +604,7 @@ namespace MoneyFlow
                     return;
                 }
 
-                txtTransactionId.Text = transaction.TransactionId.ToString();
+                txtTransactionId.Text = transaction.DisplayId.ToString();
                 txtTransactionId.Visible = true;
                 lblTransactionId.Visible = true;
                 txtTransactionId.ReadOnly = true;

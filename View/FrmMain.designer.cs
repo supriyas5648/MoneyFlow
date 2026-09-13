@@ -61,6 +61,7 @@ namespace MoneyFlow
         private System.Windows.Forms.TableLayoutPanel filterInputsGrid;
         private System.Windows.Forms.Panel pnlCategoryCheckboxes;
         private System.Windows.Forms.FlowLayoutPanel flowCategoryCheckboxes;
+        private System.Windows.Forms.Button btnAddDashboardCategory;
         private System.Windows.Forms.Panel pnlDescriptionInput;
         private System.Windows.Forms.Label lblDescPrompt;
         private System.Windows.Forms.TextBox txtDescriptionSearch;
@@ -158,6 +159,7 @@ namespace MoneyFlow
             this.filterInputsGrid = new System.Windows.Forms.TableLayoutPanel();
             this.pnlCategoryCheckboxes = new System.Windows.Forms.Panel();
             this.flowCategoryCheckboxes = new System.Windows.Forms.FlowLayoutPanel();
+            this.btnAddDashboardCategory = new System.Windows.Forms.Button();
             this.pnlDescriptionInput = new System.Windows.Forms.Panel();
             this.lblDescPrompt = new System.Windows.Forms.Label();
             this.txtDescriptionSearch = new System.Windows.Forms.TextBox();
@@ -662,6 +664,7 @@ namespace MoneyFlow
             // 
             this.pnlCategoryCheckboxes.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.pnlCategoryCheckboxes.Controls.Add(this.flowCategoryCheckboxes);
+            this.pnlCategoryCheckboxes.Controls.Add(this.btnAddDashboardCategory);
             this.pnlCategoryCheckboxes.Dock = System.Windows.Forms.DockStyle.Fill;
             this.pnlCategoryCheckboxes.Location = new System.Drawing.Point(3, 3);
             this.pnlCategoryCheckboxes.Name = "pnlCategoryCheckboxes";
@@ -681,6 +684,19 @@ namespace MoneyFlow
             this.flowCategoryCheckboxes.Size = new System.Drawing.Size(313, 93);
             this.flowCategoryCheckboxes.TabIndex = 0;
             this.flowCategoryCheckboxes.WrapContents = false;
+            // 
+            // btnAddDashboardCategory
+            // 
+            this.btnAddDashboardCategory.Dock = System.Windows.Forms.DockStyle.Bottom;
+            this.btnAddDashboardCategory.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.btnAddDashboardCategory.Font = new System.Drawing.Font("Segoe UI", 8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
+            this.btnAddDashboardCategory.Location = new System.Drawing.Point(0, 69);
+            this.btnAddDashboardCategory.Name = "btnAddDashboardCategory";
+            this.btnAddDashboardCategory.Size = new System.Drawing.Size(313, 24);
+            this.btnAddDashboardCategory.TabIndex = 1;
+            this.btnAddDashboardCategory.Text = "+ Add Category";
+            this.btnAddDashboardCategory.UseVisualStyleBackColor = true;
+            this.btnAddDashboardCategory.Click += new System.EventHandler(this.BtnAddDashboardCategory_Click);
 
             // 
             // pnlDescriptionInput
@@ -750,7 +766,7 @@ namespace MoneyFlow
                 new System.Windows.Forms.ColumnHeader { Text = "Date", Width = 100 },
                 new System.Windows.Forms.ColumnHeader { Text = "Category", Width = 130 },
                 new System.Windows.Forms.ColumnHeader { Text = "Description", Width = 280 },
-                new System.Windows.Forms.ColumnHeader { Text = "Amount ($)", Width = 110 },
+                new System.Windows.Forms.ColumnHeader { Text = "Amount (₹)", Width = 110 },
                 new System.Windows.Forms.ColumnHeader { Text = "Type", Width = 90 }
             });
             this.bottomListView.Dock = System.Windows.Forms.DockStyle.Fill;
@@ -763,6 +779,7 @@ namespace MoneyFlow
             this.bottomListView.TabIndex = 1;
             this.bottomListView.UseCompatibleStateImageBehavior = false;
             this.bottomListView.View = System.Windows.Forms.View.Details;
+            this.bottomListView.DoubleClick += new System.EventHandler(this.BottomListView_DoubleClick);
 
             // 
             // summaryContainerPanel
@@ -882,7 +899,7 @@ namespace MoneyFlow
             this.lblSummaryIncTitle.Name = "lblSummaryIncTitle";
             this.lblSummaryIncTitle.Size = new System.Drawing.Size(308, 50);
             this.lblSummaryIncTitle.TabIndex = 0;
-            this.lblSummaryIncTitle.Text = "Total Income:\r\n$0.00";
+            this.lblSummaryIncTitle.Text = "Total Income:\r\n₹0.00";
             this.lblSummaryIncTitle.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
 
             // 
@@ -895,7 +912,7 @@ namespace MoneyFlow
             this.lblSummaryExpTitle.Name = "lblSummaryExpTitle";
             this.lblSummaryExpTitle.Size = new System.Drawing.Size(308, 50);
             this.lblSummaryExpTitle.TabIndex = 1;
-            this.lblSummaryExpTitle.Text = "Total Expense:\r\n$0.00";
+            this.lblSummaryExpTitle.Text = "Total Expense:\r\n₹0.00";
             this.lblSummaryExpTitle.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
 
             // 
@@ -908,7 +925,7 @@ namespace MoneyFlow
             this.lblSummaryBalTitle.Name = "lblSummaryBalTitle";
             this.lblSummaryBalTitle.Size = new System.Drawing.Size(310, 50);
             this.lblSummaryBalTitle.TabIndex = 2;
-            this.lblSummaryBalTitle.Text = "Net Balance:\r\n$0.00";
+            this.lblSummaryBalTitle.Text = "Net Balance:\r\n₹0.00";
             this.lblSummaryBalTitle.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
 
             // 
@@ -952,7 +969,7 @@ namespace MoneyFlow
                 new System.Windows.Forms.ColumnHeader { Text = "Date", Width = 100 },
                 new System.Windows.Forms.ColumnHeader { Text = "Category", Width = 130 },
                 new System.Windows.Forms.ColumnHeader { Text = "Description", Width = 280 },
-                new System.Windows.Forms.ColumnHeader { Text = "Amount ($)", Width = 110 },
+                new System.Windows.Forms.ColumnHeader { Text = "Amount (₹)", Width = 110 },
                 new System.Windows.Forms.ColumnHeader { Text = "Type", Width = 90 }
             });
             this.lvSummaryTransactions.Dock = System.Windows.Forms.DockStyle.Fill;

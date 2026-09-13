@@ -12,5 +12,7 @@ namespace MoneyFlow.Model
         public string TransactionType { get; set; } = string.Empty;
         public int TransactionCategoryId { get; set; }
         public int UserId { get; set; }
+        public int UserTransactionNo { get; set; }
+        public int DisplayId => UserTransactionNo > 0 ? UserTransactionNo : TransactionId;
     }
 }

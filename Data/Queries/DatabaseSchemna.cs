@@ -60,8 +60,9 @@ public static class DatabaseSchema
             c_transaction_amount NUMERIC(12,2) NOT NULL,
             c_transaction_description VARCHAR(255),
             c_transaction_date DATE NOT NULL,
-            c_summary_id INT NOT NULL,
+            c_summary_id INT NULL,
             c_user_id INT NOT NULL,
+            c_user_transaction_no INT NULL,
             c_transaction_created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
             c_transaction_updated_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
 

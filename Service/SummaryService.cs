@@ -45,5 +45,40 @@ namespace MoneyFlow.Service
 
             return null;
         }
+
+        /// <summary>
+        /// Ensures a summary row exists for the given user in t_summary.
+        /// </summary>
+        public void EnsureSummaryExists(int userId, NpgsqlConnection connection, NpgsqlTransaction? transaction = null)
+        {
+            using var cmd = new NpgsqlCommand(@"
+                INSERT INTO t_summary (c_user_id, c_total_income, c_total_expense)
+                VALUES (@UserId, 0, 0)
+                ON CONFLICT (c_user_id) DO NOTHING;", connection, transaction);
+            cmd.Parameters.AddWithValue("@UserId", userId);
+            cmd.ExecuteNonQuery();
+        }
+
+        /// <summary>
+        /// Recalculates and updates the total income and total expense in t_summary for the given user.
+        /// </summary>
+        public void UpdateSummaryTotals(int userId, NpgsqlConnection connection, NpgsqlTransaction? transaction = null)
+        {
+            using var cmd = new NpgsqlCommand(@"
+                UPDATE t_summary s
+                SET c_total_income = COALESCE((
+                        SELECT SUM(t.c_transaction_amount)
+                        FROM t_transaction t
+                        WHERE t.c_user_id = @UserId AND t.c_transaction_type = 'Income'
+                    ), 0),
+                    c_total_expense = COALESCE((
+                        SELECT SUM(t.c_transaction_amount)
+                        FROM t_transaction t
+                        WHERE t.c_user_id = @UserId AND t.c_transaction_type = 'Expense'
+                    ), 0)
+                WHERE s.c_user_id = @UserId;", connection, transaction);
+            cmd.Parameters.AddWithValue("@UserId", userId);
+            cmd.ExecuteNonQuery();
+        }
     }
 }

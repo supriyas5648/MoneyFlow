@@ -143,14 +143,14 @@ namespace MoneyFlow
             {
                 var item = new ListViewItem(new[]
                 {
-                    transaction.TransactionId.ToString(),
+                    transaction.DisplayId.ToString(),
                     transaction.TransactionDate.ToString("yyyy-MM-dd"),
                     transaction.CategoryName,
                     transaction.TransactionDescription ?? string.Empty,
                     transaction.TransactionAmount.ToString("N2"),
                     transaction.TransactionType
                 });
-
+                item.Tag = transaction;
                 bottomListView.Items.Add(item);
             }
         }
@@ -352,6 +352,7 @@ namespace MoneyFlow
                     }
 
                     MessageBox.Show($"Successfully imported {importedCount} transactions!", "Import Successful", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                    LoadCategoriesFromDatabase();
                     LoadTransactionsFromDatabase();
                     LoadFinancialSummary();
                 }
@@ -381,7 +382,7 @@ namespace MoneyFlow
                     foreach (TransactionModel tx in _allTransactions)
                     {
                         string desc = (tx.TransactionDescription ?? string.Empty).Replace("\"", "\"\"");
-                        writer.WriteLine($"{tx.TransactionId},{tx.TransactionDate:yyyy-MM-dd},\"{tx.CategoryName}\",\"{desc}\",{tx.TransactionAmount:F2},{tx.TransactionType}");
+                        writer.WriteLine($"{tx.DisplayId},{tx.TransactionDate:yyyy-MM-dd},\"{tx.CategoryName}\",\"{desc}\",{tx.TransactionAmount:F2},{tx.TransactionType}");
                     }
 
                     MessageBox.Show($"Successfully exported {_allTransactions.Count} records to:\n{saveFileDialog.FileName}", "Export Successful", MessageBoxButtons.OK, MessageBoxIcon.Information);
@@ -407,6 +408,7 @@ namespace MoneyFlow
             using FrmTransaction frmTransaction = new FrmTransaction(_currentUser);
             frmTransaction.ShowDialog(this);
 
+            LoadCategoriesFromDatabase();
             LoadTransactionsFromDatabase();
             LoadFinancialSummary();
         }
@@ -488,9 +490,9 @@ namespace MoneyFlow
 
             decimal max = Math.Max(Math.Max(income, expense), Math.Abs(balance));
 
-            lblSummaryIncTitle.Text = $"Total Income:\n${income:N2}";
-            lblSummaryExpTitle.Text = $"Total Expense:\n${expense:N2}";
-            lblSummaryBalTitle.Text = $"Net Balance:\n${balance:N2}";
+            lblSummaryIncTitle.Text = $"Total Income:\n₹{income:N2}";
+            lblSummaryExpTitle.Text = $"Total Expense:\n₹{expense:N2}";
+            lblSummaryBalTitle.Text = $"Net Balance:\n₹{balance:N2}";
 
             pbSummaryIncome.Value = max <= 0 ? 0 : Math.Min(100, (int)Math.Round(income / max * 100));
             pbSummaryExpense.Value = max <= 0 ? 0 : Math.Min(100, (int)Math.Round(expense / max * 100));
@@ -499,15 +501,17 @@ namespace MoneyFlow
             lvSummaryTransactions.Items.Clear();
             foreach (var tx in monthTxs)
             {
-                lvSummaryTransactions.Items.Add(new ListViewItem(new[]
+                var item = new ListViewItem(new[]
                 {
-                    tx.TransactionId.ToString(),
+                    tx.DisplayId.ToString(),
                     tx.TransactionDate.ToString("yyyy-MM-dd"),
                     tx.CategoryName,
                     tx.TransactionDescription ?? string.Empty,
                     tx.TransactionAmount.ToString("N2"),
                     tx.TransactionType
-                }));
+                });
+                item.Tag = tx;
+                lvSummaryTransactions.Items.Add(item);
             }
         }
 
@@ -529,7 +533,7 @@ namespace MoneyFlow
             decimal expense = monthTxs.Where(t => t.TransactionType.Equals("Expense", StringComparison.OrdinalIgnoreCase)).Sum(t => t.TransactionAmount);
             decimal balance = income - expense;
 
-            lblGraphSummaryInfo.Text = $"Month: {dudGraphMonth.SelectedItem} {year} | Income: ${income:N2} | Expense: ${expense:N2} | Balance: ${balance:N2}";
+            lblGraphSummaryInfo.Text = $"Month: {dudGraphMonth.SelectedItem} {year} | Income: ₹{income:N2} | Expense: ₹{expense:N2} | Balance: ₹{balance:N2}";
             picGraph.Invalidate();
         }
 
@@ -581,7 +585,7 @@ namespace MoneyFlow
             g.DrawRectangle(Pens.DimGray, x, baseline - h, width, h);
 
             g.DrawString(label, barFont, textBrush, x, baseline + 8);
-            g.DrawString($"${val:N2}", labelFont, textBrush, x, Math.Max(40, baseline - h - 18));
+            g.DrawString($"₹{val:N2}", labelFont, textBrush, x, Math.Max(40, baseline - h - 18));
         }
 
         private int GetMonthIndex(string? monthName)
@@ -791,6 +795,106 @@ namespace MoneyFlow
             {
                 return fallback;
             }
+        }
+
+        private void BtnAddDashboardCategory_Click(object? sender, EventArgs e)
+        {
+            using Form prompt = new Form
+            {
+                Width = 360,
+                Height = 225,
+                FormBorderStyle = FormBorderStyle.FixedDialog,
+                Text = "Add New Category",
+                StartPosition = FormStartPosition.CenterParent,
+                MaximizeBox = false,
+                MinimizeBox = false
+            };
+
+            Label lblName = new Label { Left = 20, Top = 15, Text = "Category Name:", AutoSize = true };
+            TextBox txtName = new TextBox { Left = 20, Top = 35, Width = 300 };
+
+            Label lblType = new Label { Left = 20, Top = 70, Text = "Category Type:", AutoSize = true };
+            RadioButton rbIncome = new RadioButton { Left = 20, Top = 90, Text = "Income", AutoSize = true, Checked = true };
+            RadioButton rbExpense = new RadioButton { Left = 120, Top = 90, Text = "Expense", AutoSize = true };
+
+            Button btnSave = new Button { Text = "Save", Left = 140, Width = 85, Top = 135, DialogResult = DialogResult.OK };
+            Button btnCancel = new Button { Text = "Cancel", Left = 235, Width = 85, Top = 135, DialogResult = DialogResult.Cancel };
+
+            prompt.Controls.Add(lblName);
+            prompt.Controls.Add(txtName);
+            prompt.Controls.Add(lblType);
+            prompt.Controls.Add(rbIncome);
+            prompt.Controls.Add(rbExpense);
+            prompt.Controls.Add(btnSave);
+            prompt.Controls.Add(btnCancel);
+            prompt.AcceptButton = btnSave;
+            prompt.CancelButton = btnCancel;
+
+            if (prompt.ShowDialog(this) == DialogResult.OK)
+            {
+                string catName = txtName.Text.Trim();
+                string catType = rbIncome.Checked ? "Income" : "Expense";
+
+                if (string.IsNullOrWhiteSpace(catName))
+                {
+                    MessageBox.Show("Please enter category name.", "Validation Error", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                    return;
+                }
+
+                if (catName.Length > 100)
+                {
+                    MessageBox.Show("Category name cannot exceed 100 characters.", "Validation Error", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                    return;
+                }
+
+                if (!catName.All(c => char.IsLetter(c) || c == ' '))
+                {
+                    MessageBox.Show("Category name can contain only alphabets and spaces.", "Validation Error", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                    return;
+                }
+
+                try
+                {
+                    if (_transactionCategoryService.CategoryExists(_currentUser.UserId, catName, catType))
+                    {
+                        MessageBox.Show("This category already exists.", "Validation Error", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                        return;
+                    }
+
+                    _transactionCategoryService.AddCategory(catName, catType, _currentUser.UserId);
+                    MessageBox.Show("Category added successfully!", "Success", MessageBoxButtons.OK, MessageBoxIcon.Information);
+
+                    LoadCategoriesFromDatabase();
+
+                    if (chkFilterCategory.Checked)
+                    {
+                        var newChk = categoryCheckBoxesList.FirstOrDefault(c => c.Text.Equals(catName, StringComparison.OrdinalIgnoreCase));
+                        if (newChk != null)
+                        {
+                            newChk.Checked = true;
+                        }
+                    }
+                }
+                catch (Exception ex)
+                {
+                    MessageBox.Show($"Error adding category: {ex.Message}", "Database Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                }
+            }
+        }
+
+        private void BottomListView_DoubleClick(object? sender, EventArgs e)
+        {
+            if (bottomListView.SelectedItems.Count == 0) return;
+
+            var selectedTx = bottomListView.SelectedItems[0].Tag as TransactionModel;
+            if (selectedTx == null) return;
+
+            using FrmTransaction frmTransaction = new FrmTransaction(_currentUser, selectedTx.DisplayId);
+            frmTransaction.ShowDialog(this);
+
+            LoadCategoriesFromDatabase();
+            LoadTransactionsFromDatabase();
+            LoadFinancialSummary();
         }
     }
 }

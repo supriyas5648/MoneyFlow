@@ -105,7 +105,8 @@ namespace MoneyFlow.Service
                         @fullname,
                         @username,
                         @password
-                    );
+                    )
+                    RETURNING c_user_id;
                 ";
 
                 using (NpgsqlCommand command =
@@ -126,9 +127,34 @@ namespace MoneyFlow.Service
                         user.UserPassword!
                     );
 
-                    int rowsAffected = command.ExecuteNonQuery();
+                    object? result = command.ExecuteScalar();
+                    if (result != null && int.TryParse(result.ToString(), out int newUserId))
+                    {
+                        user.UserId = newUserId;
 
-                    return rowsAffected > 0;
+                        using (var summaryCmd = new NpgsqlCommand(@"
+                            INSERT INTO t_summary
+                            (
+                                c_user_id,
+                                c_total_income,
+                                c_total_expense
+                            )
+                            VALUES
+                            (
+                                @UserId,
+                                0,
+                                0
+                            )
+                            ON CONFLICT (c_user_id) DO NOTHING;", connection))
+                        {
+                            summaryCmd.Parameters.AddWithValue("@UserId", newUserId);
+                            summaryCmd.ExecuteNonQuery();
+                        }
+
+                        return true;
+                    }
+
+                    return false;
                 }
             }
         }
@@ -155,6 +181,54 @@ namespace MoneyFlow.Service
                     command.Parameters.AddWithValue("@currentPassword", currentPassword);
 
                     return command.ExecuteNonQuery() > 0;
+                }
+            }
+        }
+
+        public bool DeleteUser(int userId)
+        {
+            using (NpgsqlConnection connection =
+                   new NpgsqlConnection(Env.ConnectionString))
+            {
+                connection.Open();
+                using (var transaction = connection.BeginTransaction())
+                {
+                    try
+                    {
+                        using (var cmd = connection.CreateCommand())
+                        {
+                            cmd.Transaction = transaction;
+                            cmd.Parameters.AddWithValue("@userId", userId);
+
+                            // 1. Delete user transactions
+                            cmd.CommandText = "DELETE FROM t_transaction WHERE c_user_id = @userId;";
+                            cmd.ExecuteNonQuery();
+
+                            // 2. Delete user settings
+                            cmd.CommandText = "DELETE FROM t_user_settings WHERE c_user_id = @userId;";
+                            cmd.ExecuteNonQuery();
+
+                            // 3. Delete user summary
+                            cmd.CommandText = "DELETE FROM t_summary WHERE c_user_id = @userId;";
+                            cmd.ExecuteNonQuery();
+
+                            // 4. Delete user custom categories
+                            cmd.CommandText = "DELETE FROM t_category WHERE c_created_by_user_id = @userId;";
+                            cmd.ExecuteNonQuery();
+
+                            // 5. Delete user
+                            cmd.CommandText = "DELETE FROM t_user WHERE c_user_id = @userId;";
+                            int rows = cmd.ExecuteNonQuery();
+
+                            transaction.Commit();
+                            return rows > 0;
+                        }
+                    }
+                    catch
+                    {
+                        transaction.Rollback();
+                        throw;
+                    }
                 }
             }
         }

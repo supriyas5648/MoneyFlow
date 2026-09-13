@@ -197,7 +197,7 @@ namespace MoneyFlow.View
             this.lblPreviewSample.Name = "lblPreviewSample";
             this.lblPreviewSample.Size = new System.Drawing.Size(410, 42);
             this.lblPreviewSample.TabIndex = 5;
-            this.lblPreviewSample.Text = "  $5,000.00  |  2026-09-01  |  Salary  |  Monthly Income";
+            this.lblPreviewSample.Text = "  ₹5,000.00  |  2026-09-01  |  Salary  |  Monthly Income";
             this.lblPreviewSample.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
 
             // btnSaveAppearance
