@@ -51,6 +51,9 @@ namespace MoneyFlow
         private Button btnTrans;
         private Button btnView;
         private Button btnSetting;
+        private MenuStrip mainMenuStrip;
+        private ToolStripMenuItem viewMenuItem;
+        private ToolStripMenuItem reportMenuItem;
 
         protected override void Dispose(bool disposing)
         {
@@ -100,6 +103,7 @@ namespace MoneyFlow
             btnSetting = new Button { Text = "Setting", Dock = DockStyle.Fill, FlatStyle = FlatStyle.System };
 
             btnFile.Click += new System.EventHandler(this.btnFile_Click);
+            btnView.Click += new System.EventHandler(this.btnView_Click);
 
             headerGrid.Controls.Add(btnFile, 0, 0);
             headerGrid.Controls.Add(btnTrans, 1, 0);
@@ -116,6 +120,18 @@ namespace MoneyFlow
 
             this.Controls.Add(this.workspaceContainerPanel);
             this.Controls.Add(this.headerPanel);
+
+            this.mainMenuStrip = new MenuStrip
+            {
+                Dock = DockStyle.Top,
+                GripStyle = ToolStripGripStyle.Hidden
+            };
+            this.viewMenuItem = new ToolStripMenuItem("View");
+            this.reportMenuItem = new ToolStripMenuItem("Day / Month / Year Report");
+            this.reportMenuItem.Click += new System.EventHandler(this.btnView_Click);
+            this.viewMenuItem.DropDownItems.Add(this.reportMenuItem);
+            this.mainMenuStrip.Items.Add(this.viewMenuItem);
+            this.Controls.Add(this.mainMenuStrip);
 
             InitializeWorkspaceComponents();
         }

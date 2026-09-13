@@ -31,6 +31,17 @@ namespace MoneyFlow
             LoadMainWorkspacePage();
         }
 
+        private void btnView_Click(object sender, EventArgs e)
+        {
+            OpenReportForm();
+        }
+
+        private void OpenReportForm()
+        {
+            using FrmReport reportForm = new FrmReport(_currentUserId);
+            reportForm.ShowDialog(this);
+        }
+
         /// <summary>
         /// Main entry point — loads all dynamic data from the database into the UI.
         /// </summary>
