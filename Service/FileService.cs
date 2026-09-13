@@ -282,6 +282,26 @@ namespace MoneyFlow.Service
                     savedCount++;
                 }
 
+                using NpgsqlCommand summaryCommand = new NpgsqlCommand(@"
+                    INSERT INTO t_summary (c_user_id)
+                    VALUES (@UserId)
+                    ON CONFLICT (c_user_id) DO NOTHING;
+
+                    UPDATE t_summary
+                    SET c_total_income = COALESCE((
+                            SELECT SUM(c_transaction_amount)
+                            FROM t_transaction
+                            WHERE c_user_id = @UserId
+                              AND c_transaction_type = 'Income'), 0),
+                        c_total_expense = COALESCE((
+                            SELECT SUM(c_transaction_amount)
+                            FROM t_transaction
+                            WHERE c_user_id = @UserId
+                              AND c_transaction_type = 'Expense'), 0)
+                    WHERE c_user_id = @UserId;", connection, transaction);
+                summaryCommand.Parameters.AddWithValue("@UserId", loggedInUserId);
+                summaryCommand.ExecuteNonQuery();
+
                 transaction.Commit();
                 return savedCount;
             }

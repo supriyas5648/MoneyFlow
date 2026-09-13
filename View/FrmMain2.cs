@@ -795,7 +795,8 @@ namespace MoneyFlow
                         c.c_category_name AS ""Category"",
                         t.c_transaction_amount AS ""Amount"",
                         t.c_transaction_description AS ""Description"",
-                        t.c_transaction_date AS ""Date""
+                        t.c_transaction_date AS ""Date"",
+                        t.c_user_id AS ""User ID""
                     FROM t_transaction t
                     INNER JOIN t_category c
                         ON t.c_transaction_category_id =
