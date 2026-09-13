@@ -423,7 +423,9 @@ namespace MoneyFlow
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
+            this.AutoScroll = true;
             this.ClientSize = new System.Drawing.Size(850, 785);
+            this.MinimumSize = new System.Drawing.Size(780, 730);
             this.Controls.Add(this.grpboxTransaction);
             this.Name = "FrmTransaction";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
@@ -445,10 +447,11 @@ namespace MoneyFlow
 
         private void FrmTransaction_Resize(object sender, System.EventArgs e)
         {
-            this.grpboxTransaction.Left = ((this.ClientSize.Width - this.grpboxTransaction.Width)
-                        / 2);
-            this.grpboxTransaction.Top = ((this.ClientSize.Height - this.grpboxTransaction.Height)
-                        / 2);
+            if (this.grpboxTransaction != null)
+            {
+                this.grpboxTransaction.Left = System.Math.Max(12, (this.ClientSize.Width - this.grpboxTransaction.Width) / 2);
+                this.grpboxTransaction.Top = System.Math.Max(12, (this.ClientSize.Height - this.grpboxTransaction.Height) / 2);
+            }
         }
         private System.Windows.Forms.GroupBox grpboxTransaction;
         private System.Windows.Forms.TextBox txtTransactionDescription;

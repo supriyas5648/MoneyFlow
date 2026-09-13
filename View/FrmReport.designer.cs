@@ -117,7 +117,7 @@ namespace MoneyFlow
             this.filterPanel.Name = "filterPanel";
             this.filterPanel.Size = new Size(1050, 36);
             this.filterPanel.TabIndex = 0;
-            this.filterPanel.WrapContents = false;
+            this.filterPanel.WrapContents = true;
 
             // 
             // lblPeriodPrompt
@@ -332,10 +332,11 @@ namespace MoneyFlow
             // 
             this.AutoScaleDimensions = new SizeF(7F, 15F);
             this.AutoScaleMode = AutoScaleMode.Font;
+            this.AutoScroll = true;
             this.ClientSize = new Size(1100, 720);
             this.Controls.Add(this.mainLayout);
             this.Font = new Font("Segoe UI", 9F);
-            this.MinimumSize = new Size(900, 620);
+            this.MinimumSize = new Size(850, 580);
             this.Name = "FrmReport";
             this.StartPosition = FormStartPosition.CenterParent;
             this.Text = "MoneyFlow Reports";

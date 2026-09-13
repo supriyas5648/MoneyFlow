@@ -411,6 +411,7 @@ namespace MoneyFlow
             // 
             // workspaceContainerPanel
             // 
+            this.workspaceContainerPanel.AutoScroll = true;
             this.workspaceContainerPanel.Controls.Add(this.masterMainGrid);
             this.workspaceContainerPanel.Dock = System.Windows.Forms.DockStyle.Fill;
             this.workspaceContainerPanel.Location = new System.Drawing.Point(0, 24);
@@ -600,7 +601,7 @@ namespace MoneyFlow
             this.filterHeaderPanel.Name = "filterHeaderPanel";
             this.filterHeaderPanel.Size = new System.Drawing.Size(642, 25);
             this.filterHeaderPanel.TabIndex = 0;
-            this.filterHeaderPanel.WrapContents = false;
+            this.filterHeaderPanel.WrapContents = true;
 
             // 
             // lblFilterPrompt
@@ -1086,7 +1087,7 @@ namespace MoneyFlow
             this.Controls.Add(this.menuStripMain);
             this.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
             this.MainMenuStrip = this.menuStripMain;
-            this.MinimumSize = new System.Drawing.Size(820, 540);
+            this.MinimumSize = new System.Drawing.Size(860, 580);
             this.Name = "FrmMain";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "MoneyFlow Desktop";

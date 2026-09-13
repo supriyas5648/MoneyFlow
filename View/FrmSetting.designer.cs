@@ -63,6 +63,8 @@ namespace MoneyFlow.View
             // 
             // grpChangePassword
             // 
+            this.grpChangePassword.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
             this.grpChangePassword.Controls.Add(this.lblCurrentPassword);
             this.grpChangePassword.Controls.Add(this.txtCurrentPassword);
             this.grpChangePassword.Controls.Add(this.lblNewPassword);
@@ -86,6 +88,8 @@ namespace MoneyFlow.View
             this.lblCurrentPassword.Text = "Current Password:";
 
             // txtCurrentPassword
+            this.txtCurrentPassword.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
             this.txtCurrentPassword.Location = new System.Drawing.Point(150, 29);
             this.txtCurrentPassword.Name = "txtCurrentPassword";
             this.txtCurrentPassword.PasswordChar = '*';
@@ -101,6 +105,8 @@ namespace MoneyFlow.View
             this.lblNewPassword.Text = "New Password:";
 
             // txtNewPassword
+            this.txtNewPassword.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
             this.txtNewPassword.Location = new System.Drawing.Point(150, 65);
             this.txtNewPassword.Name = "txtNewPassword";
             this.txtNewPassword.PasswordChar = '*';
@@ -116,6 +122,8 @@ namespace MoneyFlow.View
             this.lblConfirmPassword.Text = "Confirm Password:";
 
             // txtConfirmPassword
+            this.txtConfirmPassword.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
             this.txtConfirmPassword.Location = new System.Drawing.Point(150, 101);
             this.txtConfirmPassword.Name = "txtConfirmPassword";
             this.txtConfirmPassword.PasswordChar = '*';
@@ -134,6 +142,8 @@ namespace MoneyFlow.View
             // 
             // grpAppearance
             // 
+            this.grpAppearance.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
             this.grpAppearance.Controls.Add(this.btnChooseFont);
             this.grpAppearance.Controls.Add(this.lblFontInfo);
             this.grpAppearance.Controls.Add(this.btnChooseColor);
@@ -191,6 +201,8 @@ namespace MoneyFlow.View
             this.lblPreviewTitle.Text = "Sample Preview:";
 
             // lblPreviewSample
+            this.lblPreviewSample.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
             this.lblPreviewSample.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.lblPreviewSample.BackColor = System.Drawing.Color.White;
             this.lblPreviewSample.Location = new System.Drawing.Point(20, 136);
@@ -210,6 +222,7 @@ namespace MoneyFlow.View
             this.btnSaveAppearance.Click += new System.EventHandler(this.btnSaveAppearance_Click);
 
             // btnClose
+            this.btnClose.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
             this.btnClose.Location = new System.Drawing.Point(380, 474);
             this.btnClose.Name = "btnClose";
             this.btnClose.Size = new System.Drawing.Size(100, 32);
@@ -223,14 +236,16 @@ namespace MoneyFlow.View
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
+            this.AutoScroll = true;
             this.ClientSize = new System.Drawing.Size(504, 520);
             this.Controls.Add(this.btnClose);
             this.Controls.Add(this.grpAppearance);
             this.Controls.Add(this.grpChangePassword);
             this.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
-            this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedDialog;
-            this.MaximizeBox = false;
-            this.MinimizeBox = false;
+            this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.Sizable;
+            this.MaximizeBox = true;
+            this.MinimizeBox = true;
+            this.MinimumSize = new System.Drawing.Size(520, 560);
             this.Name = "FrmSetting";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent;
             this.Text = "Settings & Appearance";
