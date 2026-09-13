@@ -1,4 +1,4 @@
-namespace MoneyFlow.View
+namespace MoneyFlow
 {
     partial class FrmChangePassword
     {
@@ -125,6 +125,8 @@ namespace MoneyFlow.View
             // FrmChangePassword
             //
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
+            this.BackColor = System.Drawing.Color.FromArgb(238, 246, 247);
+            this.ForeColor = System.Drawing.Color.FromArgb(27, 49, 58);
             this.AcceptButton = this.btnChangePasswordSubmit;
             this.CancelButton = this.btnChangePasswordCancel;
             this.ClientSize = new System.Drawing.Size(520, 310);

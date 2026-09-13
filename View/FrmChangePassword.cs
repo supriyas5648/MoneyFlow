@@ -2,7 +2,7 @@ using System;
 using System.Windows.Forms;
 using MoneyFlow.Service;
 
-namespace MoneyFlow.View
+namespace MoneyFlow
 {
     public partial class FrmChangePassword : Form
     {

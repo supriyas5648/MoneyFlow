@@ -1,16 +1,4 @@
-.env
-.env.*
-!.env.example
-
-# Local database credentials
-Service/Env.cs
-
-# Visual Studio and .NET build output
-.vs/
-[Bb]in/
-[Oo]bj/
-*.user
-*.suo
-
-# IDE and local tooling files
-.idea/
+env.cs
+obj/
+bin/
+Program.cs

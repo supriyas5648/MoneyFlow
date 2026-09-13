@@ -4,7 +4,7 @@ using System.Windows.Forms;
 using MoneyFlow.Model;
 using MoneyFlow.Service;
 
-namespace MoneyFlow.View
+namespace MoneyFlow
 {
     public partial class FrmRegistration : Form
     {
@@ -212,8 +212,9 @@ namespace MoneyFlow.View
 
         private void btnRegistrationLogin_Click(object sender, EventArgs e)
         {
-            DialogResult = DialogResult.Cancel;
-            Close();
+            FrmLogin login = new FrmLogin();
+            login.ShowDialog();
+            this.Hide();
         }
     }
 }

@@ -25,7 +25,7 @@ namespace MoneyFlow
         /// <summary>
         /// Required method for Designer support - do not modify
         /// the contents of this method with the code editor.
-        /// </summary>
+        // /// </summary>
         private void InitializeComponent()
         {
             this.components = new System.ComponentModel.Container();
@@ -78,7 +78,6 @@ namespace MoneyFlow
             this.txtUserName.Name = "txtUserName";
             this.txtUserName.Size = new System.Drawing.Size(218, 22);
             this.txtUserName.TabIndex = 3;
-            this.txtUserName.TextChanged += new System.EventHandler(this.txtUserName_TextChanged);
             // 
             // txtPassword
             // 
@@ -86,7 +85,6 @@ namespace MoneyFlow
             this.txtPassword.Name = "txtPassword";
             this.txtPassword.Size = new System.Drawing.Size(218, 22);
             this.txtPassword.TabIndex = 4;
-            this.txtPassword.TextChanged += new System.EventHandler(this.txtPassword_TextChanged);
             // 
             // btnLogin
             // 
@@ -97,7 +95,7 @@ namespace MoneyFlow
             this.btnLogin.TabIndex = 5;
             this.btnLogin.Text = "LOGIN";
             this.btnLogin.UseVisualStyleBackColor = false;
-            this.btnLogin.Click += new System.EventHandler(this.LoginClick);
+            this.btnLogin.Click += new System.EventHandler(this.btnLogin_Click);
             // 
             // lblUserNameError
             // 
@@ -131,7 +129,7 @@ namespace MoneyFlow
             this.btnRegister.TabIndex = 8;
             this.btnRegister.Text = "Register";
             this.btnRegister.UseVisualStyleBackColor = false;
-            this.btnRegister.Click += new System.EventHandler(this.RegisterClick);
+            this.btnRegister.Click += new System.EventHandler(this.btnRegisterClick);
             // 
             // lblRegister
             // 
@@ -146,6 +144,8 @@ namespace MoneyFlow
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
+            this.BackColor = System.Drawing.Color.FromArgb(238, 246, 247);
+            this.ForeColor = System.Drawing.Color.FromArgb(27, 49, 58);
             this.ClientSize = new System.Drawing.Size(605, 414);
             this.Controls.Add(this.lblRegister);
             this.Controls.Add(this.btnRegister);
@@ -175,5 +175,6 @@ namespace MoneyFlow
         private System.Windows.Forms.Label lblPasswordError;
         private System.Windows.Forms.Button btnRegister;
         private System.Windows.Forms.Label lblRegister;
+
     }
 }

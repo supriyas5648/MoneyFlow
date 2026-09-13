@@ -8,7 +8,7 @@ namespace MoneyFlow.Service
         public UserSettings? GetUserSettings(int userId)
         {
             using (NpgsqlConnection connection =
-                   new NpgsqlConnection(Env.ConnectionString))
+                   new NpgsqlConnection(env.ConnectionString))
             {
                 connection.Open();
 
@@ -60,7 +60,7 @@ namespace MoneyFlow.Service
         public bool SaveUserSettings(UserSettings settings)
         {
             using (NpgsqlConnection connection =
-                   new NpgsqlConnection(Env.ConnectionString))
+                   new NpgsqlConnection(env.ConnectionString))
             {
                 connection.Open();
 

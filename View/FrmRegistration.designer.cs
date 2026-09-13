@@ -1,4 +1,4 @@
-namespace MoneyFlow.View
+namespace MoneyFlow
 {
     public partial class FrmRegistration : System.Windows.Forms.Form
     {
@@ -172,6 +172,7 @@ namespace MoneyFlow.View
             this.btnRegistrationRegister.Text = "Register";
             this.btnRegistrationRegister.UseVisualStyleBackColor = true;
             this.btnRegistrationRegister.Click += new System.EventHandler(this.btnRegistrationRegister_Click);
+            // btnRegistrationRegister.Click += btnRegistrationRegister_Click;
             // 
             // btnRegistrationClear
             // 
@@ -182,6 +183,7 @@ namespace MoneyFlow.View
             this.btnRegistrationClear.Text = "Clear";
             this.btnRegistrationClear.UseVisualStyleBackColor = true;
             this.btnRegistrationClear.Click += new System.EventHandler(this.btnRegistrationClear_Click);
+            // btnRegistrationClear.Click += btnRegistrationClear_Click;
             // 
             // btnRegistrationLogin
             // 
@@ -197,6 +199,8 @@ namespace MoneyFlow.View
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(9F, 20F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
+            this.BackColor = System.Drawing.Color.FromArgb(238, 246, 247);
+            this.ForeColor = System.Drawing.Color.FromArgb(27, 49, 58);
             this.ClientSize = new System.Drawing.Size(800, 500);
             this.Controls.Add(this.btnRegistrationLogin);
             this.Controls.Add(this.btnRegistrationClear);

@@ -1,104 +1,93 @@
 using System;
+using Npgsql;
 using System.Windows.Forms;
-using MoneyFlow.Model;
 using MoneyFlow.Service;
-using MoneyFlow.View;
+using MoneyFlow.Model;
 
 namespace MoneyFlow
 {
     public partial class FrmLogin : Form
     {
-        private readonly UserService _userService;
 
         public FrmLogin()
         {
             InitializeComponent();
-            _userService = new UserService();
         }
 
-        private void LoginClick(object sender, EventArgs e)
+        public void btnLogin_Click(object sender, EventArgs e)
         {
-            string username = txtUserName.Text.Trim();
-            string password = txtPassword.Text;
-
-            lblUserNameError.Visible = string.IsNullOrWhiteSpace(username);
-            lblPasswordError.Visible = string.IsNullOrWhiteSpace(password);
-
-            if (lblUserNameError.Visible || lblPasswordError.Visible)
+            if (string.IsNullOrEmpty(this.txtUserName.Text) || string.IsNullOrEmpty(this.txtPassword.Text))
             {
-                return;
-            }
-
-            try
-            {
-                User? authenticatedUser = _userService.AuthenticateUser(username, password);
-
-                if (authenticatedUser != null)
+                if (string.IsNullOrEmpty(this.txtUserName.Text))
                 {
-                    Hide();
+                    this.lblUserNameError.Visible = true;
+                }
 
-                    using (FrmMain mainForm = new FrmMain(authenticatedUser))
+                if (string.IsNullOrEmpty(this.txtPassword.Text))
+                {
+                    this.lblPasswordError.Visible = true;
+                }
+            }
+            else
+            {
+
+                //else check values
+
+                //connection 
+                NpgsqlConnection cn = new NpgsqlConnection(env.ConnectionString);
+                try
+                {
+                    string query = @"SELECT c_user_id, c_user_username
+                                     FROM t_user
+                                     WHERE c_user_username = @username
+                                     AND c_user_password = @password;";
+
+                    NpgsqlCommand cmd = new NpgsqlCommand(query, cn);
+
+                    cmd.Parameters.AddWithValue("username", txtUserName.Text);
+                    cmd.Parameters.AddWithValue("password", txtPassword.Text);
+
+                    cn.Open();
+
+                    using NpgsqlDataReader reader = cmd.ExecuteReader();
+
+                    if (reader.Read())
                     {
-                        mainForm.ShowDialog(this);
-
-                        if (mainForm.LogoutRequested)
+                        // Get user information
+                        User currentUser = new User
                         {
-                            ResetForNextUser();
-                            Show();
-                            return;
-                        }
+                            UserId = Convert.ToInt32(reader["c_user_id"]),
+                            UserUsername = reader["c_user_username"].ToString()
+                        };
+
+                        // Pass logged-in user to FrmMain
+                        FrmMain2 frmMain = new FrmMain2(currentUser);
+                        frmMain.Show();
+                        this.Hide();
+                    }
+                    else
+                    {
+                        MessageBox.Show("Invalid username or password");
                     }
 
-                    Close();
                 }
-                else
+                catch (Exception ex)
                 {
-                    MessageBox.Show(
-                        "Invalid username or password.",
-                        "Login",
-                        MessageBoxButtons.OK,
-                        MessageBoxIcon.Warning);
+                    MessageBox.Show("Error : " + ex.Message);
+                }
+                finally
+                {
+                    cn.Close();
                 }
             }
-            catch (Exception)
-            {
-                MessageBox.Show(
-                    "Unable to connect to the database.",
-                    "Database Error",
-                    MessageBoxButtons.OK,
-                    MessageBoxIcon.Error);
-            }
         }
 
-        private void RegisterClick(object sender, EventArgs e)
+
+        public void btnRegisterClick(object sender, EventArgs e)
         {
-            Hide();
-
-            using (FrmRegistration registrationForm = new FrmRegistration())
-            {
-                registrationForm.ShowDialog(this);
-            }
-
-            Show();
-        }
-
-        private void txtUserName_TextChanged(object sender, EventArgs e)
-        {
-            lblUserNameError.Visible = string.IsNullOrWhiteSpace(txtUserName.Text);
-        }
-
-        private void txtPassword_TextChanged(object sender, EventArgs e)
-        {
-            lblPasswordError.Visible = string.IsNullOrWhiteSpace(txtPassword.Text);
-        }
-
-        private void ResetForNextUser()
-        {
-            txtUserName.Clear();
-            txtPassword.Clear();
-            lblUserNameError.Visible = false;
-            lblPasswordError.Visible = false;
-            txtUserName.Focus();
+            FrmRegistration registerForm = new FrmRegistration();
+            registerForm.Show();
+            this.Hide();
         }
     }
 }

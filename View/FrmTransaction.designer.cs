@@ -423,6 +423,8 @@ namespace MoneyFlow
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
+            this.BackColor = System.Drawing.Color.FromArgb(238, 246, 247);
+            this.ForeColor = System.Drawing.Color.FromArgb(27, 49, 58);
             this.ClientSize = new System.Drawing.Size(850, 785);
             this.Controls.Add(this.grpboxTransaction);
             this.Name = "FrmTransaction";
