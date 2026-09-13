@@ -37,7 +37,7 @@ namespace MoneyFlow
                 {
                     Hide();
 
-                    using (FrmMain mainForm = new FrmMain(authenticatedUser))
+                    using (FrmMain2 mainForm = new FrmMain2(authenticatedUser))
                     {
                         mainForm.ShowDialog(this);
 
