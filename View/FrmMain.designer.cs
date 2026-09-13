@@ -61,7 +61,6 @@ namespace MoneyFlow
         private System.Windows.Forms.TableLayoutPanel filterInputsGrid;
         private System.Windows.Forms.Panel pnlCategoryCheckboxes;
         private System.Windows.Forms.FlowLayoutPanel flowCategoryCheckboxes;
-        private System.Windows.Forms.Button btnAddDashboardCategory;
         private System.Windows.Forms.Panel pnlDescriptionInput;
         private System.Windows.Forms.Label lblDescPrompt;
         private System.Windows.Forms.TextBox txtDescriptionSearch;
@@ -159,7 +158,6 @@ namespace MoneyFlow
             this.filterInputsGrid = new System.Windows.Forms.TableLayoutPanel();
             this.pnlCategoryCheckboxes = new System.Windows.Forms.Panel();
             this.flowCategoryCheckboxes = new System.Windows.Forms.FlowLayoutPanel();
-            this.btnAddDashboardCategory = new System.Windows.Forms.Button();
             this.pnlDescriptionInput = new System.Windows.Forms.Panel();
             this.lblDescPrompt = new System.Windows.Forms.Label();
             this.txtDescriptionSearch = new System.Windows.Forms.TextBox();
@@ -664,7 +662,6 @@ namespace MoneyFlow
             // 
             this.pnlCategoryCheckboxes.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.pnlCategoryCheckboxes.Controls.Add(this.flowCategoryCheckboxes);
-            this.pnlCategoryCheckboxes.Controls.Add(this.btnAddDashboardCategory);
             this.pnlCategoryCheckboxes.Dock = System.Windows.Forms.DockStyle.Fill;
             this.pnlCategoryCheckboxes.Location = new System.Drawing.Point(3, 3);
             this.pnlCategoryCheckboxes.Name = "pnlCategoryCheckboxes";
@@ -684,19 +681,6 @@ namespace MoneyFlow
             this.flowCategoryCheckboxes.Size = new System.Drawing.Size(313, 93);
             this.flowCategoryCheckboxes.TabIndex = 0;
             this.flowCategoryCheckboxes.WrapContents = false;
-            // 
-            // btnAddDashboardCategory
-            // 
-            this.btnAddDashboardCategory.Dock = System.Windows.Forms.DockStyle.Bottom;
-            this.btnAddDashboardCategory.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.btnAddDashboardCategory.Font = new System.Drawing.Font("Segoe UI", 8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
-            this.btnAddDashboardCategory.Location = new System.Drawing.Point(0, 69);
-            this.btnAddDashboardCategory.Name = "btnAddDashboardCategory";
-            this.btnAddDashboardCategory.Size = new System.Drawing.Size(313, 24);
-            this.btnAddDashboardCategory.TabIndex = 1;
-            this.btnAddDashboardCategory.Text = "+ Add Category";
-            this.btnAddDashboardCategory.UseVisualStyleBackColor = true;
-            this.btnAddDashboardCategory.Click += new System.EventHandler(this.BtnAddDashboardCategory_Click);
 
             // 
             // pnlDescriptionInput
