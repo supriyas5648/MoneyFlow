@@ -9,7 +9,7 @@ namespace MoneyFlow.Service
 {
     public class FileService
     {
-        private readonly string _connectionString = env.ConnectionString;
+        private readonly string _connectionString = Env.ConnectionString;
 
         public DataTable ReadCsv(string filePath)
         {

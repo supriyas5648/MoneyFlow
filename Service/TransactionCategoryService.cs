@@ -6,7 +6,7 @@ namespace MoneyFlow.Service
 {
     public class TransactionCategoryService
     {
-        private readonly string _con = env.ConnectionString;
+        private readonly string _con = Env.ConnectionString;
 
         public TransactionCategoryService()
         {

@@ -4,7 +4,7 @@ using System.Windows.Forms;
 using MoneyFlow.Service;
 using MoneyFlow.Model;
 
-namespace MoneyFlow
+namespace MoneyFlow.View
 {
     public partial class FrmLogin : Form
     {
@@ -34,7 +34,7 @@ namespace MoneyFlow
                 //else check values
 
                 //connection 
-                NpgsqlConnection cn = new NpgsqlConnection(env.ConnectionString);
+                NpgsqlConnection cn = new NpgsqlConnection(Env.ConnectionString);
                 try
                 {
                     string query = @"SELECT c_user_id, c_user_username

@@ -20,7 +20,7 @@ namespace MoneyFlow.Service
                 FROM t_summary
                 WHERE c_user_id = @userId";
 
-            using (var connection = new NpgsqlConnection(env.ConnectionString))
+            using (var connection = new NpgsqlConnection(Env.ConnectionString))
             {
                 connection.Open();
 

@@ -3,6 +3,7 @@ using System.Text.RegularExpressions;
 using System.Windows.Forms;
 using MoneyFlow.Model;
 using MoneyFlow.Service;
+using MoneyFlow.View;
 
 namespace MoneyFlow
 {

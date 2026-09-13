@@ -459,7 +459,7 @@ public partial class FrmMain2
             GridLines = true,
             HideSelection = false,
             HeaderStyle = ColumnHeaderStyle.Nonclickable,
-            View = View.Details,
+            View = System.Windows.Forms.View.Details,
             BorderStyle = BorderStyle.None,
             // BackgroundColor = Color.White,
             Font = new Font("Segoe UI", 9.5F)

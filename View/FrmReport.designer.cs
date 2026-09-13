@@ -114,7 +114,7 @@ namespace MoneyFlow
             _reportListView = new ListView
             {
                 Dock = DockStyle.Fill,
-                View = View.Details,
+                View = System.Windows.Forms.View.Details,
                 FullRowSelect = true,
                 GridLines = true,
                 HideSelection = false

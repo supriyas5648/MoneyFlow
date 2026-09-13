@@ -784,7 +784,7 @@ namespace MoneyFlow
 
             try
             {
-                using NpgsqlConnection conn = new NpgsqlConnection(env.ConnectionString);
+                using NpgsqlConnection conn = new NpgsqlConnection(Env.ConnectionString);
 
                 conn.Open();
 

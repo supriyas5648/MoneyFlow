@@ -1,4 +1,4 @@
-namespace MoneyFlow
+namespace MoneyFlow.View
 {
     public partial class FrmLogin : System.Windows.Forms.Form
     {

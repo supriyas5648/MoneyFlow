@@ -8,7 +8,7 @@ namespace MoneyFlow.Service
         public User? AuthenticateUser(string username, string password)
         {
             using (NpgsqlConnection connection =
-                   new NpgsqlConnection(env.ConnectionString))
+                   new NpgsqlConnection(Env.ConnectionString))
             {
                 connection.Open();
 
@@ -59,7 +59,7 @@ namespace MoneyFlow.Service
         public bool UsernameExists(string username)
         {
             using (NpgsqlConnection connection =
-                   new NpgsqlConnection(env.ConnectionString))
+                   new NpgsqlConnection(Env.ConnectionString))
             {
                 connection.Open();
 
@@ -89,7 +89,7 @@ namespace MoneyFlow.Service
         public bool RegisterUser(User user)
         {
             using (NpgsqlConnection connection =
-                   new NpgsqlConnection(env.ConnectionString))
+                   new NpgsqlConnection(Env.ConnectionString))
             {
                 connection.Open();
 
@@ -136,7 +136,7 @@ namespace MoneyFlow.Service
         public bool ChangePassword(int userId, string currentPassword, string newPassword)
         {
             using (NpgsqlConnection connection =
-                   new NpgsqlConnection(env.ConnectionString))
+                   new NpgsqlConnection(Env.ConnectionString))
             {
                 connection.Open();
 

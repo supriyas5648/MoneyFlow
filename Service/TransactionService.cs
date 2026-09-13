@@ -9,7 +9,7 @@ namespace MoneyFlow.Service
         
            
 
-         private readonly string _con =env.ConnectionString;
+         private readonly string _con = Env.ConnectionString;
         public TransactionService()
         {
         }
@@ -294,7 +294,7 @@ namespace MoneyFlow.Service
                 WHERE t.c_user_id = @userId
                 ORDER BY t.c_transaction_date DESC";
 
-            using (var connection = new NpgsqlConnection(env.ConnectionString))
+            using (var connection = new NpgsqlConnection(Env.ConnectionString))
             {
                 connection.Open();
 

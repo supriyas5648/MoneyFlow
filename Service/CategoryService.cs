@@ -24,7 +24,7 @@ namespace MoneyFlow.Service
                 WHERE c_created_by_user_id IS NULL OR c_created_by_user_id = @userId
                 ORDER BY c_category_name";
 
-            using (var connection = new NpgsqlConnection(env.ConnectionString))
+            using (var connection = new NpgsqlConnection(Env.ConnectionString))
             {
                 connection.Open();
 
