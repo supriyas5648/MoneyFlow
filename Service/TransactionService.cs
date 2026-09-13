@@ -65,7 +65,11 @@ namespace MoneyFlow.Service
                             "@Description", (object?)description ?? DBNull.Value);
 
                         con.Open();
+                        using NpgsqlTransaction transaction = con.BeginTransaction();
+                        cmd.Transaction = transaction;
                         cmd.ExecuteNonQuery();
+                        UpdateSummary(con, transaction, userId);
+                        transaction.Commit();
                     }
                 }
             }
@@ -186,11 +190,16 @@ namespace MoneyFlow.Service
                     cmd.Parameters.AddWithValue("@Description", (object?)description ?? DBNull.Value);
 
                     con.Open();
+                    using NpgsqlTransaction transaction = con.BeginTransaction();
+                    cmd.Transaction = transaction;
                     if (cmd.ExecuteNonQuery() == 0)
                     {
                         throw new InvalidOperationException(
                             "The transaction does not belong to the current user.");
                     }
+
+                            UpdateSummary(con, transaction, userId);
+                            transaction.Commit();
                 }
             }
             catch (Exception ex)
@@ -215,11 +224,16 @@ namespace MoneyFlow.Service
                     cmd.Parameters.AddWithValue("@UserId", userId);
 
                     con.Open();
+                    using NpgsqlTransaction transaction = con.BeginTransaction();
+                    cmd.Transaction = transaction;
                     if (cmd.ExecuteNonQuery() == 0)
                     {
                         throw new InvalidOperationException(
                             "The transaction does not belong to the current user.");
                     }
+
+                            UpdateSummary(con, transaction, userId);
+                            transaction.Commit();
                 }
             }
             catch (Exception ex)
@@ -228,6 +242,36 @@ namespace MoneyFlow.Service
                     "Error while deleting transaction: " + ex.Message,
                     ex);
             }
+        }
+
+        private static void UpdateSummary(
+            NpgsqlConnection connection,
+            NpgsqlTransaction transaction,
+            int userId)
+        {
+            using NpgsqlCommand command = new NpgsqlCommand(@"
+                INSERT INTO t_summary (c_user_id)
+                VALUES (@UserId)
+                ON CONFLICT (c_user_id) DO NOTHING;
+
+                UPDATE t_summary
+                SET c_total_income = COALESCE((
+                        SELECT SUM(c_transaction_amount)
+                        FROM t_transaction
+                        WHERE c_user_id = @UserId
+                          AND c_transaction_type = 'Income'), 0),
+                    c_total_expense = COALESCE((
+                        SELECT SUM(c_transaction_amount)
+                        FROM t_transaction
+                        WHERE c_user_id = @UserId
+                          AND c_transaction_type = 'Expense'), 0)
+                WHERE c_user_id = @UserId;", connection)
+            {
+                Transaction = transaction
+            };
+
+            command.Parameters.AddWithValue("@UserId", userId);
+            command.ExecuteNonQuery();
         }
 
           public List<TransactionModel> GetAllTransactions(int userId)

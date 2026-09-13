@@ -498,9 +498,7 @@ namespace MoneyFlow
                  i < lstboxTransactionExpenseCategory.Items.Count;
                  i++)
             {
-                DataRowView row =
-                    lstboxTransactionExpenseCategory.Items[i]
-                    as DataRowView;
+                DataRowView row = lstboxTransactionExpenseCategory.Items[i] as DataRowView;
 
                 if (row != null &&
                     Convert.ToInt32(
@@ -813,9 +811,7 @@ namespace MoneyFlow
             object sender,
             EventArgs e)
         {
-            if (!ValidateTransaction(
-                out string transactionType,
-                out int categoryId))
+            if (!ValidateTransaction(out string transactionType,out int categoryId))
             {
                 return;
             }

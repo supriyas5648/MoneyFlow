@@ -364,6 +364,7 @@ namespace MoneyFlow
         private readonly SettingService _settingService;
         private UserSettings? _currentUserSettings;
         private DataTable? _transactionsTable;
+        private readonly FileService _fileService = new FileService();
         public bool LogoutRequested { get; private set; }
 
 
@@ -1034,214 +1035,133 @@ namespace MoneyFlow
             // FrmSummary frmSummary = new FrmSummary();
             // frmSummary.Show();
         }
-#region csv file
-     //Save to Database
-    //     private void SaveDataToDatabase(DataTable dataTable)
-    //     {
-    //         int insertedCount = 0;
-    //         int existingCount = 0;
-    //         int skippedCount = 0;
 
-    //         if (_currentUser == null)
-    //         {
-    //             return;
-    //         }
+      private void menuItemMainFileImportRecords_Click(
+            object sender,
+            EventArgs e)
+        {
+            if (_currentUser == null)
+            {
+                MessageBox.Show(
+                    "Please log in before importing records.",
+                    "Import Records",
+                    MessageBoxButtons.OK,
+                    MessageBoxIcon.Warning);
+                return;
+            }
 
-    //         try
-    //         {
-    //            using NpgsqlConnection cn = new NpgsqlConnection(env.ConnectionString);
-    //             cn.Open();
+            using OpenFileDialog dialog = new OpenFileDialog
+            {
+                Filter = "CSV files (*.csv)|*.csv|All files (*.*)|*.*",
+                Title = "Select transaction CSV file",
+                CheckFileExists = true,
+                Multiselect = false
+            };
 
-    //             foreach (DataRow row in dataTable.Rows)   
-    //             {
-    //                 int id = Convert.ToInt32(row["ID"]);
-    //                 string type = row["Type"].ToString();
-    //                 string category = row["Category"].ToString();
-    //                 string description = row["Description"].ToString();
-    //                 decimal amount = Convert.ToDecimal(row["Amount ($)"]);
-    //                 DateTime date = Convert.ToDateTime(row["Date"]);
+            if (dialog.ShowDialog(this) != DialogResult.OK)
+            {
+                return;
+            }
 
-    //                 // Check whether transaction already exists
-    //                 using (NpgsqlCommand checkCmd = new NpgsqlCommand(
-    //                     @"SELECT COUNT(*) FROM t_transaction WHERE c_transaction_id = @id",cn))
-    //                 {
-    //                     checkCmd.Parameters.AddWithValue("@id", id);
+            try
+            {
+                DataTable records = _fileService.ReadCsv(dialog.FileName);
+                List<string> validationErrors = _fileService.ValidateRecords(records, _currentUser.UserId);
 
-    //                     int recordCount = Convert.ToInt32(checkCmd.ExecuteScalar());
+                if (validationErrors.Count > 0)
+                {
+                    string details = string.Join(
+                        Environment.NewLine,
+                        validationErrors.Take(10));
 
-    //                     if (recordCount == 0)
-    //                     {
-    //                         using (NpgsqlCommand insertCmd = new NpgsqlCommand(
-    //                             @"INSERT INTO t_transaction"+
-    //                             "(c_transaction_id, c_transaction_type,c_transaction_category, c_transaction_description,c_transaction_amount, c_transaction_date)"+
-    //                             "VALUES" +
-    //                             "(@id, @type, @category, @description, @amount, @date)",
-    //                             cn))
-    //                         {
-    //                             insertCmd.Parameters.AddWithValue("@id", id);
-    //                             insertCmd.Parameters.AddWithValue("@type", type);
-    //                             insertCmd.Parameters.AddWithValue("@category", category);
-    //                             insertCmd.Parameters.AddWithValue("@description", description);
-    //                             insertCmd.Parameters.AddWithValue("@amount", amount);
-    //                             insertCmd.Parameters.AddWithValue("@date", date);
+                    if (validationErrors.Count > 10)
+                    {
+                        details += Environment.NewLine + "More validation errors were found.";
+                    }
 
-    //                             insertCmd.ExecuteNonQuery();
-    //                             insertedCount++;
-    //                         }
-    //                     }
-    //                     else
-    //                     {
-    //                         existingCount++;
-    //                     }
-    //                 }
-    //             }
+                    MessageBox.Show(
+                        details,
+                        "Import Validation Failed",
+                        MessageBoxButtons.OK,
+                        MessageBoxIcon.Warning);
+                    return;
+                }
 
-    //             MessageBox.Show(
-    //                 "Database update completed!\n\n" +
-    //                 "New transactions inserted: " + insertedCount + "\n" +
-    //                 "Existing transactions skipped: " + existingCount,
-    //                 "Import Result",
-    //                 MessageBoxButtons.OK,
-    //                 MessageBoxIcon.Information);
-    //         }
-    //         catch (Exception ex)
-    //         {
-    //             MessageBox.Show(
-    //                 "Error while saving transactions:\n" + ex.Message,
-    //                 "Database Error",
-    //                 MessageBoxButtons.OK,
-    //                 MessageBoxIcon.Error);
-    //         }
-    //         finally
-    //         {
-    //             cn.Close();
-    //             cn.Dispose();
-    //         }
-    //     }
+                int savedCount = _fileService.SaveToDatabase(
+                    records,
+                    _currentUser.UserId);
 
-    //     private void FileExport_Click(object sender, System.EventArgs e)
-    // {
-    //     try
-    //     {
-    //         NpgsqlCommand cmd = new NpgsqlCommand("SELECT * FROM books", cn);
+                LoadDataInListView();
 
-    //         NpgsqlDataAdapter da =new NpgsqlDataAdapter(cmd);
+                MessageBox.Show(
+                    savedCount == 0
+                        ? "The CSV contained no new records."
+                        : $"Imported {savedCount} new record(s) successfully.",
+                    "Import Records",
+                    MessageBoxButtons.OK,
+                    MessageBoxIcon.Information);
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(
+                    "The records could not be imported.\n\n" + ex.Message,
+                    "Import Error",
+                    MessageBoxButtons.OK,
+                    MessageBoxIcon.Error);
+            }
+        }
 
-    //         SaveFileDialog saveFileDialog1 =new SaveFileDialog();
+        private void menuItemMainFileExportRecords_Click(
+            object sender,
+            EventArgs e)
+        {
+            if (_currentUser == null)
+            {
+                MessageBox.Show(
+                    "Please log in before exporting records.",
+                    "Export Records",
+                    MessageBoxButtons.OK,
+                    MessageBoxIcon.Warning);
+                return;
+            }
 
-    //         saveFileDialog1.Filter = "CSV Files|*.csv|All Files|*.*";
+            using SaveFileDialog dialog = new SaveFileDialog
+            {
+                Filter = "CSV files (*.csv)|*.csv|All files (*.*)|*.*",
+                Title = "Save transaction CSV file",
+                DefaultExt = "csv",
+                AddExtension = true,
+                OverwritePrompt = true,
+                FileName = "transactions.csv"
+            };
 
-    //         if (saveFileDialog1.ShowDialog() == DialogResult.OK)
-    //         {
-    //             DataTable dt = new DataTable();
+            if (dialog.ShowDialog(this) != DialogResult.OK)
+            {
+                return;
+            }
 
-    //             // Fill DataTable from database
-    //             da.Fill(dt);
+            try
+            {
+                DataTable records = _transactionsTable?.DefaultView.ToTable()
+                    ?? new DataTable();
 
-    //             using (StreamWriter sw = new StreamWriter(saveFileDialog1.FileName))
-    //             {
-    //                 // Write column headers
-    //                 sw.WriteLine("bookid,bookname,author,price,page" );
+                _fileService.ExportToCsv(records, dialog.FileName);
 
-    //                 // Write records
-    //                 foreach (DataRow dr in dt.Rows)
-    //                 {
-    //                     sw.WriteLine(
-    //                         $"{dr["bookid"]}," +
-    //                         $"\"{dr["bookname"]}\"," +
-    //                         $"\"{dr["author"]}\"," +
-    //                         $"{dr["price"]},"+
-    //                         $"{dr["page"]}"
-    //                     );
-    //                 }
-    //             }
-
-    //             MessageBox.Show(
-    //                 "Data successfully written to CSV file!",
-    //                 "Write",
-    //                 MessageBoxButtons.OK,
-    //                 MessageBoxIcon.Information);
-    //         }
-    //     }
-    //     catch (Exception ex)
-    //     {
-    //         MessageBox.Show(
-    //             ex.Message,
-    //             "Error",
-    //             MessageBoxButtons.OK,
-    //             MessageBoxIcon.Error);
-    //     }
-    //     finally
-    //     {
-    //         cn.Close();
-    //     }
-
-    // }
-
-    // private void FileImport_Click(object sender, System.EventArgs e)
-    // {
-    //     DataTable dt = new DataTable();
-
-    //     OpenFileDialog openFileDialog1 = new OpenFileDialog();
-
-    //     openFileDialog1.FileName = "";
-
-    //     openFileDialog1.Filter ="CSV Files|*.csv|All Files|*.*";
-
-    //     if (openFileDialog1.ShowDialog() == DialogResult.OK)
-    //     {
-    //         try
-    //         {
-    //             // Create columns
-    //             dt.Columns.Add("bookid");
-    //             dt.Columns.Add("bookname");
-    //             dt.Columns.Add("author");
-    //             dt.Columns.Add("price");
-    //             dt.Columns.Add("page");
-
-    //             using (StreamReader sr = new StreamReader(openFileDialog1.FileName))
-    //             {
-    //                 // Skip header
-    //                 sr.ReadLine();
-
-    //                 string line;
-
-    //                 while ((line = sr.ReadLine()) != null)
-    //                 {
-    //                     string[] values = line.Split(',');
-
-    //                     DataRow dr = dt.NewRow();
-
-    //                     dr["bookid"] = values[0];
-    //                     dr["bookname"] = values[1].Trim('"');
-    //                     dr["author"] = values[2].Trim('"');
-    //                     dr["price"] = values[3];
-    //                     dr["page"] = values[4];
-                        
-
-    //                     dt.Rows.Add(dr);
-    //                 }
-    //             }
-
-    //             // // Display CSV data
-    //             // dataGridView1.DataSource = dt;
-
-    //             // Save only new records to database
-    //             SaveDataToDatabase(dt);
-
-    //             LoadDataInListView();
-    //         }
-    //         catch (Exception ex)
-    //         {
-    //             MessageBox.Show(
-    //                 ex.Message,
-    //                 "Error",
-    //                 MessageBoxButtons.OK,
-    //                 MessageBoxIcon.Error);
-    //         }
-    //     }
-    // }
-    #endregion
+                MessageBox.Show(
+                    $"Exported {records.Rows.Count} record(s) successfully.",
+                    "Export Records",
+                    MessageBoxButtons.OK,
+                    MessageBoxIcon.Information);
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(
+                    "The records could not be exported.\n\n" + ex.Message,
+                    "Export Error",
+                    MessageBoxButtons.OK,
+                    MessageBoxIcon.Error);
+            }
+        }
 
     }
 }
