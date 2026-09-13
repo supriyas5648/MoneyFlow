@@ -102,5 +102,7 @@ public static class DatabaseSchema
             CONSTRAINT chk_font_size
                 CHECK (c_font_size BETWEEN 6 AND 72)
         );
+
+        Alter table t_transaction alter column c_summary_id drop not null;
         """;
 }

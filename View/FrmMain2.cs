@@ -395,9 +395,7 @@ namespace MoneyFlow
         // SETTINGS - CHANGE FONT
         // ============================================================
 
-        private void menuItemMainSettingsChangeFont_Click(
-            object sender,
-            EventArgs e)
+        private void menuItemMainSettingsChangeFont_Click(object sender, EventArgs e)
         {
             using FontDialog fontDialogMain = new FontDialog
             {
@@ -439,12 +437,8 @@ namespace MoneyFlow
                 // Update saved settings
                 // ----------------------------------------------------
 
-                UserSettings updatedSettings =
-                    CopyCurrentSettings();
-
-                updatedSettings.FontName =
-                    fontDialogMain.Font.FontFamily.Name;
-
+                UserSettings updatedSettings = CopyCurrentSettings();
+                updatedSettings.FontName = fontDialogMain.Font.FontFamily.Name;
                 updatedSettings.FontSize = fontSize;
 
 
@@ -459,9 +453,7 @@ namespace MoneyFlow
 
         // SETTINGS - CHANGE COLOR
 
-        private void menuItemMainSettingsChangeColor_Click(
-            object sender,
-            EventArgs e)
+        private void menuItemMainSettingsChangeColor_Click(object sender, EventArgs e)
         {
             using ColorDialog colorDialogMain = new ColorDialog
             {
@@ -558,8 +550,7 @@ namespace MoneyFlow
         // SAVE USER SETTINGS
         // ============================================================
 
-        private bool TrySaveUserSettings(
-            UserSettings settings)
+        private bool TrySaveUserSettings(UserSettings settings)
         {
             try
             {
@@ -611,19 +602,14 @@ namespace MoneyFlow
         // CREATE DEFAULT SETTINGS
         // ============================================================
 
-        private static UserSettings CreateDefaultSettings(
-            int userId)
+        private static UserSettings CreateDefaultSettings(int userId)
         {
             return new UserSettings
             {
                 UserId = userId,
-
                 FontName = "Arial",
-
                 FontSize = 12,
-
                 TextColor = "#000000",
-
                 BackgroundColor = "#FFFFFF"
             };
         }
@@ -797,7 +783,7 @@ namespace MoneyFlow
 
             try
             {
-                using NpgsqlConnection conn =new NpgsqlConnection(env.ConnectionString);
+                using NpgsqlConnection conn = new NpgsqlConnection(env.ConnectionString);
 
                 conn.Open();
 
@@ -821,7 +807,7 @@ namespace MoneyFlow
 
 
                 using NpgsqlCommand cmd = new NpgsqlCommand(query, conn);
-                cmd.Parameters.AddWithValue("@user_id",_currentUser.UserId);
+                cmd.Parameters.AddWithValue("@user_id", _currentUser.UserId);
 
 
                 using NpgsqlDataAdapter adapter = new NpgsqlDataAdapter(cmd);
@@ -832,6 +818,7 @@ namespace MoneyFlow
 
                 // Store the table for filtering and render rows in the ListView.
                 _transactionsTable = dt;
+                UpdateFinancialTotals(dt);
                 ApplyFilters();
             }
             catch (Exception ex)
@@ -848,14 +835,40 @@ namespace MoneyFlow
             }
         }
 
+         private void UpdateFinancialTotals(DataTable transactions)
+        {
+            decimal totalIncome = 0m;
+            decimal totalExpense = 0m;
+
+            foreach (DataRow transaction in transactions.Rows)
+            {
+                decimal amount = transaction["Amount"] == DBNull.Value
+                    ? 0m
+                    : Convert.ToDecimal(transaction["Amount"]);
+
+                string transactionType = transaction["Type"]?.ToString() ?? string.Empty;
+
+                if (transactionType.Equals("Income", StringComparison.OrdinalIgnoreCase))
+                {
+                    totalIncome += amount;
+                }
+                else if (transactionType.Equals("Expense", StringComparison.OrdinalIgnoreCase))
+                {
+                    totalExpense += amount;
+                }
+            }
+
+            txtTotalIncome.Text = totalIncome.ToString("0.00");
+            txtTotalExpense.Text = totalExpense.ToString("0.00");
+            txtSavings.Text = (totalIncome - totalExpense).ToString("0.00");
+        }
+
 
         // ============================================================
         // FILTER MODE CHANGED
         // ============================================================
 
-        private void FilterMode_CheckedChanged(
-            object sender,
-            EventArgs e)
+        private void FilterMode_CheckedChanged(object sender, EventArgs e)
         {
             // Show category section only when Category is checked
             grpCategory.Visible = chkFilterCategory.Checked;
@@ -870,9 +883,7 @@ namespace MoneyFlow
         // CATEGORY / DESCRIPTION VALUE CHANGED
         // ============================================================
 
-        private void DynamicFilter_Changed(
-            object sender,
-            EventArgs e)
+        private void DynamicFilter_Changed(object sender, EventArgs e)
         {
             ApplyFilters();
         }
@@ -899,8 +910,7 @@ namespace MoneyFlow
             // Build filter conditions
             // --------------------------------------------------------
 
-            List<string> filters =
-                new List<string>();
+            List<string> filters = new List<string>();
 
 
             // ========================================================
@@ -944,9 +954,7 @@ namespace MoneyFlow
             // DESCRIPTION FILTER
             // ========================================================
 
-            if (chkFilterDescription.Checked &&
-                !string.IsNullOrWhiteSpace(
-                    txtDescription.Text))
+            if (chkFilterDescription.Checked && !string.IsNullOrWhiteSpace(txtDescription.Text))
             {
                 string description =
                     txtDescription.Text
@@ -1014,9 +1022,226 @@ namespace MoneyFlow
             transactionsListView.EndUpdate();
         }
 
-        private void GrpFinancialOverview_Enter(object sender, System.EventArgs e)
+    private void Graph_Click(object sender, EventArgs e)
         {
-
+            //    string query = "SELECT "
+                FrmReport frmReport= new FrmReport(_currentUser.UserId);
+                frmReport.Show();
         }
+
+    private void Summary_Click(object sender, EventArgs e)
+        {
+            // FrmSummary frmSummary = new FrmSummary();
+            // frmSummary.Show();
+        }
+#region csv file
+     //Save to Database
+    //     private void SaveDataToDatabase(DataTable dataTable)
+    //     {
+    //         int insertedCount = 0;
+    //         int existingCount = 0;
+    //         int skippedCount = 0;
+
+    //         if (_currentUser == null)
+    //         {
+    //             return;
+    //         }
+
+    //         try
+    //         {
+    //            using NpgsqlConnection cn = new NpgsqlConnection(env.ConnectionString);
+    //             cn.Open();
+
+    //             foreach (DataRow row in dataTable.Rows)   
+    //             {
+    //                 int id = Convert.ToInt32(row["ID"]);
+    //                 string type = row["Type"].ToString();
+    //                 string category = row["Category"].ToString();
+    //                 string description = row["Description"].ToString();
+    //                 decimal amount = Convert.ToDecimal(row["Amount ($)"]);
+    //                 DateTime date = Convert.ToDateTime(row["Date"]);
+
+    //                 // Check whether transaction already exists
+    //                 using (NpgsqlCommand checkCmd = new NpgsqlCommand(
+    //                     @"SELECT COUNT(*) FROM t_transaction WHERE c_transaction_id = @id",cn))
+    //                 {
+    //                     checkCmd.Parameters.AddWithValue("@id", id);
+
+    //                     int recordCount = Convert.ToInt32(checkCmd.ExecuteScalar());
+
+    //                     if (recordCount == 0)
+    //                     {
+    //                         using (NpgsqlCommand insertCmd = new NpgsqlCommand(
+    //                             @"INSERT INTO t_transaction"+
+    //                             "(c_transaction_id, c_transaction_type,c_transaction_category, c_transaction_description,c_transaction_amount, c_transaction_date)"+
+    //                             "VALUES" +
+    //                             "(@id, @type, @category, @description, @amount, @date)",
+    //                             cn))
+    //                         {
+    //                             insertCmd.Parameters.AddWithValue("@id", id);
+    //                             insertCmd.Parameters.AddWithValue("@type", type);
+    //                             insertCmd.Parameters.AddWithValue("@category", category);
+    //                             insertCmd.Parameters.AddWithValue("@description", description);
+    //                             insertCmd.Parameters.AddWithValue("@amount", amount);
+    //                             insertCmd.Parameters.AddWithValue("@date", date);
+
+    //                             insertCmd.ExecuteNonQuery();
+    //                             insertedCount++;
+    //                         }
+    //                     }
+    //                     else
+    //                     {
+    //                         existingCount++;
+    //                     }
+    //                 }
+    //             }
+
+    //             MessageBox.Show(
+    //                 "Database update completed!\n\n" +
+    //                 "New transactions inserted: " + insertedCount + "\n" +
+    //                 "Existing transactions skipped: " + existingCount,
+    //                 "Import Result",
+    //                 MessageBoxButtons.OK,
+    //                 MessageBoxIcon.Information);
+    //         }
+    //         catch (Exception ex)
+    //         {
+    //             MessageBox.Show(
+    //                 "Error while saving transactions:\n" + ex.Message,
+    //                 "Database Error",
+    //                 MessageBoxButtons.OK,
+    //                 MessageBoxIcon.Error);
+    //         }
+    //         finally
+    //         {
+    //             cn.Close();
+    //             cn.Dispose();
+    //         }
+    //     }
+
+    //     private void FileExport_Click(object sender, System.EventArgs e)
+    // {
+    //     try
+    //     {
+    //         NpgsqlCommand cmd = new NpgsqlCommand("SELECT * FROM books", cn);
+
+    //         NpgsqlDataAdapter da =new NpgsqlDataAdapter(cmd);
+
+    //         SaveFileDialog saveFileDialog1 =new SaveFileDialog();
+
+    //         saveFileDialog1.Filter = "CSV Files|*.csv|All Files|*.*";
+
+    //         if (saveFileDialog1.ShowDialog() == DialogResult.OK)
+    //         {
+    //             DataTable dt = new DataTable();
+
+    //             // Fill DataTable from database
+    //             da.Fill(dt);
+
+    //             using (StreamWriter sw = new StreamWriter(saveFileDialog1.FileName))
+    //             {
+    //                 // Write column headers
+    //                 sw.WriteLine("bookid,bookname,author,price,page" );
+
+    //                 // Write records
+    //                 foreach (DataRow dr in dt.Rows)
+    //                 {
+    //                     sw.WriteLine(
+    //                         $"{dr["bookid"]}," +
+    //                         $"\"{dr["bookname"]}\"," +
+    //                         $"\"{dr["author"]}\"," +
+    //                         $"{dr["price"]},"+
+    //                         $"{dr["page"]}"
+    //                     );
+    //                 }
+    //             }
+
+    //             MessageBox.Show(
+    //                 "Data successfully written to CSV file!",
+    //                 "Write",
+    //                 MessageBoxButtons.OK,
+    //                 MessageBoxIcon.Information);
+    //         }
+    //     }
+    //     catch (Exception ex)
+    //     {
+    //         MessageBox.Show(
+    //             ex.Message,
+    //             "Error",
+    //             MessageBoxButtons.OK,
+    //             MessageBoxIcon.Error);
+    //     }
+    //     finally
+    //     {
+    //         cn.Close();
+    //     }
+
+    // }
+
+    // private void FileImport_Click(object sender, System.EventArgs e)
+    // {
+    //     DataTable dt = new DataTable();
+
+    //     OpenFileDialog openFileDialog1 = new OpenFileDialog();
+
+    //     openFileDialog1.FileName = "";
+
+    //     openFileDialog1.Filter ="CSV Files|*.csv|All Files|*.*";
+
+    //     if (openFileDialog1.ShowDialog() == DialogResult.OK)
+    //     {
+    //         try
+    //         {
+    //             // Create columns
+    //             dt.Columns.Add("bookid");
+    //             dt.Columns.Add("bookname");
+    //             dt.Columns.Add("author");
+    //             dt.Columns.Add("price");
+    //             dt.Columns.Add("page");
+
+    //             using (StreamReader sr = new StreamReader(openFileDialog1.FileName))
+    //             {
+    //                 // Skip header
+    //                 sr.ReadLine();
+
+    //                 string line;
+
+    //                 while ((line = sr.ReadLine()) != null)
+    //                 {
+    //                     string[] values = line.Split(',');
+
+    //                     DataRow dr = dt.NewRow();
+
+    //                     dr["bookid"] = values[0];
+    //                     dr["bookname"] = values[1].Trim('"');
+    //                     dr["author"] = values[2].Trim('"');
+    //                     dr["price"] = values[3];
+    //                     dr["page"] = values[4];
+                        
+
+    //                     dt.Rows.Add(dr);
+    //                 }
+    //             }
+
+    //             // // Display CSV data
+    //             // dataGridView1.DataSource = dt;
+
+    //             // Save only new records to database
+    //             SaveDataToDatabase(dt);
+
+    //             LoadDataInListView();
+    //         }
+    //         catch (Exception ex)
+    //         {
+    //             MessageBox.Show(
+    //                 ex.Message,
+    //                 "Error",
+    //                 MessageBoxButtons.OK,
+    //                 MessageBoxIcon.Error);
+    //         }
+    //     }
+    // }
+    #endregion
+
     }
 }

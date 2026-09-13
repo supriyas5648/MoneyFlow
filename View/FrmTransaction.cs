@@ -9,10 +9,8 @@ namespace MoneyFlow
     public partial class FrmTransaction : Form
     {
         private readonly User _currentUser;
-        private readonly TransactionService _transactionService =
-            new TransactionService();
-        private readonly TransactionCategoryService _transactionCategoryService =
-            new TransactionCategoryService();
+        private readonly TransactionService _transactionService =  new TransactionService();
+        private readonly TransactionCategoryService _transactionCategoryService =   new TransactionCategoryService();
 
         public FrmTransaction(User currentUser)
         {
@@ -48,19 +46,14 @@ namespace MoneyFlow
         {
             try
             {
-                DataTable dt =
-                    _transactionCategoryService.GetCategories(
-                        _currentUser.UserId,
-                        "Income");
+                DataTable dt =  _transactionCategoryService.GetCategories( _currentUser.UserId,"Income");
 
                 AddOtherOption(dt, "Income");
 
                 cmbIncomeCategory.DataSource = null;
                 cmbIncomeCategory.DataSource = dt;
-                cmbIncomeCategory.DisplayMember =
-                    "c_category_name";
-                cmbIncomeCategory.ValueMember =
-                    "c_category_id";
+                cmbIncomeCategory.DisplayMember = "c_category_name";
+                cmbIncomeCategory.ValueMember = "c_category_id";
 
                 cmbIncomeCategory.SelectedIndex = -1;
 
@@ -84,19 +77,14 @@ namespace MoneyFlow
         {
             try
             {
-                DataTable dt =
-                    _transactionCategoryService.GetCategories(
-                        _currentUser.UserId,
-                        "Expense");
+                DataTable dt = _transactionCategoryService.GetCategories( _currentUser.UserId,"Expense");
 
                 AddOtherOption(dt, "Expense");
 
                 lstboxTransactionExpenseCategory.DataSource = null;
                 lstboxTransactionExpenseCategory.DataSource = dt;
-                lstboxTransactionExpenseCategory.DisplayMember =
-                    "c_category_name";
-                lstboxTransactionExpenseCategory.ValueMember =
-                    "c_category_id";
+                lstboxTransactionExpenseCategory.DisplayMember = "c_category_name";
+                lstboxTransactionExpenseCategory.ValueMember = "c_category_id";
 
                 lstboxTransactionExpenseCategory.SelectedIndex = -1;
 
@@ -116,9 +104,7 @@ namespace MoneyFlow
         // =========================================================
         // ADD "OTHER" TO DATATABLE
         // =========================================================
-        private void AddOtherOption(
-            DataTable dt,
-            string categoryType)
+        private void AddOtherOption(DataTable dt,string categoryType)
         {
             DataRow otherRow = dt.NewRow();
 
@@ -161,9 +147,7 @@ namespace MoneyFlow
         // =========================================================
         // EXPENSE RADIO BUTTON
         // =========================================================
-        private void RbTransactionExpense_CheckedChanged(
-            object sender,
-            EventArgs e)
+        private void RbTransactionExpense_CheckedChanged(object sender,EventArgs e)
         {
              if (!rbTransactionExpense.Checked)
                 return;
@@ -187,9 +171,7 @@ namespace MoneyFlow
         // =========================================================
         // INCOME CATEGORY SELECTION
         // =========================================================
-        private void CmbIncomeCategory_SelectedIndexChanged(
-            object sender,
-            EventArgs e)
+        private void CmbIncomeCategory_SelectedIndexChanged(object sender,EventArgs e)
         {
             if (cmbIncomeCategory.SelectedValue == null)
                 return;
@@ -252,14 +234,11 @@ namespace MoneyFlow
             }
         }
 
-        private void DtpTransactionDate_ValueChanged(
-            object sender,
-            EventArgs e)
+        private void DtpTransactionDate_ValueChanged(object sender,EventArgs e)
         {
             if (dtpTransactionDate.Value.Date > DateTime.Today)
             {
-                lblTransactionDateError.Text =
-                    "Transaction date cannot be in the future.";
+                lblTransactionDateError.Text = "Transaction date cannot be in the future.";
                 lblTransactionDateError.Visible = true;
             }
             else
@@ -268,9 +247,7 @@ namespace MoneyFlow
             }
         }
 
-        private void TxtTransactionDescription_TextChanged(
-            object sender,
-            EventArgs e)
+        private void TxtTransactionDescription_TextChanged( object sender, EventArgs e)
         {
             if (!string.IsNullOrWhiteSpace(
                 txtTransactionDescription.Text))

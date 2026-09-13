@@ -6,6 +6,7 @@ namespace MoneyFlow;
 
 public partial class FrmMain2
 {
+    #region initialized objects
     private System.ComponentModel.IContainer components = null;
     // Main MenuStrip
     private MenuStrip menuStripMain;
@@ -25,45 +26,6 @@ public partial class FrmMain2
     private ToolStripMenuItem menuItemMainSettingsChangeColor;
     private ToolStripMenuItem menuItemMainSettingsChangePassword;
     private ToolStripMenuItem menuItemMainSettingsLogout;
-
-    #region prev code
-    //     // Master Grid & Containers
-    //     private Panel workspaceContainerPanel;
-    //     private TableLayoutPanel masterMainGrid;
-    //     private TableLayoutPanel middleLayoutTable;
-
-    //     // Middle-Left Controls (Financial Overview)
-    //     private GroupBox pnlLeftFields;
-    //     private TableLayoutPanel leftGrid;
-    //     private Label lblInc;
-    //     private Label lblExp;
-    //     private Label lblSav;
-    //     private TextBox txtTotalIncome;
-    //     private TextBox txtTotalExpense;
-    //     private TextBox txtSavings;
-
-    //     // Middle-Right Controls (Filters)
-    //     private GroupBox pnlRightWorkspace;
-    //     private TableLayoutPanel rightWorkspaceGrid;
-    //     private FlowLayoutPanel filterHeaderPanel;
-    //     private Label lblFilterPrompt;
-    //     private CheckBox chkFilterCategory;
-    //     private CheckBox chkFilterDescription;
-
-    //     // Input Containers
-    //     private TableLayoutPanel filterInputsGrid;
-    //     private Panel pnlCategoryCheckboxes;
-    //     private FlowLayoutPanel flowCategoryCheckboxes;
-    //     private Panel pnlDescriptionInput;
-    //     private Label lblDescPrompt;
-    //     private TextBox txtDescriptionSearch;
-    //     private List<CheckBox> categoryCheckBoxesList = new List<CheckBox>();
-
-    //     // Output Controls
-    //     private Label lblListBoxTitle;
-    //     private ListBox lstSelectedFiltersSummary;
-    //     private ListView bottomListView;
-    #endregion
 
     private GroupBox grpFinancialOverview;
     private GroupBox grpFilter;
@@ -94,6 +56,7 @@ public partial class FrmMain2
     private ListView transactionsListView;
 
     private List<CheckBox> categoryCheckBoxesList = new List<CheckBox>();
+    #endregion
     protected override void Dispose(bool disposing)
     {
         if (disposing && (components != null))
@@ -144,6 +107,8 @@ public partial class FrmMain2
                 this.menuItemMainFileExit
         });
 
+        // this.menuItemMainFileImportRecords.Click += new ToolStripItemEventHandler(this.ImportRecord_Click)
+
         this.menuItemMainTransaction = new ToolStripMenuItem("Transaction");
         this.menuItemMainTransaction.Click += new EventHandler(this.menuItemMainTransaction_Click);
 
@@ -153,6 +118,8 @@ public partial class FrmMain2
         this.menuItemMainViewShowExpense = new ToolStripMenuItem("Show Expense");
         this.menuItemMainViewSummary = new ToolStripMenuItem("Summary");
         this.menuItemMainViewGraph = new ToolStripMenuItem("Graph");
+        this.menuItemMainViewGraph.Click += new EventHandler(this.Graph_Click);
+        this.menuItemMainViewSummary.Click += new EventHandler(this.Summary_Click);
 
         this.menuItemMainView.DropDownItems.AddRange(new ToolStripItem[]
         {
@@ -169,14 +136,10 @@ public partial class FrmMain2
         this.menuItemMainSettingsChangePassword = new ToolStripMenuItem("Change Password");
         this.menuItemMainSettingsLogout = new ToolStripMenuItem("Logout");
 
-        this.menuItemMainSettingsChangeFont.Click +=
-            new EventHandler(this.menuItemMainSettingsChangeFont_Click);
-        this.menuItemMainSettingsChangeColor.Click +=
-            new EventHandler(this.menuItemMainSettingsChangeColor_Click);
-        this.menuItemMainSettingsChangePassword.Click +=
-            new EventHandler(this.menuItemMainSettingsChangePassword_Click);
-        this.menuItemMainSettingsLogout.Click +=
-            new EventHandler(this.menuItemMainSettingsLogout_Click);
+        this.menuItemMainSettingsChangeFont.Click += new EventHandler(this.menuItemMainSettingsChangeFont_Click);
+        this.menuItemMainSettingsChangeColor.Click += new EventHandler(this.menuItemMainSettingsChangeColor_Click);
+        this.menuItemMainSettingsChangePassword.Click += new EventHandler(this.menuItemMainSettingsChangePassword_Click);
+        this.menuItemMainSettingsLogout.Click += new EventHandler(this.menuItemMainSettingsLogout_Click);
 
         this.menuItemMainSettings.DropDownItems.AddRange(new ToolStripItem[]
         {
@@ -284,9 +247,9 @@ public partial class FrmMain2
             Margin = new Padding(3)
         };
 
-        this.txtTotalIncome = CreateValueTextBox("5000.00", Color.FromArgb(240, 253, 244));
-        this.txtTotalExpense = CreateValueTextBox("270.00", Color.FromArgb(254, 242, 242));
-        this.txtSavings = CreateValueTextBox("4730.00", Color.FromArgb(239, 246, 255));
+        this.txtTotalIncome = CreateValueTextBox("0.00", Color.FromArgb(240, 253, 244));
+        this.txtTotalExpense = CreateValueTextBox("0.00", Color.FromArgb(254, 242, 242));
+        this.txtSavings = CreateValueTextBox("0.00", Color.FromArgb(239, 246, 255));
 
         financialGrid.Controls.Add(this.lblInc, 0, 0);
         financialGrid.Controls.Add(this.txtTotalIncome, 1, 0);
