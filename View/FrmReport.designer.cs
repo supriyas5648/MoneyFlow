@@ -7,6 +7,11 @@ namespace MoneyFlow
     {
         private ComboBox _filterModeComboBox = null!;
         private DateTimePicker _filterDatePicker = null!;
+        private NumericUpDown _startYearPicker = null!;
+        private NumericUpDown _endYearPicker = null!;
+        private Label _filterDateLabel = null!;
+        private Label _startYearLabel = null!;
+        private Label _endYearLabel = null!;
         private Label _periodLabel = null!;
         private Label _incomeLabel = null!;
         private Label _expenseLabel = null!;
@@ -32,7 +37,7 @@ namespace MoneyFlow
                 RowCount = 3,
                 Padding = new Padding(12)
             };
-            mainLayout.RowStyles.Add(new RowStyle(SizeType.Absolute, 78F));
+            mainLayout.RowStyles.Add(new RowStyle(SizeType.Absolute, 92F));
             mainLayout.RowStyles.Add(new RowStyle(SizeType.Absolute, 145F));
             mainLayout.RowStyles.Add(new RowStyle(SizeType.Percent, 100F));
 
@@ -57,13 +62,15 @@ namespace MoneyFlow
             _filterModeComboBox.SelectedIndexChanged += FilterChanged;
             filterPanel.Controls.Add(_filterModeComboBox);
 
-            filterPanel.Controls.Add(new Label { Text = "Date:", AutoSize = true, Margin = new Padding(0, 7, 6, 0) });
+            _filterDateLabel = new Label { Text = "Month:", AutoSize = true, Margin = new Padding(0, 7, 6, 0) };
+            filterPanel.Controls.Add(_filterDateLabel);
             _filterDatePicker = new DateTimePicker
             {
                 Format = DateTimePickerFormat.Custom,
-                CustomFormat = "yyyy-MM-dd",
+                CustomFormat = "MMMM yyyy",
                 Width = 125,
                 Value = DateTime.Today,
+                ShowUpDown = true,
                 Margin = new Padding(0, 2, 18, 0)
             };
             _filterDatePicker.ValueChanged += FilterChanged;
@@ -71,6 +78,19 @@ namespace MoneyFlow
 
             _periodLabel = new Label { AutoSize = true, Margin = new Padding(0, 7, 0, 0) };
             filterPanel.Controls.Add(_periodLabel);
+
+            _startYearLabel = new Label { Text = "From:", AutoSize = true, Visible = false, Margin = new Padding(0, 7, 6, 0) };
+            _startYearPicker = CreateYearPicker();
+            _startYearPicker.Visible = false;
+            _startYearPicker.ValueChanged += FilterChanged;
+            _endYearLabel = new Label { Text = "To:", AutoSize = true, Visible = false, Margin = new Padding(0, 7, 6, 0) };
+            _endYearPicker = CreateYearPicker();
+            _endYearPicker.Visible = false;
+            _endYearPicker.ValueChanged += FilterChanged;
+            filterPanel.Controls.Add(_startYearLabel);
+            filterPanel.Controls.Add(_startYearPicker);
+            filterPanel.Controls.Add(_endYearLabel);
+            filterPanel.Controls.Add(_endYearPicker);
             filterGroup.Controls.Add(filterPanel);
             mainLayout.Controls.Add(filterGroup, 0, 0);
 
@@ -162,6 +182,18 @@ namespace MoneyFlow
                 Maximum = 100,
                 Style = ProgressBarStyle.Continuous,
                 Margin = new Padding(16, 8, 16, 8)
+            };
+        }
+
+        private NumericUpDown CreateYearPicker()
+        {
+            return new NumericUpDown
+            {
+                Minimum = 2000,
+                Maximum = 2100,
+                Value = DateTime.Today.Year,
+                Width = 75,
+                Margin = new Padding(0, 2, 12, 0)
             };
         }
     }

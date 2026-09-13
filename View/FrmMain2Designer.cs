@@ -98,6 +98,7 @@ public partial class FrmMain2
         this.menuItemMainFileExit = new ToolStripMenuItem("Exit");
         this.menuItemMainFileImportRecords.Click += new EventHandler(this.menuItemMainFileImportRecords_Click);
         this.menuItemMainFileExportRecords.Click += new EventHandler(this.menuItemMainFileExportRecords_Click);
+        this.menuItemMainFileExit.Click += new EventHandler(this.menuItemMainFileExit_Click);
 
         this.menuItemMainFile.DropDownItems.AddRange(new ToolStripItem[]
         {

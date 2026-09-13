@@ -1089,13 +1089,21 @@ namespace MoneyFlow
 
     private void Summary_Click(object sender, EventArgs e)
         {
-            // FrmSummary frmSummary = new FrmSummary();
-            // frmSummary.Show();
+            if (_currentUser == null)
+            {
+                MessageBox.Show(
+                    "Summary is available after a user has logged in.",
+                    "Summary",
+                    MessageBoxButtons.OK,
+                    MessageBoxIcon.Information);
+                return;
+            }
+
+            using FrmSummary frmSummary = new FrmSummary(_currentUser.UserId);
+            frmSummary.ShowDialog(this);
         }
 
-      private void menuItemMainFileImportRecords_Click(
-            object sender,
-            EventArgs e)
+      private void menuItemMainFileImportRecords_Click(object sender, EventArgs e)
         {
             if (_currentUser == null)
             {
@@ -1218,6 +1226,13 @@ namespace MoneyFlow
                     MessageBoxButtons.OK,
                     MessageBoxIcon.Error);
             }
+        }
+
+        private void menuItemMainFileExit_Click(object sender,EventArgs e)
+        {
+           FrmLogin frmLogin = new FrmLogin();
+           frmLogin.Show();
+           this.Close();
         }
 
     }
