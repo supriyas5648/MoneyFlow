@@ -20,7 +20,7 @@ namespace MoneyFlow.Service
             {
                 using (NpgsqlConnection con = new NpgsqlConnection(_con))
                 using (NpgsqlCommand cmd = new NpgsqlCommand(@"
-                    SELECT
+                    SELECT DISTINCT ON (LOWER(c_category_name), c_category_type)
                         c_category_id,
                         c_category_name,
                         c_category_type,
@@ -30,7 +30,11 @@ namespace MoneyFlow.Service
                         (c_created_by_user_id = @UserId
                          OR c_created_by_user_id IS NULL)
                         AND c_category_type = @CategoryType
-                    ORDER BY c_category_name;", con))
+                    ORDER BY
+                        LOWER(c_category_name),
+                        c_category_type,
+                        (c_created_by_user_id IS NULL),
+                        c_category_id;", con))
                 {
                     cmd.Parameters.AddWithValue("@UserId", userId);
                     cmd.Parameters.AddWithValue("@CategoryType", categoryType);
@@ -60,7 +64,7 @@ namespace MoneyFlow.Service
                 using (NpgsqlCommand cmd = new NpgsqlCommand(@"
                     SELECT COUNT(*)
                     FROM t_category
-                    WHERE c_created_by_user_id = @UserId
+                    WHERE (c_created_by_user_id = @UserId OR c_created_by_user_id IS NULL)
                       AND LOWER(c_category_name) = LOWER(@CategoryName)
                       AND c_category_type = @CategoryType;", con))
                 {
@@ -76,6 +80,56 @@ namespace MoneyFlow.Service
             {
                 throw new Exception("Error while checking category.", ex);
             }
+        }
+
+        public int? GetCategoryId(
+            int userId,
+            string categoryName,
+            string categoryType)
+        {
+            try
+            {
+                using (NpgsqlConnection con = new NpgsqlConnection(_con))
+                using (NpgsqlCommand cmd = new NpgsqlCommand(@"
+                    SELECT c_category_id
+                    FROM t_category
+                    WHERE (c_created_by_user_id = @UserId OR c_created_by_user_id IS NULL)
+                      AND LOWER(c_category_name) = LOWER(@CategoryName)
+                      AND c_category_type = @CategoryType
+                    ORDER BY (c_created_by_user_id IS NULL), c_category_id
+                    LIMIT 1;", con))
+                {
+                    cmd.Parameters.AddWithValue("@UserId", userId);
+                    cmd.Parameters.AddWithValue("@CategoryName", categoryName);
+                    cmd.Parameters.AddWithValue("@CategoryType", categoryType);
+
+                    con.Open();
+                    object? result = cmd.ExecuteScalar();
+                    if (result != null && result != DBNull.Value)
+                    {
+                        return Convert.ToInt32(result);
+                    }
+                    return null;
+                }
+            }
+            catch (Exception ex)
+            {
+                throw new Exception("Error while fetching category ID.", ex);
+            }
+        }
+
+        public int GetOrCreateCategoryId(
+            string categoryName,
+            string categoryType,
+            int userId)
+        {
+            int? existingId = GetCategoryId(userId, categoryName, categoryType);
+            if (existingId.HasValue)
+            {
+                return existingId.Value;
+            }
+
+            return AddCategory(categoryName, categoryType, userId);
         }
 
         public int AddCategory(

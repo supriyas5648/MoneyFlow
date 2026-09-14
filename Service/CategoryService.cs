@@ -18,10 +18,11 @@ namespace MoneyFlow.Service
             var categories = new List<CategoryModel>();
 
             string query = @"
-                SELECT c_category_id, c_category_name, c_category_type, c_created_by_user_id
+                SELECT DISTINCT ON (LOWER(c_category_name))
+                    c_category_id, c_category_name, c_category_type, c_created_by_user_id
                 FROM t_category
                 WHERE c_created_by_user_id IS NULL OR c_created_by_user_id = @userId
-                ORDER BY c_category_name";
+                ORDER BY LOWER(c_category_name), (c_created_by_user_id IS NULL), c_category_id";
 
             using (var connection = new NpgsqlConnection(Env.ConnectionString))
             {

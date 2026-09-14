@@ -294,6 +294,7 @@ namespace MoneyFlow
                     }
 
                     int importedCount = 0;
+                    int skippedDuplicateCount = 0;
                     int startIndex = 0;
 
                     // Skip header line if detected
@@ -302,6 +303,11 @@ namespace MoneyFlow
                     {
                         startIndex = 1;
                     }
+
+                    // Track transactions processed in this import to prevent duplicate Date and Category within the same CSV file
+                    var seenInBatch = new HashSet<string>(StringComparer.OrdinalIgnoreCase);
+
+                    string[] dateFormats = { "yyyy-MM-dd", "dd-MM-yyyy", "d-M-yyyy", "MM/dd/yyyy", "M/d/yyyy", "yyyy/MM/dd", "dd/MM/yyyy" };
 
                     for (int i = startIndex; i < lines.Length; i++)
                     {
@@ -316,42 +322,57 @@ namespace MoneyFlow
                         // 2. ID, Date, Category, Description, Amount, Type
                         int offset = parts.Length >= 6 ? 1 : 0;
 
-                        if (DateTime.TryParse(parts[offset].Trim(), out DateTime txDate) &&
-                            decimal.TryParse(parts[offset + 3].Trim(), out decimal txAmount))
+                        string rawDateStr = parts[offset].Trim().Trim('"');
+                        string rawAmountStr = parts[offset + 3].Trim().Trim('"');
+
+                        bool dateParsed = DateTime.TryParseExact(rawDateStr, dateFormats, System.Globalization.CultureInfo.InvariantCulture, System.Globalization.DateTimeStyles.None, out DateTime txDate)
+                                       || DateTime.TryParse(rawDateStr, System.Globalization.CultureInfo.CurrentCulture, System.Globalization.DateTimeStyles.None, out txDate)
+                                       || DateTime.TryParse(rawDateStr, System.Globalization.CultureInfo.InvariantCulture, System.Globalization.DateTimeStyles.None, out txDate);
+
+                        bool amountParsed = decimal.TryParse(rawAmountStr, System.Globalization.NumberStyles.Any, System.Globalization.CultureInfo.InvariantCulture, out decimal txAmount)
+                                         || decimal.TryParse(rawAmountStr, System.Globalization.NumberStyles.Any, System.Globalization.CultureInfo.CurrentCulture, out txAmount);
+
+                        if (dateParsed && amountParsed)
                         {
-                            string categoryName = parts[offset + 1].Trim();
-                            string description = parts[offset + 2].Trim();
-                            string txType = (parts.Length > offset + 4 ? parts[offset + 4].Trim() : "Expense");
+                            string categoryName = parts[offset + 1].Trim().Trim('"');
+                            string description = parts[offset + 2].Trim().Trim('"');
+                            string txType = (parts.Length > offset + 4 ? parts[offset + 4].Trim().Trim('"') : "Expense");
                             if (!txType.Equals("Income", StringComparison.OrdinalIgnoreCase))
                             {
                                 txType = "Expense";
                             }
 
-                            // Ensure category exists or add it
-                            int catId = 1;
-                            if (!_transactionCategoryService.CategoryExists(_currentUser.UserId, categoryName, txType))
+                            // 1. Check duplicate within current CSV import batch
+                            string batchKey = $"{txDate:yyyy-MM-dd}_{categoryName.ToLowerInvariant()}";
+                            if (seenInBatch.Contains(batchKey))
                             {
-                                catId = _transactionCategoryService.AddCategory(categoryName, txType, _currentUser.UserId);
+                                skippedDuplicateCount++;
+                                continue;
                             }
-                            else
+
+                            // 2. Resolve category ID without duplicating existing system or user categories
+                            int catId = _transactionCategoryService.GetOrCreateCategoryId(categoryName, txType, _currentUser.UserId);
+
+                            // 3. Check if transaction with same Date and Category already exists in the database
+                            if (_transactionService.TransactionExistsByDateAndCategory(_currentUser.UserId, txDate.Date, catId, categoryName))
                             {
-                                var catDt = _transactionCategoryService.GetCategories(_currentUser.UserId, txType);
-                                foreach (System.Data.DataRow row in catDt.Rows)
-                                {
-                                    if (row["c_category_name"].ToString()?.Equals(categoryName, StringComparison.OrdinalIgnoreCase) == true)
-                                    {
-                                        catId = Convert.ToInt32(row["c_category_id"]);
-                                        break;
-                                    }
-                                }
+                                skippedDuplicateCount++;
+                                continue;
                             }
+
+                            seenInBatch.Add(batchKey);
 
                             _transactionService.AddTransaction(txType, catId, txAmount, txDate, _currentUser.UserId, description);
                             importedCount++;
                         }
                     }
 
-                    MessageBox.Show($"Successfully imported {importedCount} transactions!", "Import Successful", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                    string message = $"Successfully imported {importedCount} transaction(s)!";
+                    if (skippedDuplicateCount > 0)
+                    {
+                        message += $"\n{skippedDuplicateCount} duplicate transaction(s) with matching date and category were skipped.";
+                    }
+                    MessageBox.Show(message, "Import Results", MessageBoxButtons.OK, MessageBoxIcon.Information);
                     LoadCategoriesFromDatabase();
                     LoadTransactionsFromDatabase();
                     LoadFinancialSummary();

@@ -354,5 +354,35 @@ namespace MoneyFlow.Service
                 throw new Exception("Error while fetching transactions: " + ex.Message, ex);
             }
         }
+
+        public bool TransactionExistsByDateAndCategory(int userId, DateTime transactionDate, int categoryId, string categoryName)
+        {
+            try
+            {
+                using (NpgsqlConnection con = new NpgsqlConnection(_con))
+                using (NpgsqlCommand cmd = new NpgsqlCommand(@"
+                    SELECT EXISTS (
+                        SELECT 1
+                        FROM t_transaction t
+                        LEFT JOIN t_category c ON t.c_transaction_category_id = c.c_category_id
+                        WHERE t.c_user_id = @UserId
+                          AND t.c_transaction_date = @TransactionDate
+                          AND (t.c_transaction_category_id = @CategoryId OR LOWER(c.c_category_name) = LOWER(@CategoryName))
+                    );", con))
+                {
+                    cmd.Parameters.AddWithValue("@UserId", userId);
+                    cmd.Parameters.AddWithValue("@TransactionDate", transactionDate.Date);
+                    cmd.Parameters.AddWithValue("@CategoryId", categoryId);
+                    cmd.Parameters.AddWithValue("@CategoryName", categoryName.Trim());
+
+                    con.Open();
+                    return Convert.ToBoolean(cmd.ExecuteScalar());
+                }
+            }
+            catch (Exception ex)
+            {
+                throw new Exception("Error while checking transaction existence: " + ex.Message, ex);
+            }
+        }
     }
 }

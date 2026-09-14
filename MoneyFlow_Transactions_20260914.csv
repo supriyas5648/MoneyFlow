@@ -1,0 +1,4 @@
+TransactionId,Date,Category,Description,Amount,Type
+2,13-09-2026,BhaiBandh,G-Pay,400,Income
+1,13-09-2026,Food,G-Pay,1000,Expense
+3,13-09-2026,BhaiBandh,G-Pay,400,Income

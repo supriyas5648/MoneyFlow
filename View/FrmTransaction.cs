@@ -709,7 +709,7 @@ namespace MoneyFlow
                     txtTransactionDescription.Text.Trim());
 
                 MessageBox.Show(
-                    "Transaction updated successfully.",
+                    "Transaction id: "+ transactionId +"  updated successfully.",
                     "Success",
                     MessageBoxButtons.OK,
                     MessageBoxIcon.Information);
@@ -752,7 +752,7 @@ namespace MoneyFlow
                     _currentUser.UserId);
 
                 MessageBox.Show(
-                    "Transaction deleted successfully.",
+                    "Transaction id: "+ transactionId +" deleted successfully.",
                     "Success",
                     MessageBoxButtons.OK,
                     MessageBoxIcon.Information);
