@@ -32,12 +32,15 @@ namespace MoneyFlow
             this.lblChangePasswordTitle = new System.Windows.Forms.Label();
             this.lblChangePasswordCurrentPassword = new System.Windows.Forms.Label();
             this.txtChangePasswordCurrentPassword = new System.Windows.Forms.TextBox();
+            this.chkShowChangePasswordCurrent = new System.Windows.Forms.CheckBox();
             this.lblChangePasswordCurrentPasswordError = new System.Windows.Forms.Label();
             this.lblChangePasswordNewPassword = new System.Windows.Forms.Label();
             this.txtChangePasswordNewPassword = new System.Windows.Forms.TextBox();
+            this.chkShowChangePasswordNew = new System.Windows.Forms.CheckBox();
             this.lblChangePasswordNewPasswordError = new System.Windows.Forms.Label();
             this.lblChangePasswordConfirmPassword = new System.Windows.Forms.Label();
             this.txtChangePasswordConfirmPassword = new System.Windows.Forms.TextBox();
+            this.chkShowChangePasswordConfirm = new System.Windows.Forms.CheckBox();
             this.lblChangePasswordConfirmPasswordError = new System.Windows.Forms.Label();
             this.btnChangePasswordSubmit = new System.Windows.Forms.Button();
             this.btnChangePasswordCancel = new System.Windows.Forms.Button();
@@ -71,6 +74,17 @@ namespace MoneyFlow
             this.txtChangePasswordCurrentPassword.UseSystemPasswordChar = true;
             this.txtChangePasswordCurrentPassword.TextChanged += new System.EventHandler(this.txtChangePasswordCurrentPassword_TextChanged);
             // 
+            // chkShowChangePasswordCurrent
+            // 
+            this.chkShowChangePasswordCurrent.AutoSize = true;
+            this.chkShowChangePasswordCurrent.Location = new System.Drawing.Point(485, 84);
+            this.chkShowChangePasswordCurrent.Name = "chkShowChangePasswordCurrent";
+            this.chkShowChangePasswordCurrent.Size = new System.Drawing.Size(51, 20);
+            this.chkShowChangePasswordCurrent.TabIndex = 3;
+            this.chkShowChangePasswordCurrent.Text = "Show";
+            this.chkShowChangePasswordCurrent.UseVisualStyleBackColor = true;
+            this.chkShowChangePasswordCurrent.CheckedChanged += new System.EventHandler(this.chkShowChangePasswordCurrent_CheckedChanged);
+            // 
             // lblChangePasswordCurrentPasswordError
             // 
             this.lblChangePasswordCurrentPasswordError.AutoSize = true;
@@ -98,6 +112,17 @@ namespace MoneyFlow
             this.txtChangePasswordNewPassword.UseSystemPasswordChar = true;
             this.txtChangePasswordNewPassword.TextChanged += new System.EventHandler(this.txtChangePasswordNewPassword_TextChanged);
             // 
+            // chkShowChangePasswordNew
+            // 
+            this.chkShowChangePasswordNew.AutoSize = true;
+            this.chkShowChangePasswordNew.Location = new System.Drawing.Point(485, 149);
+            this.chkShowChangePasswordNew.Name = "chkShowChangePasswordNew";
+            this.chkShowChangePasswordNew.Size = new System.Drawing.Size(51, 20);
+            this.chkShowChangePasswordNew.TabIndex = 5;
+            this.chkShowChangePasswordNew.Text = "Show";
+            this.chkShowChangePasswordNew.UseVisualStyleBackColor = true;
+            this.chkShowChangePasswordNew.CheckedChanged += new System.EventHandler(this.chkShowChangePasswordNew_CheckedChanged);
+            // 
             // lblChangePasswordNewPasswordError
             // 
             this.lblChangePasswordNewPasswordError.AutoSize = true;
@@ -124,6 +149,17 @@ namespace MoneyFlow
             this.txtChangePasswordConfirmPassword.TabIndex = 6;
             this.txtChangePasswordConfirmPassword.UseSystemPasswordChar = true;
             this.txtChangePasswordConfirmPassword.TextChanged += new System.EventHandler(this.txtChangePasswordConfirmPassword_TextChanged);
+            // 
+            // chkShowChangePasswordConfirm
+            // 
+            this.chkShowChangePasswordConfirm.AutoSize = true;
+            this.chkShowChangePasswordConfirm.Location = new System.Drawing.Point(485, 254);
+            this.chkShowChangePasswordConfirm.Name = "chkShowChangePasswordConfirm";
+            this.chkShowChangePasswordConfirm.Size = new System.Drawing.Size(51, 20);
+            this.chkShowChangePasswordConfirm.TabIndex = 7;
+            this.chkShowChangePasswordConfirm.Text = "Show";
+            this.chkShowChangePasswordConfirm.UseVisualStyleBackColor = true;
+            this.chkShowChangePasswordConfirm.CheckedChanged += new System.EventHandler(this.chkShowChangePasswordConfirm_CheckedChanged);
             // 
             // lblChangePasswordConfirmPasswordError
             // 
@@ -166,12 +202,15 @@ namespace MoneyFlow
             this.Controls.Add(this.btnChangePasswordCancel);
             this.Controls.Add(this.btnChangePasswordSubmit);
             this.Controls.Add(this.lblChangePasswordConfirmPasswordError);
+            this.Controls.Add(this.chkShowChangePasswordConfirm);
             this.Controls.Add(this.txtChangePasswordConfirmPassword);
             this.Controls.Add(this.lblChangePasswordConfirmPassword);
             this.Controls.Add(this.lblChangePasswordNewPasswordError);
+            this.Controls.Add(this.chkShowChangePasswordNew);
             this.Controls.Add(this.txtChangePasswordNewPassword);
             this.Controls.Add(this.lblChangePasswordNewPassword);
             this.Controls.Add(this.lblChangePasswordCurrentPasswordError);
+            this.Controls.Add(this.chkShowChangePasswordCurrent);
             this.Controls.Add(this.txtChangePasswordCurrentPassword);
             this.Controls.Add(this.lblChangePasswordCurrentPassword);
             this.Controls.Add(this.lblChangePasswordTitle);
@@ -192,12 +231,15 @@ namespace MoneyFlow
         private System.Windows.Forms.Label lblChangePasswordTitle;
         private System.Windows.Forms.Label lblChangePasswordCurrentPassword;
         private System.Windows.Forms.TextBox txtChangePasswordCurrentPassword;
+        private System.Windows.Forms.CheckBox chkShowChangePasswordCurrent;
         private System.Windows.Forms.Label lblChangePasswordCurrentPasswordError;
         private System.Windows.Forms.Label lblChangePasswordNewPassword;
         private System.Windows.Forms.TextBox txtChangePasswordNewPassword;
+        private System.Windows.Forms.CheckBox chkShowChangePasswordNew;
         private System.Windows.Forms.Label lblChangePasswordNewPasswordError;
         private System.Windows.Forms.Label lblChangePasswordConfirmPassword;
         private System.Windows.Forms.TextBox txtChangePasswordConfirmPassword;
+        private System.Windows.Forms.CheckBox chkShowChangePasswordConfirm;
         private System.Windows.Forms.Label lblChangePasswordConfirmPasswordError;
         private System.Windows.Forms.Button btnChangePasswordSubmit;
         private System.Windows.Forms.Button btnChangePasswordCancel;

@@ -11,7 +11,7 @@ namespace MoneyFlow
         private readonly UserService _userService;
         private const string FullNamePattern = @"^[A-Za-z]{2,}(?:\s+[A-Za-z]+)*$";
         private const string UsernamePattern = @"^(?=.*[0-9])[A-Z][A-Za-z0-9]{0,49}$";
-        private const string PasswordPattern = @"^(?=[A-Z])(?=.*\d)(?=.*[^A-Za-z0-9\s])[^\s]{8,}$";
+        private const string PasswordPattern = @"^(?=.*\d)(?=.*[^A-Za-z0-9\s])[^\s]{8,}$";
 
         public FrmRegistration()
         {
@@ -77,6 +77,8 @@ namespace MoneyFlow
                     MessageBox.Show("Registration successful.", "Registration", MessageBoxButtons.OK, MessageBoxIcon.Information);
 
                     ClearRegistrationFields();
+                    DialogResult = DialogResult.OK;
+                    Close();
                 }
                 else
                 {
@@ -154,7 +156,7 @@ namespace MoneyFlow
             if (!Regex.IsMatch(password, PasswordPattern, RegexOptions.CultureInvariant))
             {
                 lblRegistrationPasswordError.Text =
-                    "Password must start with an uppercase letter, be at least 8 characters, contain a number and special character, and contain no spaces.";
+                    "Start with uppercase, use 8+ chars,\na number, special character, and no spaces.";
                 return false;
             }
 
@@ -223,11 +225,20 @@ namespace MoneyFlow
             ValidateConfirmPassword();
         }
 
+        private void chkShowRegistrationPassword_CheckedChanged(object sender, EventArgs e)
+        {
+            txtRegistrationPassword.UseSystemPasswordChar = !chkShowRegistrationPassword.Checked;
+        }
+
+        private void chkShowRegistrationConfirmPassword_CheckedChanged(object sender, EventArgs e)
+        {
+            txtRegistrationConfirmPassword.UseSystemPasswordChar = !chkShowRegistrationConfirmPassword.Checked;
+        }
+
         private void btnRegistrationLogin_Click(object sender, EventArgs e)
         {
-            FrmLogin login = new FrmLogin();
-            login.ShowDialog();
-            this.Hide();
+            DialogResult = DialogResult.Cancel;
+            Close();
         }
     }
 }

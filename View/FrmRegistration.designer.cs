@@ -38,9 +38,11 @@ namespace MoneyFlow
             this.lblRegistrationUsernameError = new System.Windows.Forms.Label();
             this.lblRegistrationPassword = new System.Windows.Forms.Label();
             this.txtRegistrationPassword = new System.Windows.Forms.TextBox();
+            this.chkShowRegistrationPassword = new System.Windows.Forms.CheckBox();
             this.lblRegistrationPasswordError = new System.Windows.Forms.Label();
             this.lblRegistrationConfirmPassword = new System.Windows.Forms.Label();
             this.txtRegistrationConfirmPassword = new System.Windows.Forms.TextBox();
+            this.chkShowRegistrationConfirmPassword = new System.Windows.Forms.CheckBox();
             this.lblRegistrationConfirmPasswordError = new System.Windows.Forms.Label();
             this.btnRegistrationRegister = new System.Windows.Forms.Button();
             this.btnRegistrationClear = new System.Windows.Forms.Button();
@@ -50,9 +52,9 @@ namespace MoneyFlow
             // lblRegistrationTitle
             // 
             this.lblRegistrationTitle.AutoSize = true;
-            this.lblRegistrationTitle.Location = new System.Drawing.Point(320, 35);
+            this.lblRegistrationTitle.Location = new System.Drawing.Point(284, 28);
             this.lblRegistrationTitle.Name = "lblRegistrationTitle";
-            this.lblRegistrationTitle.Size = new System.Drawing.Size(95, 20);
+            this.lblRegistrationTitle.Size = new System.Drawing.Size(79, 16);
             this.lblRegistrationTitle.TabIndex = 0;
             this.lblRegistrationTitle.Text = "Registration";
             this.lblRegistrationTitle.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
@@ -60,17 +62,18 @@ namespace MoneyFlow
             // lblRegistrationFullName
             // 
             this.lblRegistrationFullName.AutoSize = true;
-            this.lblRegistrationFullName.Location = new System.Drawing.Point(170, 115);
+            this.lblRegistrationFullName.Location = new System.Drawing.Point(151, 92);
             this.lblRegistrationFullName.Name = "lblRegistrationFullName";
-            this.lblRegistrationFullName.Size = new System.Drawing.Size(80, 20);
+            this.lblRegistrationFullName.Size = new System.Drawing.Size(68, 16);
             this.lblRegistrationFullName.TabIndex = 1;
             this.lblRegistrationFullName.Text = "Full Name";
             // 
             // txtRegistrationFullName
             // 
-            this.txtRegistrationFullName.Location = new System.Drawing.Point(340, 110);
+            this.txtRegistrationFullName.Location = new System.Drawing.Point(302, 88);
+            this.txtRegistrationFullName.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.txtRegistrationFullName.Name = "txtRegistrationFullName";
-            this.txtRegistrationFullName.Size = new System.Drawing.Size(250, 26);
+            this.txtRegistrationFullName.Size = new System.Drawing.Size(223, 22);
             this.txtRegistrationFullName.TabIndex = 2;
             this.txtRegistrationFullName.TextChanged += new System.EventHandler(this.txtRegistrationFullName_TextChanged);
             // 
@@ -78,25 +81,27 @@ namespace MoneyFlow
             // 
             this.lblRegistrationFullNameError.AutoSize = true;
             this.lblRegistrationFullNameError.ForeColor = System.Drawing.Color.Firebrick;
-            this.lblRegistrationFullNameError.Location = new System.Drawing.Point(340, 139);
+            this.lblRegistrationFullNameError.Location = new System.Drawing.Point(302, 111);
+            this.lblRegistrationFullNameError.MaximumSize = new System.Drawing.Size(223, 0);
             this.lblRegistrationFullNameError.Name = "lblRegistrationFullNameError";
-            this.lblRegistrationFullNameError.Size = new System.Drawing.Size(0, 20);
+            this.lblRegistrationFullNameError.Size = new System.Drawing.Size(0, 16);
             this.lblRegistrationFullNameError.TabIndex = 12;
             // 
             // lblRegistrationUsername
             // 
             this.lblRegistrationUsername.AutoSize = true;
-            this.lblRegistrationUsername.Location = new System.Drawing.Point(170, 180);
+            this.lblRegistrationUsername.Location = new System.Drawing.Point(151, 144);
             this.lblRegistrationUsername.Name = "lblRegistrationUsername";
-            this.lblRegistrationUsername.Size = new System.Drawing.Size(83, 20);
+            this.lblRegistrationUsername.Size = new System.Drawing.Size(70, 16);
             this.lblRegistrationUsername.TabIndex = 3;
             this.lblRegistrationUsername.Text = "Username";
             // 
             // txtRegistrationUsername
             // 
-            this.txtRegistrationUsername.Location = new System.Drawing.Point(340, 175);
+            this.txtRegistrationUsername.Location = new System.Drawing.Point(302, 140);
+            this.txtRegistrationUsername.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.txtRegistrationUsername.Name = "txtRegistrationUsername";
-            this.txtRegistrationUsername.Size = new System.Drawing.Size(250, 26);
+            this.txtRegistrationUsername.Size = new System.Drawing.Size(223, 22);
             this.txtRegistrationUsername.TabIndex = 4;
             this.txtRegistrationUsername.TextChanged += new System.EventHandler(this.txtRegistrationUsername_TextChanged);
             // 
@@ -104,92 +109,120 @@ namespace MoneyFlow
             // 
             this.lblRegistrationUsernameError.AutoSize = true;
             this.lblRegistrationUsernameError.ForeColor = System.Drawing.Color.Firebrick;
-            this.lblRegistrationUsernameError.Location = new System.Drawing.Point(340, 204);
+            this.lblRegistrationUsernameError.Location = new System.Drawing.Point(302, 163);
+            this.lblRegistrationUsernameError.MaximumSize = new System.Drawing.Size(223, 0);
             this.lblRegistrationUsernameError.Name = "lblRegistrationUsernameError";
-            this.lblRegistrationUsernameError.Size = new System.Drawing.Size(0, 20);
+            this.lblRegistrationUsernameError.Size = new System.Drawing.Size(0, 16);
             this.lblRegistrationUsernameError.TabIndex = 13;
             // 
             // lblRegistrationPassword
             // 
             this.lblRegistrationPassword.AutoSize = true;
-            this.lblRegistrationPassword.Location = new System.Drawing.Point(170, 245);
+            this.lblRegistrationPassword.Location = new System.Drawing.Point(151, 233);
             this.lblRegistrationPassword.Name = "lblRegistrationPassword";
-            this.lblRegistrationPassword.Size = new System.Drawing.Size(78, 20);
+            this.lblRegistrationPassword.Size = new System.Drawing.Size(67, 16);
             this.lblRegistrationPassword.TabIndex = 5;
             this.lblRegistrationPassword.Text = "Password";
             // 
             // txtRegistrationPassword
             // 
-            this.txtRegistrationPassword.Location = new System.Drawing.Point(340, 240);
+            this.txtRegistrationPassword.Location = new System.Drawing.Point(302, 227);
+            this.txtRegistrationPassword.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.txtRegistrationPassword.Name = "txtRegistrationPassword";
-            this.txtRegistrationPassword.Size = new System.Drawing.Size(250, 26);
+            this.txtRegistrationPassword.Size = new System.Drawing.Size(223, 22);
             this.txtRegistrationPassword.TabIndex = 6;
             this.txtRegistrationPassword.UseSystemPasswordChar = true;
             this.txtRegistrationPassword.TextChanged += new System.EventHandler(this.txtRegistrationPassword_TextChanged);
+            // 
+            // chkShowRegistrationPassword
+            // 
+            this.chkShowRegistrationPassword.AutoSize = true;
+            this.chkShowRegistrationPassword.Location = new System.Drawing.Point(531, 229);
+            this.chkShowRegistrationPassword.Name = "chkShowRegistrationPassword";
+            this.chkShowRegistrationPassword.Size = new System.Drawing.Size(51, 20);
+            this.chkShowRegistrationPassword.TabIndex = 7;
+            this.chkShowRegistrationPassword.Text = "Show";
+            this.chkShowRegistrationPassword.UseVisualStyleBackColor = true;
+            this.chkShowRegistrationPassword.CheckedChanged += new System.EventHandler(this.chkShowRegistrationPassword_CheckedChanged);
             // 
             // lblRegistrationPasswordError
             // 
             this.lblRegistrationPasswordError.AutoSize = true;
             this.lblRegistrationPasswordError.ForeColor = System.Drawing.Color.Firebrick;
-            this.lblRegistrationPasswordError.Location = new System.Drawing.Point(340, 269);
+            this.lblRegistrationPasswordError.Location = new System.Drawing.Point(302, 253);
+            this.lblRegistrationPasswordError.MaximumSize = new System.Drawing.Size(223, 0);
             this.lblRegistrationPasswordError.Name = "lblRegistrationPasswordError";
-            this.lblRegistrationPasswordError.Size = new System.Drawing.Size(0, 20);
+            this.lblRegistrationPasswordError.Size = new System.Drawing.Size(0, 16);
             this.lblRegistrationPasswordError.TabIndex = 14;
             // 
             // lblRegistrationConfirmPassword
             // 
             this.lblRegistrationConfirmPassword.AutoSize = true;
-            this.lblRegistrationConfirmPassword.Location = new System.Drawing.Point(170, 310);
+            this.lblRegistrationConfirmPassword.Location = new System.Drawing.Point(143, 306);
             this.lblRegistrationConfirmPassword.Name = "lblRegistrationConfirmPassword";
-            this.lblRegistrationConfirmPassword.Size = new System.Drawing.Size(137, 20);
+            this.lblRegistrationConfirmPassword.Size = new System.Drawing.Size(115, 16);
             this.lblRegistrationConfirmPassword.TabIndex = 7;
             this.lblRegistrationConfirmPassword.Text = "Confirm Password";
             // 
             // txtRegistrationConfirmPassword
             // 
-            this.txtRegistrationConfirmPassword.Location = new System.Drawing.Point(340, 305);
+            this.txtRegistrationConfirmPassword.Location = new System.Drawing.Point(302, 303);
+            this.txtRegistrationConfirmPassword.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.txtRegistrationConfirmPassword.Name = "txtRegistrationConfirmPassword";
-            this.txtRegistrationConfirmPassword.Size = new System.Drawing.Size(250, 26);
+            this.txtRegistrationConfirmPassword.Size = new System.Drawing.Size(223, 22);
             this.txtRegistrationConfirmPassword.TabIndex = 8;
             this.txtRegistrationConfirmPassword.UseSystemPasswordChar = true;
             this.txtRegistrationConfirmPassword.TextChanged += new System.EventHandler(this.txtRegistrationConfirmPassword_TextChanged);
+            // 
+            // chkShowRegistrationConfirmPassword
+            // 
+            this.chkShowRegistrationConfirmPassword.AutoSize = true;
+            this.chkShowRegistrationConfirmPassword.Location = new System.Drawing.Point(531, 305);
+            this.chkShowRegistrationConfirmPassword.Name = "chkShowRegistrationConfirmPassword";
+            this.chkShowRegistrationConfirmPassword.Size = new System.Drawing.Size(51, 20);
+            this.chkShowRegistrationConfirmPassword.TabIndex = 9;
+            this.chkShowRegistrationConfirmPassword.Text = "Show";
+            this.chkShowRegistrationConfirmPassword.UseVisualStyleBackColor = true;
+            this.chkShowRegistrationConfirmPassword.CheckedChanged += new System.EventHandler(this.chkShowRegistrationConfirmPassword_CheckedChanged);
             // 
             // lblRegistrationConfirmPasswordError
             // 
             this.lblRegistrationConfirmPasswordError.AutoSize = true;
             this.lblRegistrationConfirmPasswordError.ForeColor = System.Drawing.Color.Firebrick;
-            this.lblRegistrationConfirmPasswordError.Location = new System.Drawing.Point(340, 334);
+            this.lblRegistrationConfirmPasswordError.Location = new System.Drawing.Point(302, 328);
+            this.lblRegistrationConfirmPasswordError.MaximumSize = new System.Drawing.Size(223, 0);
             this.lblRegistrationConfirmPasswordError.Name = "lblRegistrationConfirmPasswordError";
-            this.lblRegistrationConfirmPasswordError.Size = new System.Drawing.Size(0, 20);
+            this.lblRegistrationConfirmPasswordError.Size = new System.Drawing.Size(0, 16);
             this.lblRegistrationConfirmPasswordError.TabIndex = 15;
             // 
             // btnRegistrationRegister
             // 
-            this.btnRegistrationRegister.Location = new System.Drawing.Point(170, 390);
+            this.btnRegistrationRegister.Location = new System.Drawing.Point(151, 384);
+            this.btnRegistrationRegister.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.btnRegistrationRegister.Name = "btnRegistrationRegister";
-            this.btnRegistrationRegister.Size = new System.Drawing.Size(120, 40);
+            this.btnRegistrationRegister.Size = new System.Drawing.Size(107, 32);
             this.btnRegistrationRegister.TabIndex = 9;
             this.btnRegistrationRegister.Text = "Register";
             this.btnRegistrationRegister.UseVisualStyleBackColor = true;
             this.btnRegistrationRegister.Click += new System.EventHandler(this.btnRegistrationRegister_Click);
-            // btnRegistrationRegister.Click += btnRegistrationRegister_Click;
             // 
             // btnRegistrationClear
             // 
-            this.btnRegistrationClear.Location = new System.Drawing.Point(320, 390);
+            this.btnRegistrationClear.Location = new System.Drawing.Point(284, 384);
+            this.btnRegistrationClear.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.btnRegistrationClear.Name = "btnRegistrationClear";
-            this.btnRegistrationClear.Size = new System.Drawing.Size(120, 40);
+            this.btnRegistrationClear.Size = new System.Drawing.Size(107, 32);
             this.btnRegistrationClear.TabIndex = 10;
             this.btnRegistrationClear.Text = "Clear";
             this.btnRegistrationClear.UseVisualStyleBackColor = true;
             this.btnRegistrationClear.Click += new System.EventHandler(this.btnRegistrationClear_Click);
-            // btnRegistrationClear.Click += btnRegistrationClear_Click;
             // 
             // btnRegistrationLogin
             // 
-            this.btnRegistrationLogin.Location = new System.Drawing.Point(470, 390);
+            this.btnRegistrationLogin.Location = new System.Drawing.Point(408, 384);
+            this.btnRegistrationLogin.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.btnRegistrationLogin.Name = "btnRegistrationLogin";
-            this.btnRegistrationLogin.Size = new System.Drawing.Size(120, 40);
+            this.btnRegistrationLogin.Size = new System.Drawing.Size(107, 32);
             this.btnRegistrationLogin.TabIndex = 11;
             this.btnRegistrationLogin.Text = "Login";
             this.btnRegistrationLogin.UseVisualStyleBackColor = true;
@@ -197,18 +230,19 @@ namespace MoneyFlow
             // 
             // FrmRegistration
             // 
-            this.AutoScaleDimensions = new System.Drawing.SizeF(9F, 20F);
+            this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.BackColor = System.Drawing.Color.FromArgb(238, 246, 247);
-            this.ForeColor = System.Drawing.Color.FromArgb(27, 49, 58);
-            this.ClientSize = new System.Drawing.Size(800, 500);
+            this.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(238)))), ((int)(((byte)(246)))), ((int)(((byte)(247)))));
+            this.ClientSize = new System.Drawing.Size(711, 493);
             this.Controls.Add(this.btnRegistrationLogin);
             this.Controls.Add(this.btnRegistrationClear);
             this.Controls.Add(this.btnRegistrationRegister);
             this.Controls.Add(this.lblRegistrationConfirmPasswordError);
             this.Controls.Add(this.txtRegistrationConfirmPassword);
+            this.Controls.Add(this.chkShowRegistrationConfirmPassword);
             this.Controls.Add(this.lblRegistrationConfirmPassword);
             this.Controls.Add(this.lblRegistrationPasswordError);
+            this.Controls.Add(this.chkShowRegistrationPassword);
             this.Controls.Add(this.txtRegistrationPassword);
             this.Controls.Add(this.lblRegistrationPassword);
             this.Controls.Add(this.lblRegistrationUsernameError);
@@ -218,6 +252,8 @@ namespace MoneyFlow
             this.Controls.Add(this.txtRegistrationFullName);
             this.Controls.Add(this.lblRegistrationFullName);
             this.Controls.Add(this.lblRegistrationTitle);
+            this.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(27)))), ((int)(((byte)(49)))), ((int)(((byte)(58)))));
+            this.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.Name = "FrmRegistration";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "Registration";
@@ -236,9 +272,11 @@ namespace MoneyFlow
         private System.Windows.Forms.Label lblRegistrationUsernameError;
         private System.Windows.Forms.Label lblRegistrationPassword;
         private System.Windows.Forms.TextBox txtRegistrationPassword;
+        private System.Windows.Forms.CheckBox chkShowRegistrationPassword;
         private System.Windows.Forms.Label lblRegistrationPasswordError;
         private System.Windows.Forms.Label lblRegistrationConfirmPassword;
         private System.Windows.Forms.TextBox txtRegistrationConfirmPassword;
+        private System.Windows.Forms.CheckBox chkShowRegistrationConfirmPassword;
         private System.Windows.Forms.Label lblRegistrationConfirmPasswordError;
         private System.Windows.Forms.Button btnRegistrationRegister;
         private System.Windows.Forms.Button btnRegistrationClear;

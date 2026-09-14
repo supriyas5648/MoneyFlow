@@ -26,6 +26,11 @@ namespace MoneyFlow
             lblPasswordError.Visible = string.IsNullOrWhiteSpace(txtPassword.Text);
         }
 
+        private void chkShowPassword_CheckedChanged(object? sender, EventArgs e)
+        {
+            txtPassword.UseSystemPasswordChar = !chkShowPassword.Checked;
+        }
+
         public void btnLogin_Click(object sender, EventArgs e)
         {
             if (string.IsNullOrEmpty(this.txtUserName.Text) || string.IsNullOrEmpty(this.txtPassword.Text))
@@ -97,9 +102,14 @@ namespace MoneyFlow
 
         public void btnRegisterClick(object sender, EventArgs e)
         {
-            FrmRegistration registerForm = new FrmRegistration();
-            registerForm.Show();
             this.Hide();
+
+            using (FrmRegistration registerForm = new FrmRegistration())
+            {
+                registerForm.ShowDialog(this);
+            }
+
+            this.Show();
         }
     }
 }

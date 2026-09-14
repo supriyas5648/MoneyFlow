@@ -358,7 +358,6 @@ namespace MoneyFlow
     public partial class FrmMain2 : Form
     {
         // CURRENT USER
-        // ============================================================
 
         private User? _currentUser;
         private readonly SettingService _settingService;
@@ -755,18 +754,18 @@ namespace MoneyFlow
         // LOGOUT
         // ============================================================
 
-        private void menuItemMainSettingsLogout_Click(
-            object sender,
-            EventArgs e)
-        {
-            LogoutRequested = true;
+        // private void menuItemMainSettingsLogout_Click(
+        //     object sender,
+        //     EventArgs e)
+        // {
+        //     LogoutRequested = true;
 
-            _currentUserSettings = null;
+        //     _currentUserSettings = null;
 
-            _currentUser = null;
+        //     _currentUser = null;
 
-            Close();
-        }
+        //     Close();
+        // }
 
 
         // ============================================================
@@ -1255,16 +1254,20 @@ namespace MoneyFlow
             }
         }
 
-        private void menuItemMainFileExit_Click(object sender,EventArgs e)
+        private void menuItemMainFileExit_Click(object sender, EventArgs e)
         {
-           this.Close();
+            Application.Exit();
         }
 
-        private void menuItemMainFileExit_Click()
+        private void menuItemMainSettingsLogout_Click(object sender, EventArgs e)
         {
+            LogoutRequested = true;
+            _currentUserSettings = null;
+            _currentUser = null;
+
             FrmLogin frmLogin = new FrmLogin();
-           frmLogin.Show();
-           this.Close();
+            frmLogin.Show();
+            Close();
         }
 
     }

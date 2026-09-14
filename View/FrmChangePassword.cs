@@ -152,6 +152,21 @@ namespace MoneyFlow
             ValidateConfirmPassword();
         }
 
+        private void chkShowChangePasswordCurrent_CheckedChanged(object sender, EventArgs e)
+        {
+            txtChangePasswordCurrentPassword.UseSystemPasswordChar = !chkShowChangePasswordCurrent.Checked;
+        }
+
+        private void chkShowChangePasswordNew_CheckedChanged(object sender, EventArgs e)
+        {
+            txtChangePasswordNewPassword.UseSystemPasswordChar = !chkShowChangePasswordNew.Checked;
+        }
+
+        private void chkShowChangePasswordConfirm_CheckedChanged(object sender, EventArgs e)
+        {
+            txtChangePasswordConfirmPassword.UseSystemPasswordChar = !chkShowChangePasswordConfirm.Checked;
+        }
+
         private void btnChangePasswordCancel_Click(object sender, EventArgs e)
         {
             DialogResult = DialogResult.Cancel;

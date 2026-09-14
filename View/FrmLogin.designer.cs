@@ -34,6 +34,7 @@ namespace MoneyFlow
             this.lblPassword = new System.Windows.Forms.Label();
             this.txtUserName = new System.Windows.Forms.TextBox();
             this.txtPassword = new System.Windows.Forms.TextBox();
+            this.chkShowPassword = new System.Windows.Forms.CheckBox();
             this.btnLogin = new System.Windows.Forms.Button();
             this.lblUserNameError = new System.Windows.Forms.Label();
             this.lblPasswordError = new System.Windows.Forms.Label();
@@ -85,6 +86,18 @@ namespace MoneyFlow
             this.txtPassword.Name = "txtPassword";
             this.txtPassword.Size = new System.Drawing.Size(218, 22);
             this.txtPassword.TabIndex = 4;
+            this.txtPassword.UseSystemPasswordChar = true;
+            // 
+            // chkShowPassword
+            // 
+            this.chkShowPassword.AutoSize = true;
+            this.chkShowPassword.Location = new System.Drawing.Point(425, 223);
+            this.chkShowPassword.Name = "chkShowPassword";
+            this.chkShowPassword.Size = new System.Drawing.Size(51, 20);
+            this.chkShowPassword.TabIndex = 5;
+            this.chkShowPassword.Text = "Show";
+            this.chkShowPassword.UseVisualStyleBackColor = true;
+            this.chkShowPassword.CheckedChanged += new System.EventHandler(this.chkShowPassword_CheckedChanged);
             // 
             // btnLogin
             // 
@@ -92,7 +105,7 @@ namespace MoneyFlow
             this.btnLogin.Location = new System.Drawing.Point(199, 296);
             this.btnLogin.Name = "btnLogin";
             this.btnLogin.Size = new System.Drawing.Size(170, 63);
-            this.btnLogin.TabIndex = 5;
+            this.btnLogin.TabIndex = 6;
             this.btnLogin.Text = "LOGIN";
             this.btnLogin.UseVisualStyleBackColor = false;
             this.btnLogin.Click += new System.EventHandler(this.btnLogin_Click);
@@ -152,6 +165,7 @@ namespace MoneyFlow
             this.Controls.Add(this.lblPasswordError);
             this.Controls.Add(this.lblUserNameError);
             this.Controls.Add(this.btnLogin);
+            this.Controls.Add(this.chkShowPassword);
             this.Controls.Add(this.txtPassword);
             this.Controls.Add(this.txtUserName);
             this.Controls.Add(this.lblPassword);
@@ -170,6 +184,7 @@ namespace MoneyFlow
         private System.Windows.Forms.Label lblPassword;
         private System.Windows.Forms.TextBox txtUserName;
         private System.Windows.Forms.TextBox txtPassword;
+        private System.Windows.Forms.CheckBox chkShowPassword;
         private System.Windows.Forms.Button btnLogin;
         private System.Windows.Forms.Label lblUserNameError;
         private System.Windows.Forms.Label lblPasswordError;
