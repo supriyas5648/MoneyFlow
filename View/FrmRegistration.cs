@@ -25,25 +25,30 @@ namespace MoneyFlow.View
             string password = txtRegistrationPassword.Text;
             string confirmPassword = txtRegistrationConfirmPassword.Text;
 
-            if (!ValidateFullName(true))
+            bool isFullNameValid = ValidateFullName(true);
+            bool isUsernameValid = ValidateUsername(true);
+            bool isPasswordValid = ValidatePassword(true);
+            bool isConfirmPasswordValid = ValidateConfirmPassword(true);
+
+            if (!isFullNameValid)
             {
                 txtRegistrationFullName.Focus();
                 return;
             }
 
-            if (!ValidateUsername(true))
+            if (!isUsernameValid)
             {
                 txtRegistrationUsername.Focus();
                 return;
             }
 
-            if (!ValidatePassword(true))
+            if (!isPasswordValid)
             {
                 txtRegistrationPassword.Focus();
                 return;
             }
 
-            if (!ValidateConfirmPassword(true))
+            if (!isConfirmPasswordValid)
             {
                 txtRegistrationConfirmPassword.Focus();
                 return;
@@ -104,6 +109,18 @@ namespace MoneyFlow.View
                 return false;
             }
 
+            if (showRequiredError && fullName.Length < 2)
+            {
+                lblRegistrationFullNameError.Text = "Full name must be at least 2 characters.";
+                return false;
+            }
+
+            if (!Regex.IsMatch(fullName, @"^[a-zA-Z\s.'-]+$"))
+            {
+                lblRegistrationFullNameError.Text = "Full name can only contain letters and spaces.";
+                return false;
+            }
+
             lblRegistrationFullNameError.Text = string.Empty;
             return true;
         }
@@ -116,6 +133,12 @@ namespace MoneyFlow.View
                 lblRegistrationUsernameError.Text = showRequiredError ? "Username is required." : string.Empty;
 
                 return !showRequiredError;
+            }
+
+            if (username.Length > 50)
+            {
+                lblRegistrationUsernameError.Text = "Username cannot exceed 50 characters.";
+                return false;
             }
 
             if (!Regex.IsMatch(username, UsernamePattern, RegexOptions.CultureInvariant))

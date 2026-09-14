@@ -71,7 +71,7 @@ namespace MoneyFlow.View
             this.pnlRegistrationCard.Controls.Add(this.btnRegistrationLogin);
             this.pnlRegistrationCard.Location = new System.Drawing.Point(55, 30);
             this.pnlRegistrationCard.Name = "pnlRegistrationCard";
-            this.pnlRegistrationCard.Size = new System.Drawing.Size(650, 420);
+            this.pnlRegistrationCard.Size = new System.Drawing.Size(650, 440);
             this.pnlRegistrationCard.TabIndex = 0;
             // 
             // lblRegistrationTitle
@@ -111,6 +111,7 @@ namespace MoneyFlow.View
             this.lblRegistrationFullNameError.Font = new System.Drawing.Font("Segoe UI", 8F);
             this.lblRegistrationFullNameError.ForeColor = System.Drawing.Color.Firebrick;
             this.lblRegistrationFullNameError.Location = new System.Drawing.Point(180, 101);
+            this.lblRegistrationFullNameError.MaximumSize = new System.Drawing.Size(430, 0);
             this.lblRegistrationFullNameError.Name = "lblRegistrationFullNameError";
             this.lblRegistrationFullNameError.Size = new System.Drawing.Size(0, 13);
             this.lblRegistrationFullNameError.TabIndex = 12;
@@ -119,7 +120,7 @@ namespace MoneyFlow.View
             // 
             this.lblRegistrationUsername.AutoSize = true;
             this.lblRegistrationUsername.Font = new System.Drawing.Font("Segoe UI", 9F);
-            this.lblRegistrationUsername.Location = new System.Drawing.Point(35, 125);
+            this.lblRegistrationUsername.Location = new System.Drawing.Point(35, 142);
             this.lblRegistrationUsername.Name = "lblRegistrationUsername";
             this.lblRegistrationUsername.Size = new System.Drawing.Size(66, 15);
             this.lblRegistrationUsername.TabIndex = 3;
@@ -128,7 +129,7 @@ namespace MoneyFlow.View
             // txtRegistrationUsername
             // 
             this.txtRegistrationUsername.Font = new System.Drawing.Font("Segoe UI", 9F);
-            this.txtRegistrationUsername.Location = new System.Drawing.Point(180, 122);
+            this.txtRegistrationUsername.Location = new System.Drawing.Point(180, 139);
             this.txtRegistrationUsername.Name = "txtRegistrationUsername";
             this.txtRegistrationUsername.Size = new System.Drawing.Size(430, 23);
             this.txtRegistrationUsername.TabIndex = 4;
@@ -139,7 +140,8 @@ namespace MoneyFlow.View
             this.lblRegistrationUsernameError.AutoSize = true;
             this.lblRegistrationUsernameError.Font = new System.Drawing.Font("Segoe UI", 8F);
             this.lblRegistrationUsernameError.ForeColor = System.Drawing.Color.Firebrick;
-            this.lblRegistrationUsernameError.Location = new System.Drawing.Point(180, 148);
+            this.lblRegistrationUsernameError.Location = new System.Drawing.Point(180, 165);
+            this.lblRegistrationUsernameError.MaximumSize = new System.Drawing.Size(430, 0);
             this.lblRegistrationUsernameError.Name = "lblRegistrationUsernameError";
             this.lblRegistrationUsernameError.Size = new System.Drawing.Size(0, 13);
             this.lblRegistrationUsernameError.TabIndex = 13;
@@ -148,7 +150,7 @@ namespace MoneyFlow.View
             // 
             this.lblRegistrationPassword.AutoSize = true;
             this.lblRegistrationPassword.Font = new System.Drawing.Font("Segoe UI", 9F);
-            this.lblRegistrationPassword.Location = new System.Drawing.Point(35, 172);
+            this.lblRegistrationPassword.Location = new System.Drawing.Point(35, 215);
             this.lblRegistrationPassword.Name = "lblRegistrationPassword";
             this.lblRegistrationPassword.Size = new System.Drawing.Size(63, 15);
             this.lblRegistrationPassword.TabIndex = 5;
@@ -157,7 +159,7 @@ namespace MoneyFlow.View
             // txtRegistrationPassword
             // 
             this.txtRegistrationPassword.Font = new System.Drawing.Font("Segoe UI", 9F);
-            this.txtRegistrationPassword.Location = new System.Drawing.Point(180, 169);
+            this.txtRegistrationPassword.Location = new System.Drawing.Point(180, 212);
             this.txtRegistrationPassword.Name = "txtRegistrationPassword";
             this.txtRegistrationPassword.Size = new System.Drawing.Size(430, 23);
             this.txtRegistrationPassword.TabIndex = 6;
@@ -169,7 +171,8 @@ namespace MoneyFlow.View
             this.lblRegistrationPasswordError.AutoSize = true;
             this.lblRegistrationPasswordError.Font = new System.Drawing.Font("Segoe UI", 8F);
             this.lblRegistrationPasswordError.ForeColor = System.Drawing.Color.Firebrick;
-            this.lblRegistrationPasswordError.Location = new System.Drawing.Point(180, 195);
+            this.lblRegistrationPasswordError.Location = new System.Drawing.Point(180, 238);
+            this.lblRegistrationPasswordError.MaximumSize = new System.Drawing.Size(430, 0);
             this.lblRegistrationPasswordError.Name = "lblRegistrationPasswordError";
             this.lblRegistrationPasswordError.Size = new System.Drawing.Size(0, 13);
             this.lblRegistrationPasswordError.TabIndex = 14;
@@ -178,7 +181,7 @@ namespace MoneyFlow.View
             // 
             this.lblRegistrationConfirmPassword.AutoSize = true;
             this.lblRegistrationConfirmPassword.Font = new System.Drawing.Font("Segoe UI", 9F);
-            this.lblRegistrationConfirmPassword.Location = new System.Drawing.Point(35, 219);
+            this.lblRegistrationConfirmPassword.Location = new System.Drawing.Point(35, 292);
             this.lblRegistrationConfirmPassword.Name = "lblRegistrationConfirmPassword";
             this.lblRegistrationConfirmPassword.Size = new System.Drawing.Size(110, 15);
             this.lblRegistrationConfirmPassword.TabIndex = 7;
@@ -187,7 +190,7 @@ namespace MoneyFlow.View
             // txtRegistrationConfirmPassword
             // 
             this.txtRegistrationConfirmPassword.Font = new System.Drawing.Font("Segoe UI", 9F);
-            this.txtRegistrationConfirmPassword.Location = new System.Drawing.Point(180, 216);
+            this.txtRegistrationConfirmPassword.Location = new System.Drawing.Point(180, 289);
             this.txtRegistrationConfirmPassword.Name = "txtRegistrationConfirmPassword";
             this.txtRegistrationConfirmPassword.Size = new System.Drawing.Size(430, 23);
             this.txtRegistrationConfirmPassword.TabIndex = 8;
@@ -199,7 +202,8 @@ namespace MoneyFlow.View
             this.lblRegistrationConfirmPasswordError.AutoSize = true;
             this.lblRegistrationConfirmPasswordError.Font = new System.Drawing.Font("Segoe UI", 8F);
             this.lblRegistrationConfirmPasswordError.ForeColor = System.Drawing.Color.Firebrick;
-            this.lblRegistrationConfirmPasswordError.Location = new System.Drawing.Point(180, 242);
+            this.lblRegistrationConfirmPasswordError.Location = new System.Drawing.Point(180, 315);
+            this.lblRegistrationConfirmPasswordError.MaximumSize = new System.Drawing.Size(430, 0);
             this.lblRegistrationConfirmPasswordError.Name = "lblRegistrationConfirmPasswordError";
             this.lblRegistrationConfirmPasswordError.Size = new System.Drawing.Size(0, 13);
             this.lblRegistrationConfirmPasswordError.TabIndex = 15;
@@ -211,7 +215,7 @@ namespace MoneyFlow.View
             this.btnRegistrationRegister.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.btnRegistrationRegister.Font = new System.Drawing.Font("Segoe UI", 9.5F, System.Drawing.FontStyle.Bold);
             this.btnRegistrationRegister.ForeColor = System.Drawing.Color.White;
-            this.btnRegistrationRegister.Location = new System.Drawing.Point(180, 280);
+            this.btnRegistrationRegister.Location = new System.Drawing.Point(180, 365);
             this.btnRegistrationRegister.Name = "btnRegistrationRegister";
             this.btnRegistrationRegister.Size = new System.Drawing.Size(125, 38);
             this.btnRegistrationRegister.TabIndex = 9;
@@ -223,7 +227,7 @@ namespace MoneyFlow.View
             // 
             this.btnRegistrationClear.Cursor = System.Windows.Forms.Cursors.Hand;
             this.btnRegistrationClear.Font = new System.Drawing.Font("Segoe UI", 9.5F);
-            this.btnRegistrationClear.Location = new System.Drawing.Point(325, 280);
+            this.btnRegistrationClear.Location = new System.Drawing.Point(325, 365);
             this.btnRegistrationClear.Name = "btnRegistrationClear";
             this.btnRegistrationClear.Size = new System.Drawing.Size(125, 38);
             this.btnRegistrationClear.TabIndex = 10;
@@ -235,7 +239,7 @@ namespace MoneyFlow.View
             // 
             this.btnRegistrationLogin.Cursor = System.Windows.Forms.Cursors.Hand;
             this.btnRegistrationLogin.Font = new System.Drawing.Font("Segoe UI", 9.5F);
-            this.btnRegistrationLogin.Location = new System.Drawing.Point(470, 280);
+            this.btnRegistrationLogin.Location = new System.Drawing.Point(470, 365);
             this.btnRegistrationLogin.Name = "btnRegistrationLogin";
             this.btnRegistrationLogin.Size = new System.Drawing.Size(125, 38);
             this.btnRegistrationLogin.TabIndex = 11;
@@ -249,10 +253,10 @@ namespace MoneyFlow.View
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.AutoScroll = true;
             this.BackColor = System.Drawing.SystemColors.Control;
-            this.ClientSize = new System.Drawing.Size(760, 500);
+            this.ClientSize = new System.Drawing.Size(760, 520);
             this.Controls.Add(this.pnlRegistrationCard);
             this.Font = new System.Drawing.Font("Segoe UI", 9F);
-            this.MinimumSize = new System.Drawing.Size(700, 500);
+            this.MinimumSize = new System.Drawing.Size(720, 520);
             this.Name = "FrmRegistration";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "MoneyFlow - Registration";
